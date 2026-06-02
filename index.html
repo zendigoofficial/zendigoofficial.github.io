@@ -1,87 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Zendigo | Unauthorized Broadcast</title>
 
 <style>
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#050816;
-    color:white;
-    text-align:center;
+:root{
+  --bg:#050712;
+  --panel:#0d1020;
+  --panel2:#14182b;
+  --cyan:#00f5ff;
+  --magenta:#ff00d4;
+  --purple:#8b3cff;
+  --white:#ffffff;
+  --muted:#a9aec3;
 }
 
-.banner{
-    width:100%;
-    max-width:1200px;
-    margin:auto;
-    padding:40px 20px;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255,0,212,.18), transparent 35%),
+    radial-gradient(circle at top right, rgba(0,245,255,.16), transparent 35%),
+    linear-gradient(180deg,#050712,#080b18 65%,#04050b);
+  color:var(--white);
+  text-align:center;
+}
+
+.wrap{
+  width:min(920px,92%);
+  margin:auto;
+  padding:48px 0 36px;
+}
+
+.signal{
+  display:inline-block;
+  padding:7px 14px;
+  border:1px solid var(--cyan);
+  color:var(--cyan);
+  letter-spacing:3px;
+  font-size:.75rem;
+  text-transform:uppercase;
+  box-shadow:0 0 18px rgba(0,245,255,.35);
 }
 
 h1{
-    font-size:3rem;
-    margin-bottom:10px;
+  margin:20px 0 4px;
+  font-size:clamp(3rem,10vw,6rem);
+  line-height:.9;
+  letter-spacing:2px;
+  text-shadow:
+    3px 0 var(--magenta),
+    -3px 0 var(--cyan),
+    0 0 30px rgba(255,0,212,.35);
 }
 
-.subtitle{
-    color:#00ffff;
-    letter-spacing:3px;
-    margin-bottom:40px;
+.tagline{
+  margin:16px auto 30px;
+  color:var(--muted);
+  font-size:1.05rem;
+}
+
+.card{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(13,16,32,.82);
+  border-radius:22px;
+  padding:24px;
+  box-shadow:0 0 35px rgba(0,0,0,.45);
+  backdrop-filter:blur(10px);
+}
+
+.feature{
+  border:1px solid rgba(255,0,212,.45);
+  background:
+    linear-gradient(135deg,rgba(255,0,212,.12),rgba(0,245,255,.08)),
+    rgba(20,24,43,.85);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:18px;
+}
+
+.feature h2{
+  margin:0 0 8px;
+  font-size:1.4rem;
+}
+
+.feature p{
+  margin:0;
+  color:var(--muted);
 }
 
 .links{
-    display:flex;
-    flex-direction:column;
-    gap:15px;
-    max-width:400px;
-    margin:auto;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
 }
 
-.links a{
-    text-decoration:none;
-    color:white;
-    padding:16px;
-    border-radius:12px;
-    border:2px solid #ff00ff;
-    background:#101425;
-    transition:0.2s;
+a.button{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  width:100%;
+  text-decoration:none;
+  color:white;
+  padding:17px 18px;
+  border-radius:14px;
+  border:2px solid var(--magenta);
+  background:linear-gradient(90deg,rgba(255,0,212,.10),rgba(0,245,255,.06));
+  font-weight:700;
+  transition:.18s ease;
 }
 
-.links a:hover{
-    transform:scale(1.03);
-    border-color:#00ffff;
+a.button:hover{
+  transform:translateY(-2px) scale(1.01);
+  border-color:var(--cyan);
+  box-shadow:0 0 20px rgba(0,245,255,.25),0 0 18px rgba(255,0,212,.18);
+}
+
+.left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.icon{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:rgba(255,255,255,.08);
+}
+
+.arrow{
+  color:var(--cyan);
+}
+
+.glitch{
+  margin-top:20px;
+  border:1px solid rgba(0,245,255,.35);
+  border-radius:18px;
+  padding:18px;
+  background:rgba(0,245,255,.05);
+}
+
+.glitch strong{
+  color:var(--cyan);
+  letter-spacing:2px;
+}
+
+.glitch p{
+  color:var(--muted);
+  margin:8px 0 0;
 }
 
 .footer{
-    margin-top:50px;
-    color:#888;
-    font-size:0.9rem;
+  margin-top:26px;
+  color:#7f8498;
+  font-size:.9rem;
+}
+
+.small{
+  margin-top:10px;
+  font-size:.78rem;
+  color:#666d82;
+}
+
+@media (min-width:720px){
+  .links{
+    grid-template-columns:1fr 1fr;
+  }
+  a.button.full{
+    grid-column:1 / -1;
+  }
 }
 </style>
 </head>
 
 <body>
+  <main class="wrap">
+    <div class="signal">Unauthorized Broadcast</div>
 
-<div class="banner">
     <h1>ZENDIGO</h1>
-    <div class="subtitle">UNAUTHORIZED BROADCAST</div>
 
-    <div class="links">
-        <a href="https://twitch.tv/zendigo_playz">Twitch</a>
-        <a href="#">YouTube</a>
-        <a href="#">Discord</a>
-        <a href="#">Speedrun.com</a>
-        <a href="#">Fourthwall</a>
-        <a href="#">Ko-fi</a>
+    <div class="tagline">
+      Speedruns • Retro Games • Hidden Gems • Hot Garbage
     </div>
+
+    <section class="card">
+      <div class="feature">
+        <h2>Welcome to the Broadcast</h2>
+        <p>Retro runs, demo discoveries, chaotic verdicts, and Glitch riding shotgun.</p>
+      </div>
+
+      <div class="links">
+        <a class="button full" href="https://www.twitch.tv/zendigo_playz" target="_blank">
+          <span class="left"><span class="icon">🎮</span> Twitch</span>
+          <span class="arrow">LIVE →</span>
+        </a>
+
+        <a class="button" href="#" target="_blank">
+          <span class="left"><span class="icon">📺</span> YouTube</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a class="button" href="#" target="_blank">
+          <span class="left"><span class="icon">💬</span> Discord</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a class="button" href="#" target="_blank">
+          <span class="left"><span class="icon">🏁</span> Speedrun.com</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a class="button" href="#" target="_blank">
+          <span class="left"><span class="icon">👕</span> Merch</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a class="button" href="#" target="_blank">
+          <span class="left"><span class="icon">☕</span> Support</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+
+      <div class="glitch">
+        <strong>GLITCH AI COMPANION</strong>
+        <p>AI co-host. Chaos certified. Signal corrupted.</p>
+      </div>
+    </section>
 
     <div class="footer">
-        Retro Games • Speedruns • Hidden Gems • Hot Garbage
+      Hidden Gem or Hot Garbage • Sonic Speedruns • Retro Events
     </div>
-</div>
 
+    <div class="small">
+      Contact: zendigoofficial@gmail.com
+    </div>
+  </main>
 </body>
 </html>
