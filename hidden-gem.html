@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Hidden Gem or Hot Garbage | Zendigo</title>
+
+<style>
+
+:root{
+  --cyan:#00FFEE;
+  --magenta:#FF20FF;
+  --purple:#A230F0;
+  --black:#0F0F14;
+  --gray:#6E6E66;
+  --white:#EEEEEE;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#05070d;
+  color:var(--white);
+  line-height:1.6;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+
+  background:
+    radial-gradient(circle at top left,
+      rgba(255,32,255,.12),
+      transparent 35%),
+
+    radial-gradient(circle at top right,
+      rgba(0,255,238,.12),
+      transparent 35%);
+
+  pointer-events:none;
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.02),
+      rgba(255,255,255,.02) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+
+  opacity:.25;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.wrapper{
+  width:min(1400px,95%);
+  margin:auto;
+  padding:20px;
+}
+
+.hero{
+  margin-bottom:20px;
+}
+
+.hero img{
+  width:100%;
+  display:block;
+  border-radius:14px;
+  border:2px solid rgba(255,32,255,.35);
+
+  box-shadow:
+    0 0 30px rgba(255,32,255,.20),
+    0 0 30px rgba(0,255,238,.15);
+}
+
+.navbar{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+
+  margin-bottom:25px;
+  padding:15px;
+
+  background:rgba(10,10,18,.85);
+
+  border:1px solid rgba(255,32,255,.25);
+  border-radius:12px;
+}
+
+.navbar a{
+  color:var(--white);
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.navbar a:hover{
+  color:var(--cyan);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:rgba(15,15,20,.90);
+
+  border:1px solid rgba(255,32,255,.30);
+  border-radius:16px;
+
+  padding:20px;
+
+  box-shadow:
+    0 0 15px rgba(255,32,255,.08);
+}
+
+.card h2{
+  color:var(--cyan);
+  margin-bottom:15px;
+  text-transform:uppercase;
+}
+
+.rating-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.rating{
+  border-radius:12px;
+  padding:15px;
+  text-align:center;
+}
+
+.hidden-gem{
+  border:1px solid var(--cyan);
+}
+
+.needs-polish{
+  border:1px solid #FFD000;
+}
+
+.hot-garbage{
+  border:1px solid var(--magenta);
+}
+
+.rating h3{
+  margin-bottom:10px;
+}
+
+.episode{
+  display:flex;
+  gap:20px;
+  align-items:center;
+}
+
+.episode img{
+  width:220px;
+  border-radius:12px;
+}
+
+.twitch-card{
+  text-align:center;
+}
+
+.twitch-card a{
+  display:inline-block;
+
+  margin-top:20px;
+  padding:15px 30px;
+
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+
+  border-radius:10px;
+
+  border:2px solid var(--magenta);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,32,255,.20),
+      rgba(0,255,238,.10)
+    );
+}
+
+.twitch-card a:hover{
+  border-color:var(--cyan);
+}
+
+.footer{
+  text-align:center;
+  margin-top:30px;
+  color:#999;
+}
+
+@media(max-width:900px){
+
+.rating-grid{
+  grid-template-columns:1fr;
+}
+
+.episode{
+  flex-direction:column;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <!-- REPLACE WITH FINAL HIDDEN GEM BANNER -->
+  <div class="hero">
+    <img src="hidden_gem_banner.png"
+         alt="Hidden Gem or Hot Garbage">
+  </div>
+
+  <div class="navbar">
+    <a href="index.html">HOME</a>
+    <a href="hidden-gem.html">HIDDEN GEM</a>
+    <a href="#">SPEEDRUNS</a>
+    <a href="#">GLITCH</a>
+    <a href="#">ABOUT</a>
+    <a href="#">CONTACT</a>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>What Is This?</h2>
+
+      <p>
+      Hidden Gem or Hot Garbage is a series where
+      Zendigo plays game demos, indie games,
+      retro releases, and random discoveries
+      from across the gaming world.
+      </p>
+
+      <br>
+
+      <p>
+      Every game faces the same question:
+      </p>
+
+      <br>
+
+      <p>
+      Is it a <span style="color:var(--cyan)">Hidden Gem</span>?
+      Does it <span style="color:#FFD000">Need Polish</span>?
+      Or is it
+      <span style="color:var(--magenta)">Hot Garbage</span>?
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>The Rating System</h2>
+
+      <div class="rating-grid">
+
+        <div class="rating hidden-gem">
+          <h3>💎 Hidden Gem</h3>
+
+          Worth your time.<br>
+          Strong recommendation.<br>
+          Would play again.
+        </div>
+
+        <div class="rating needs-polish">
+          <h3>🔧 Needs Polish</h3>
+
+          Interesting ideas.<br>
+          Not quite there yet.<br>
+          Potential with more development.
+        </div>
+
+        <div class="rating hot-garbage">
+          <h3>🔥 Hot Garbage</h3>
+
+          Major issues.<br>
+          Difficult to recommend.<br>
+          The wheel strikes again.
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Current Rating Categories</h2>
+
+      <ul style="list-style:none; text-align:left;">
+
+        <li>⭐ First Impression</li>
+        <li>🎮 Gameplay</li>
+        <li>🎨 Style</li>
+        <li>⚙ Polish</li>
+        <li>🔄 Comeback Factor</li>
+
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Latest Episode</h2>
+
+      <div class="episode">
+
+        <img src="iron_bird_episode.png"
+             alt="Iron Bird">
+
+        <div>
+
+          <h3>Episode 001</h3>
+
+          <h1>IRON BIRD</h1>
+
+          <br>
+
+          <p>Coming Soon</p>
+
+          <br>
+
+          <p>Verdict: ???</p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+      <h2>Upcoming Games</h2>
+
+      <ul style="list-style:none; text-align:left;">
+
+        <li>🎮 Upcoming Demos</li>
+        <li>🚀 More Steam Discoveries</li>
+        <li>👥 Community Suggestions</li>
+        <li>❓ Wildcard Picks</li>
+
+      </ul>
+
+    </div>
+
+    <div class="card twitch-card">
+
+      <h2>Watch Live On Twitch</h2>
+
+      <p>
+      Catch the chaos live with Zendigo and Glitch.
+      </p>
+
+      <a href="https://zendigo.s.gy/z6W6N9" target="_blank">
+        TWITCH
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="footer">
+
+    Think you can change our minds?
+
+    <br><br>
+
+    Join the Discord and suggest the next game.
+
+    <br><br>
+
+    zendigo.s.gy/krqFJy
+
+  </div>
+
+</div>
+
+</body>
+</html>
