@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact | Zendigo</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
+
+:root{
+  --cyan:#00FFEE;
+  --magenta:#FF20FF;
+  --purple:#A230F0;
+  --black:#05070d;
+  --panel:#0f0f14;
+  --white:#EEEEEE;
+  --muted:#A9AEC3;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#05070d;
+  color:var(--white);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top left, rgba(255,32,255,.14), transparent 35%),
+    radial-gradient(circle at top right, rgba(0,255,238,.12), transparent 35%),
+    linear-gradient(180deg,#05070d,#080a12 55%,#05070d);
+  pointer-events:none;
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.018),
+      rgba(255,255,255,.018) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  opacity:.35;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.wrapper{
+  width:min(1400px,95%);
+  margin:auto;
+  padding:18px 0 24px;
+}
+
+.hero{
+  margin-bottom:12px;
+}
+
+.hero img{
+  width:100%;
+  display:block;
+  border-radius:14px;
+  border:2px solid rgba(255,32,255,.35);
+  box-shadow:
+    0 0 30px rgba(255,32,255,.20),
+    0 0 30px rgba(0,255,238,.15);
+}
+
+.navbar{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:24px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+  padding:13px 16px;
+  background:rgba(10,10,18,.88);
+  border:1px solid rgba(255,32,255,.35);
+  border-radius:12px;
+  box-shadow:0 0 18px rgba(162,48,240,.16);
+}
+
+.navbar a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+}
+
+.navbar a:hover,
+.navbar a.active{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
+}
+
+.grid{
+  display:grid;
+  gap:18px;
+}
+
+.card{
+  background:rgba(15,15,20,.92);
+  border:1px solid rgba(255,32,255,.32);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 0 18px rgba(255,32,255,.08);
+}
+
+.card h2{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--cyan);
+  margin-bottom:14px;
+  text-transform:uppercase;
+}
+
+.card h3{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--magenta);
+  margin-bottom:8px;
+}
+
+.card p{
+  margin-bottom:14px;
+}
+
+.card p:last-child{
+  margin-bottom:0;
+}
+
+.contact-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.contact-card{
+  border:1px solid rgba(0,255,238,.25);
+  border-radius:14px;
+  padding:18px;
+  background:rgba(0,255,238,.04);
+}
+
+.contact-card a{
+  color:var(--cyan);
+  font-weight:bold;
+  text-decoration:none;
+}
+
+.contact-card a:hover{
+  color:var(--magenta);
+  text-shadow:0 0 10px rgba(255,32,255,.55);
+}
+
+.note{
+  color:var(--muted);
+}
+
+.footer{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(255,32,255,.25);
+  border-radius:14px;
+  background:rgba(10,10,18,.88);
+  text-align:center;
+}
+
+.social-row{
+  display:flex;
+  justify-content:center;
+  gap:28px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.social-row a{
+  color:white;
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+}
+
+.social-row a:hover{
+  color:var(--cyan);
+}
+
+.footer small{
+  color:var(--muted);
+}
+
+@media(min-width:900px){
+  .contact-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<header class="hero">
+  <img src="contact_banner.png" alt="Contact Zendigo">
+</header>
+
+<nav class="navbar">
+  <a href="index.html">HOME</a>
+  <a href="events.html">EVENTS</a>
+  <a href="hidden-gem.html">HIDDEN GEM</a>
+  <a href="speedruns.html">SPEEDRUNS</a>
+  <a href="glitch.html">GLITCH</a>
+  <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">MERCH</a>
+  <a href="about.html">ABOUT</a>
+  <a class="active" href="contact.html">CONTACT</a>
+</nav>
+
+<main class="grid">
+
+<section class="card">
+  <h2>Contact Zendigo</h2>
+
+  <p>
+    For business inquiries, collaboration requests, community questions,
+    or general contact, use the links below.
+  </p>
+
+  <p class="note">
+    For community-related questions, Discord is usually the fastest place to connect.
+  </p>
+</section>
+
+<section class="contact-grid">
+
+  <div class="contact-card">
+    <h3>Business / General Contact</h3>
+
+    <p>
+      Use email for business inquiries, collaboration requests,
+      creator opportunities, and general contact.
+    </p>
+
+    <p>
+      <a href="mailto:zendigoofficial@gmail.com">
+        zendigoofficial@gmail.com
+      </a>
+    </p>
+  </div>
+
+  <div class="contact-card">
+    <h3>Community</h3>
+
+    <p>
+      Join the Discord for community updates, event discussion,
+      stream announcements, and viewer participation.
+    </p>
+
+    <p>
+      <a href="https://zendigo.s.gy/krqFJy" target="_blank">
+        Join Discord →
+      </a>
+    </p>
+  </div>
+
+  <div class="contact-card">
+    <h3>Content & Updates</h3>
+
+    <p>
+      Follow Zendigo for streams, videos, clips, events, announcements,
+      and future project updates.
+    </p>
+
+    <p>
+      <a href="https://zendigo.s.gy/z6W6N9" target="_blank">Twitch</a>
+      ·
+      <a href="https://zendigo.s.gy/UkSAT1" target="_blank">YouTube</a>
+      ·
+      <a href="https://zendigo.s.gy/iK4kUt" target="_blank">X</a>
+    </p>
+  </div>
+
+  <div class="contact-card">
+    <h3>Merch</h3>
+
+    <p>
+      The official Zendigo shop is available on Fourthwall.
+    </p>
+
+    <p>
+      <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">
+        Visit Shop →
+      </a>
+    </p>
+  </div>
+
+</section>
+
+<section class="card">
+  <h2>Response Note</h2>
+
+  <p>
+    Messages are answered on a best-effort basis. For live community discussion,
+    event updates, and stream-related questions, Discord is usually the best place to start.
+  </p>
+</section>
+
+</main>
+
+<footer class="footer">
+
+  <div class="social-row">
+    <a href="https://zendigo.s.gy/z6W6N9" target="_blank">Twitch</a>
+    <a href="https://zendigo.s.gy/UkSAT1" target="_blank">YouTube</a>
+    <a href="https://zendigo.s.gy/krqFJy" target="_blank">Discord</a>
+    <a href="https://zendigo.s.gy/yJtsVD" target="_blank">Steam</a>
+    <a href="https://zendigo.s.gy/iK4kUt" target="_blank">X</a>
+  </div>
+
+  <small>
+    Retro Games • Speedruns • Community Events • Hidden Gems<br>
+    Contact: zendigoofficial@gmail.com
+  </small>
+
+</footer>
+
+</div>
+
+</body>
+</html>
