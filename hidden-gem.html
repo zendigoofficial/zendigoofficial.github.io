@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Hidden Gem or Hot Garbage | Zendigo</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
 
 :root{
   --cyan:#00FFEE;
   --magenta:#FF20FF;
   --purple:#A230F0;
-  --black:#0F0F14;
-  --gray:#6E6E66;
+  --black:#05070d;
+  --panel:#0f0f14;
   --white:#EEEEEE;
+  --muted:#A9AEC3;
 }
 
 *{
@@ -28,22 +29,17 @@ body{
   background:#05070d;
   color:var(--white);
   line-height:1.6;
+  overflow-x:hidden;
 }
 
 body::before{
   content:"";
   position:fixed;
   inset:0;
-
   background:
-    radial-gradient(circle at top left,
-      rgba(255,32,255,.12),
-      transparent 35%),
-
-    radial-gradient(circle at top right,
-      rgba(0,255,238,.12),
-      transparent 35%);
-
+    radial-gradient(circle at top left, rgba(255,32,255,.14), transparent 35%),
+    radial-gradient(circle at top right, rgba(0,255,238,.12), transparent 35%),
+    linear-gradient(180deg,#05070d,#080a12 55%,#05070d);
   pointer-events:none;
   z-index:-2;
 }
@@ -52,17 +48,15 @@ body::after{
   content:"";
   position:fixed;
   inset:0;
-
   background:
     repeating-linear-gradient(
       0deg,
-      rgba(255,255,255,.02),
-      rgba(255,255,255,.02) 1px,
+      rgba(255,255,255,.018),
+      rgba(255,255,255,.018) 1px,
       transparent 1px,
       transparent 5px
     );
-
-  opacity:.25;
+  opacity:.35;
   pointer-events:none;
   z-index:-1;
 }
@@ -70,11 +64,11 @@ body::after{
 .wrapper{
   width:min(1400px,95%);
   margin:auto;
-  padding:20px;
+  padding:18px 0 24px;
 }
 
 .hero{
-  margin-bottom:20px;
+  margin-bottom:12px;
 }
 
 .hero img{
@@ -82,7 +76,6 @@ body::after{
   display:block;
   border-radius:14px;
   border:2px solid rgba(255,32,255,.35);
-
   box-shadow:
     0 0 30px rgba(255,32,255,.20),
     0 0 30px rgba(0,255,238,.15);
@@ -91,138 +84,251 @@ body::after{
 .navbar{
   display:flex;
   justify-content:center;
-  gap:30px;
-
-  margin-bottom:25px;
-  padding:15px;
-
-  background:rgba(10,10,18,.85);
-
-  border:1px solid rgba(255,32,255,.25);
+  align-items:center;
+  gap:24px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+  padding:13px 16px;
+  background:rgba(10,10,18,.88);
+  border:1px solid rgba(255,32,255,.35);
   border-radius:12px;
+  box-shadow:0 0 18px rgba(162,48,240,.16);
 }
 
 .navbar a{
   color:var(--white);
   text-decoration:none;
-  font-weight:bold;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  letter-spacing:.5px;
 }
 
-.navbar a:hover{
+.navbar a:hover,
+.navbar a.active{
   color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
-  gap:20px;
+  grid-template-columns:1fr;
+  gap:18px;
 }
 
 .card{
-  background:rgba(15,15,20,.90);
-
-  border:1px solid rgba(255,32,255,.30);
+  background:rgba(15,15,20,.92);
+  border:1px solid rgba(255,32,255,.32);
   border-radius:16px;
-
   padding:20px;
-
-  box-shadow:
-    0 0 15px rgba(255,32,255,.08);
+  box-shadow:0 0 18px rgba(255,32,255,.08);
 }
 
 .card h2{
+  font-family:Orbitron, Arial, sans-serif;
   color:var(--cyan);
-  margin-bottom:15px;
+  margin-bottom:14px;
   text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.card h3{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--white);
+  margin-bottom:8px;
+}
+
+.card p{
+  color:var(--white);
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.accent-cyan{
+  color:var(--cyan);
+  font-weight:bold;
+}
+
+.accent-magenta{
+  color:var(--magenta);
+  font-weight:bold;
+}
+
+.accent-purple{
+  color:var(--purple);
+  font-weight:bold;
 }
 
 .rating-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
+  grid-template-columns:1fr;
+  gap:14px;
 }
 
 .rating{
-  border-radius:12px;
-  padding:15px;
+  border-radius:14px;
+  padding:18px;
   text-align:center;
+  min-height:210px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  background:rgba(0,0,0,.20);
+}
+
+.rating h3{
+  margin-bottom:12px;
+}
+
+.rating p{
+  color:var(--white);
 }
 
 .hidden-gem{
   border:1px solid var(--cyan);
+  box-shadow:0 0 15px rgba(0,255,238,.18);
 }
 
 .needs-polish{
-  border:1px solid #FFD000;
+  border:1px solid var(--purple);
+  box-shadow:0 0 15px rgba(162,48,240,.26);
 }
 
 .hot-garbage{
   border:1px solid var(--magenta);
+  box-shadow:0 0 15px rgba(255,32,255,.18);
 }
 
-.rating h3{
-  margin-bottom:10px;
+.category-list,
+.simple-list{
+  list-style:none;
+  display:grid;
+  gap:10px;
 }
 
-.episode{
-  display:flex;
-  gap:20px;
+.category-list li,
+.simple-list li{
+  color:var(--white);
+}
+
+.two-column{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.latest-review{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
   align-items:center;
 }
 
-.episode img{
-  width:220px;
-  border-radius:12px;
-}
-
-.twitch-card{
+.review-art{
+  min-height:190px;
+  border:1px solid rgba(0,255,238,.35);
+  border-radius:14px;
+  background:
+    linear-gradient(135deg,rgba(255,32,255,.10),rgba(0,255,238,.08)),
+    rgba(0,0,0,.35);
+  display:grid;
+  place-items:center;
   text-align:center;
+  padding:18px;
 }
 
-.twitch-card a{
+.review-art strong{
+  font-family:Orbitron, Arial, sans-serif;
+  font-size:1.7rem;
+  color:var(--white);
+  letter-spacing:1px;
+}
+
+.review-details .verdict{
   display:inline-block;
+  margin:10px 0;
+  padding:6px 12px;
+  border:1px solid var(--purple);
+  border-radius:999px;
+  color:var(--purple);
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+}
 
-  margin-top:20px;
-  padding:15px 30px;
-
+.review-button{
+  display:inline-block;
+  margin-top:14px;
+  padding:12px 18px;
   color:white;
   text-decoration:none;
-  font-weight:bold;
-
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
   border-radius:10px;
-
-  border:2px solid var(--magenta);
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(255,32,255,.20),
-      rgba(0,255,238,.10)
-    );
+  border:2px solid var(--purple);
+  background:linear-gradient(90deg,rgba(162,48,240,.25),rgba(255,32,255,.15));
 }
 
-.twitch-card a:hover{
+.review-button:hover{
   border-color:var(--cyan);
+  color:var(--cyan);
+  box-shadow:0 0 18px rgba(0,255,238,.35);
 }
 
 .footer{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(255,32,255,.25);
+  border-radius:14px;
+  background:rgba(10,10,18,.88);
   text-align:center;
-  margin-top:30px;
-  color:#999;
 }
 
-@media(max-width:900px){
-
-.rating-grid{
-  grid-template-columns:1fr;
+.social-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:28px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
 }
 
-.episode{
-  flex-direction:column;
+.social-row a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  letter-spacing:.5px;
 }
 
+.social-row a:hover{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
 }
 
+.footer small{
+  color:var(--muted);
+}
+
+@media(min-width:900px){
+  .grid-top{
+    display:grid;
+    grid-template-columns:1fr 1.4fr 1fr;
+    gap:18px;
+  }
+
+  .rating-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .two-column{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .latest-review{
+    grid-template-columns:.85fr 1.15fr;
+  }
+}
 </style>
 </head>
 
@@ -230,166 +336,159 @@ body::after{
 
 <div class="wrapper">
 
-  <!-- REPLACE WITH FINAL HIDDEN GEM BANNER -->
-  <div class="hero">
-    <img src="hidden_gem_banner.png"
-         alt="Hidden Gem or Hot Garbage">
-  </div>
+  <header class="hero">
+    <img src="hidden_gem_banner.png" alt="Hidden Gem or Hot Garbage">
+  </header>
 
-  <div class="navbar">
+  <nav class="navbar">
     <a href="index.html">HOME</a>
-    <a href="hidden-gem.html">HIDDEN GEM</a>
-    <a href="#">SPEEDRUNS</a>
-    <a href="#">GLITCH</a>
-    <a href="#">ABOUT</a>
-    <a href="#">CONTACT</a>
-  </div>
+    <a href="events.html">EVENTS</a>
+    <a class="active" href="hidden-gem.html">HIDDEN GEM</a>
+    <a href="speedruns.html">SPEEDRUNS</a>
+    <a href="glitch.html">GLITCH</a>
+    <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">MERCH</a>
+    <a href="about.html">ABOUT</a>
+    <a href="contact.html">CONTACT</a>
+  </nav>
 
-  <div class="grid">
+  <main class="grid">
 
-    <div class="card">
-      <h2>What Is This?</h2>
+    <section class="grid-top">
 
-      <p>
-      Hidden Gem or Hot Garbage is a series where
-      Zendigo plays game demos, indie games,
-      retro releases, and random discoveries
-      from across the gaming world.
-      </p>
+      <div class="card">
+        <h2>What Is This?</h2>
 
-      <br>
+        <p>
+          Hidden Gem or Hot Garbage is a series where Zendigo plays game demos,
+          indie games, retro releases, and random discoveries from across the gaming world.
+        </p>
 
-      <p>
-      Every game faces the same question:
-      </p>
+        <br>
 
-      <br>
+        <p>
+          Every game faces the same question:
+        </p>
 
-      <p>
-      Is it a <span style="color:var(--cyan)">Hidden Gem</span>?
-      Does it <span style="color:#FFD000">Need Polish</span>?
-      Or is it
-      <span style="color:var(--magenta)">Hot Garbage</span>?
-      </p>
-    </div>
+        <br>
 
-    <div class="card">
-      <h2>The Rating System</h2>
-
-      <div class="rating-grid">
-
-        <div class="rating hidden-gem">
-          <h3>💎 Hidden Gem</h3>
-
-          Worth your time.<br>
-          Strong recommendation.<br>
-          Would play again.
-        </div>
-
-        <div class="rating needs-polish">
-          <h3>🔧 Needs Polish</h3>
-
-          Interesting ideas.<br>
-          Not quite there yet.<br>
-          Potential with more development.
-        </div>
-
-        <div class="rating hot-garbage">
-          <h3>🔥 Hot Garbage</h3>
-
-          Major issues.<br>
-          Difficult to recommend.<br>
-          The wheel strikes again.
-        </div>
-
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Current Rating Categories</h2>
-
-      <ul style="list-style:none; text-align:left;">
-
-        <li>⭐ First Impression</li>
-        <li>🎮 Gameplay</li>
-        <li>🎨 Style</li>
-        <li>⚙ Polish</li>
-        <li>🔄 Comeback Factor</li>
-
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>Latest Episode</h2>
-
-      <div class="episode">
-
-        <img src="iron_bird_episode.png"
-             alt="Iron Bird">
-
-        <div>
-
-          <h3>Episode 001</h3>
-
-          <h1>IRON BIRD</h1>
-
-          <br>
-
-          <p>Coming Soon</p>
-
-          <br>
-
-          <p>Verdict: ???</p>
-
-        </div>
-
+        <p>
+          Is it a <span class="accent-cyan">Hidden Gem</span>?
+          Does it <span class="accent-purple">Need Polish</span>?
+          Or is it <span class="accent-magenta">Hot Garbage</span>?
+        </p>
       </div>
 
+      <div class="card">
+        <h2>The Rating System</h2>
+
+        <div class="rating-grid">
+
+          <div class="rating hidden-gem">
+            <h3>💎 Hidden Gem</h3>
+            <p>
+              Worth your time.<br>
+              Strong recommendation.<br>
+              Would play again.
+            </p>
+          </div>
+
+          <div class="rating needs-polish">
+            <h3>🔧 Needs Polish</h3>
+            <p>
+              Interesting ideas.<br>
+              Not quite there yet.<br>
+              Potential with more development.
+            </p>
+          </div>
+
+          <div class="rating hot-garbage">
+            <h3>🔥 Hot Garbage</h3>
+            <p>
+              Major issues.<br>
+              Difficult to recommend.<br>
+              The wheel strikes again.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Current Rating Categories</h2>
+
+        <ul class="category-list">
+          <li>⭐ First Impression</li>
+          <li>🎮 Gameplay</li>
+          <li>🎨 Style</li>
+          <li>⚙ Polish</li>
+          <li>🔄 Comeback Factor</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <section class="two-column">
+
+      <div class="card">
+        <h2>Latest Review</h2>
+
+        <div class="latest-review">
+
+          <div class="review-art">
+            <strong>IRON BIRD<br>EPISODE 001</strong>
+          </div>
+
+          <div class="review-details">
+            <h3>Iron Bird</h3>
+            <p class="muted">Episode 001 • Coming Soon</p>
+
+            <div class="verdict">
+              Verdict Pending
+            </div>
+
+            <p>
+              Full review, score breakdown, and final verdict will appear here once the episode is published.
+            </p>
+
+            <a class="review-button" href="#" target="_blank">
+              READ REVIEW →
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Upcoming Games</h2>
+
+        <ul class="simple-list">
+          <li>🎮 Upcoming Demos</li>
+          <li>🚀 More Steam Discoveries</li>
+          <li>👥 Community Suggestions</li>
+          <li>❓ Wildcard Picks</li>
+        </ul>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+
+    <div class="social-row">
+      <a href="https://zendigo.s.gy/z6W6N9" target="_blank">Twitch</a>
+      <a href="https://zendigo.s.gy/UkSAT1" target="_blank">YouTube</a>
+      <a href="https://zendigo.s.gy/krqFJy" target="_blank">Discord</a>
+      <a href="https://zendigo.s.gy/yJtsVD" target="_blank">Steam</a>
+      <a href="https://zendigo.s.gy/iK4kUt" target="_blank">X</a>
     </div>
 
-    <div class="card">
-      <h2>Upcoming Games</h2>
+    <small>
+      Hidden Gem or Hot Garbage • Sonic Speedruns • Retro Events<br>
+      Contact: zendigoofficial@gmail.com
+    </small>
 
-      <ul style="list-style:none; text-align:left;">
-
-        <li>🎮 Upcoming Demos</li>
-        <li>🚀 More Steam Discoveries</li>
-        <li>👥 Community Suggestions</li>
-        <li>❓ Wildcard Picks</li>
-
-      </ul>
-
-    </div>
-
-    <div class="card twitch-card">
-
-      <h2>Watch Live On Twitch</h2>
-
-      <p>
-      Catch the chaos live with Zendigo and Glitch.
-      </p>
-
-      <a href="https://zendigo.s.gy/z6W6N9" target="_blank">
-        TWITCH
-      </a>
-
-    </div>
-
-  </div>
-
-  <div class="footer">
-
-    Think you can change our minds?
-
-    <br><br>
-
-    Join the Discord and suggest the next game.
-
-    <br><br>
-
-    zendigo.s.gy/krqFJy
-
-  </div>
+  </footer>
 
 </div>
 
