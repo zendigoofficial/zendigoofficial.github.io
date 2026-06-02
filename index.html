@@ -83,7 +83,7 @@ body::after{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:28px;
+  gap:24px;
   flex-wrap:wrap;
   margin-bottom:18px;
   padding:13px 16px;
@@ -131,8 +131,34 @@ body::after{
   color:var(--white);
 }
 
-.muted{
-  color:var(--muted);
+.event-strip{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  flex-wrap:wrap;
+  align-items:center;
+  border-color:rgba(162,48,240,.55);
+  background:
+    linear-gradient(90deg,rgba(162,48,240,.16),rgba(255,32,255,.08),rgba(0,255,238,.07)),
+    rgba(15,15,20,.92);
+}
+
+.event-strip strong{
+  color:var(--cyan);
+}
+
+.event-strip a{
+  color:var(--white);
+  text-decoration:none;
+  font-weight:800;
+  border:1px solid rgba(0,255,238,.45);
+  border-radius:10px;
+  padding:8px 14px;
+}
+
+.event-strip a:hover{
+  color:var(--cyan);
+  box-shadow:0 0 14px rgba(0,255,238,.25);
 }
 
 .twitch-embed{
@@ -258,15 +284,26 @@ body::after{
   </header>
 
   <nav class="navbar">
-    <a class="active" href="index.html">⌂ HOME</a>
-    <a href="hidden-gem.html">◇ HIDDEN GEM</a>
-    <a href="#">▦ SPEEDRUNS</a>
-    <a href="#">☻ GLITCH</a>
-    <a href="#">● ABOUT</a>
-    <a href="#">✉ CONTACT</a>
+    <a class="active" href="index.html">HOME</a>
+    <a href="events.html">EVENTS</a>
+    <a href="hidden-gem.html">HIDDEN GEM</a>
+    <a href="speedruns.html">SPEEDRUNS</a>
+    <a href="glitch.html">GLITCH</a>
+    <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">MERCH</a>
+    <a href="about.html">ABOUT</a>
+    <a href="contact.html">CONTACT</a>
   </nav>
 
   <main class="section-grid">
+
+    <section class="card event-strip">
+      <div>
+        <strong>CURRENT EVENT:</strong>
+        #SonicSpeedEvent • Week 2 Badge Drops
+      </div>
+
+      <a href="events.html">EVENT DETAILS →</a>
+    </section>
 
     <section class="card">
       <h2>Current Status</h2>
