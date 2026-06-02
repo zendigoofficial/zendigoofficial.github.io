@@ -7,12 +7,10 @@
 
 <style>
 :root{
-  --bg:#050712;
+  --bg:#03050f;
   --panel:#0d1020;
-  --panel2:#14182b;
   --cyan:#00f5ff;
   --magenta:#ff00d4;
-  --purple:#8b3cff;
   --white:#ffffff;
   --muted:#a9aec3;
 }
@@ -23,51 +21,69 @@ body{
   margin:0;
   min-height:100vh;
   font-family:Arial, Helvetica, sans-serif;
-  background:
-    radial-gradient(circle at top left, rgba(255,0,212,.18), transparent 35%),
-    radial-gradient(circle at top right, rgba(0,245,255,.16), transparent 35%),
-    linear-gradient(180deg,#050712,#080b18 65%,#04050b);
   color:var(--white);
   text-align:center;
+  background:
+    radial-gradient(circle at top left, rgba(255,0,212,.20), transparent 35%),
+    radial-gradient(circle at top right, rgba(0,245,255,.20), transparent 35%),
+    linear-gradient(180deg,#03050f,#060915 50%,#03050f);
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    repeating-linear-gradient(0deg,rgba(255,0,212,.03) 0px,rgba(255,0,212,.03) 1px,transparent 1px,transparent 8px),
+    repeating-linear-gradient(90deg,rgba(0,245,255,.025) 0px,rgba(0,245,255,.025) 1px,transparent 1px,transparent 18px);
+  pointer-events:none;
+  opacity:.5;
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:linear-gradient(transparent 97%,rgba(0,245,255,.03) 100%);
+  background-size:100% 4px;
+  pointer-events:none;
+  opacity:.4;
+  z-index:-1;
 }
 
 .wrap{
-  width:min(920px,92%);
+  width:min(980px,92%);
   margin:auto;
-  padding:48px 0 36px;
+  padding:42px 0 34px;
 }
 
-.signal{
-  display:inline-block;
-  padding:7px 14px;
-  border:1px solid var(--cyan);
-  color:var(--cyan);
-  letter-spacing:3px;
-  font-size:.75rem;
-  text-transform:uppercase;
-  box-shadow:0 0 18px rgba(0,245,255,.35);
+.hero-banner{
+  width:100%;
+  margin-bottom:18px;
 }
 
-h1{
-  margin:20px 0 4px;
-  font-size:clamp(3rem,10vw,6rem);
-  line-height:.9;
-  letter-spacing:2px;
-  text-shadow:
-    3px 0 var(--magenta),
-    -3px 0 var(--cyan),
-    0 0 30px rgba(255,0,212,.35);
+.hero-banner img{
+  width:100%;
+  display:block;
+  margin:auto;
+  border-radius:14px;
+  box-shadow:
+    0 0 25px rgba(255,0,212,.25),
+    0 0 40px rgba(0,245,255,.18);
 }
 
 .tagline{
   margin:16px auto 30px;
   color:var(--muted);
   font-size:1.05rem;
+  letter-spacing:.5px;
 }
 
 .card{
   border:1px solid rgba(255,255,255,.12);
-  background:rgba(13,16,32,.82);
+  background:rgba(13,16,32,.84);
   border-radius:22px;
   padding:24px;
   box-shadow:0 0 35px rgba(0,0,0,.45);
@@ -122,6 +138,10 @@ a.button:hover{
   box-shadow:0 0 20px rgba(0,245,255,.25),0 0 18px rgba(255,0,212,.18);
 }
 
+a.button.full{
+  grid-column:1 / -1;
+}
+
 .left{
   display:flex;
   align-items:center;
@@ -142,7 +162,7 @@ a.button:hover{
 }
 
 .glitch{
-  margin-top:20px;
+  margin-top:18px;
   border:1px solid rgba(0,245,255,.35);
   border-radius:18px;
   padding:18px;
@@ -161,86 +181,91 @@ a.button:hover{
 
 .footer{
   margin-top:26px;
-  color:#7f8498;
+  color:#9aa1bb;
   font-size:.9rem;
 }
 
 .small{
   margin-top:10px;
   font-size:.78rem;
-  color:#666d82;
+  color:#7d86a3;
 }
 
 @media (min-width:720px){
   .links{
     grid-template-columns:1fr 1fr;
   }
-  a.button.full{
-    grid-column:1 / -1;
-  }
 }
 </style>
 </head>
 
 <body>
-  <main class="wrap">
-    <div class="signal">Unauthorized Broadcast</div>
+<main class="wrap">
 
-    <h1>ZENDIGO</h1>
+  <div class="hero-banner">
+    <img src="zendigo_banner.png" alt="Zendigo Banner">
+  </div>
 
-    <div class="tagline">
-      Speedruns • Retro Games • Hidden Gems • Hot Garbage
+  <div class="tagline">
+    Speedruns • Retro Games • Hidden Gems • Hot Garbage
+  </div>
+
+  <section class="card">
+
+    <div class="feature">
+      <h2>CURRENTLY PLAYING</h2>
+      <p>Sonic Speedruns • Week 2 Badge Event • Live on Twitch</p>
     </div>
 
-    <section class="card">
-      <div class="feature">
-        <h2>Welcome to the Broadcast</h2>
-        <p>Retro runs, demo discoveries, chaotic verdicts, and Glitch riding shotgun.</p>
-      </div>
+    <div class="links">
 
-      <div class="links">
-        <a class="button full" href="https://zendigo.s.gy/z6W6N9" target="_blank">
-          <span class="left"><span class="icon">🎮</span> Twitch</span>
-          <span class="arrow">LIVE →</span>
-        </a>
+      <a class="button full" href="https://zendigo.s.gy/z6W6N9" target="_blank">
+        <span class="left"><span class="icon">🎮</span> Twitch</span>
+        <span class="arrow">LIVE →</span>
+      </a>
 
-        <a class="button" href="https://zendigo.s.gy/UkSAT1" target="_blank">
-          <span class="left"><span class="icon">📺</span> YouTube</span>
-          <span class="arrow">→</span>
-        </a>
+      <a class="button" href="https://zendigo.s.gy/UkSAT1" target="_blank">
+        <span class="left"><span class="icon">📺</span> YouTube</span>
+        <span class="arrow">→</span>
+      </a>
 
-        <a class="button" href="https://zendigo.s.gy/krqFJy" target="_blank">
-          <span class="left"><span class="icon">💬</span> Discord</span>
-          <span class="arrow">→</span>
-        </a>
+      <a class="button" href="https://zendigo.s.gy/krqFJy" target="_blank">
+        <span class="left"><span class="icon">💬</span> Discord</span>
+        <span class="arrow">→</span>
+      </a>
 
-        <a class="button" href="https://zendigo.s.gy/QwhPxv" target="_blank">
-          <span class="left"><span class="icon">🏁</span> Speedrun.com</span>
-          <span class="arrow">→</span>
-        </a>
+      <a class="button" href="https://zendigo.s.gy/QwhPxv" target="_blank">
+        <span class="left"><span class="icon">🏁</span> Speedrun.com</span>
+        <span class="arrow">→</span>
+      </a>
 
-        <a class="button" href="https://zendigo.s.gy/yJtsVD" target="_blank">
-          <span class="left"><span class="icon">🎮</span> Steam Community</span>
-          <span class="arrow">→</span>
-        </a>
+      <a class="button" href="https://zendigo.s.gy/yJtsVD" target="_blank">
+        <span class="left"><span class="icon">🎮</span> Steam</span>
+        <span class="arrow">→</span>
+      </a>
 
-        <a class="button" href="https://zendigo.s.gy/iK4kUt" target="_blank">
-          <span class="left"><span class="icon">✦</span> X / Twitter</span>
-          <span class="arrow">→</span>
-        </a>
-      <div class="glitch">
-        <strong>GLITCH AI COMPANION</strong>
-        <p>AI co-host. Chaos certified. Signal corrupted.</p>
-      </div>
-    </section>
+      <a class="button" href="https://zendigo.s.gy/iK4kUt" target="_blank">
+        <span class="left"><span class="icon">✦</span> X / Twitter</span>
+        <span class="arrow">→</span>
+      </a>
 
-    <div class="footer">
-      Hidden Gem or Hot Garbage • Sonic Speedruns • Retro Events
     </div>
 
-    <div class="small">
-      Contact: zendigoofficial@gmail.com
+    <div class="glitch">
+      <strong>GLITCH AI COMPANION</strong>
+      <p>AI co-host. Chaos certified. Signal corrupted.</p>
     </div>
-  </main>
+
+  </section>
+
+  <div class="footer">
+    Hidden Gem or Hot Garbage • Sonic Speedruns • Retro Events
+  </div>
+
+  <div class="small">
+    Contact: zendigoofficial@gmail.com
+  </div>
+
+</main>
 </body>
 </html>
