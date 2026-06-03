@@ -540,7 +540,10 @@ p{
 const SPEEDRUN_USER = "ZendigoPlayz";
 const SPEEDRUN_PROFILE_URL = "https://www.speedrun.com/users/ZendigoPlayz";
 const SPEEDRUN_API_URL =
-  `https://www.speedrun.com/api/v1/users/${SPEEDRUN_USER}/personal-bests?embed=game,category`;
+  `https://www.speedrun.com/api/v1/users/${SPEEDRUN_USER}/personal-bests`;
+
+const gameCache = new Map();
+const categoryCache = new Map();
 
 function escapeHTML(value) {
   return String(value ?? "")
@@ -569,19 +572,98 @@ function formatSpeedrunTime(totalSeconds) {
   return `${minutes}:${secString}`;
 }
 
-function getEmbeddedName(item, key, fallback) {
-  try {
-    const data = item.run?.[key]?.data;
-    if (!data) return fallback;
+function getResourceId(resource) {
+  if (!resource) return null;
 
-    if (key === "game") {
-      return data.names?.international || fallback;
-    }
-
-    return data.name || fallback;
-  } catch {
-    return fallback;
+  if (typeof resource === "string") {
+    return resource;
   }
+
+  if (typeof resource === "object") {
+    return resource.id || resource.data?.id || null;
+  }
+
+  return null;
+}
+
+async function fetchJSON(url) {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`API error ${response.status}: ${url}`);
+  }
+
+  return response.json();
+}
+
+async function getGameName(gameResource) {
+  const gameId = getResourceId(gameResource);
+
+  if (!gameId) return "Unknown Game";
+
+  if (gameCache.has(gameId)) {
+    return gameCache.get(gameId);
+  }
+
+  try {
+    const json = await fetchJSON(`https://www.speedrun.com/api/v1/games/${gameId}`);
+    const name =
+      json.data?.names?.international ||
+      json.data?.abbreviation ||
+      "Unknown Game";
+
+    gameCache.set(gameId, name);
+    return name;
+  } catch (error) {
+    console.warn("Could not load game name:", gameId, error);
+    gameCache.set(gameId, "Unknown Game");
+    return "Unknown Game";
+  }
+}
+
+async function getCategoryName(categoryResource) {
+  const categoryId = getResourceId(categoryResource);
+
+  if (!categoryId) return "Unknown Category";
+
+  if (categoryCache.has(categoryId)) {
+    return categoryCache.get(categoryId);
+  }
+
+  try {
+    const json = await fetchJSON(`https://www.speedrun.com/api/v1/categories/${categoryId}`);
+    const name = json.data?.name || "Unknown Category";
+
+    categoryCache.set(categoryId, name);
+    return name;
+  } catch (error) {
+    console.warn("Could not load category name:", categoryId, error);
+    categoryCache.set(categoryId, "Unknown Category");
+    return "Unknown Category";
+  }
+}
+
+async function buildPBCard(item) {
+  const run = item.run || {};
+
+  const [gameName, categoryName] = await Promise.all([
+    getGameName(run.game),
+    getCategoryName(run.category)
+  ]);
+
+  const time = formatSpeedrunTime(run.times?.primary_t);
+  const place = item.place ? `#${item.place}` : "Unranked";
+  const runLink = run.weblink || SPEEDRUN_PROFILE_URL;
+
+  return `
+    <article class="pb-card">
+      <h3>${escapeHTML(gameName)}</h3>
+      <p class="pb-meta"><strong>Category:</strong> ${escapeHTML(categoryName)}</p>
+      <p class="pb-meta"><strong>Time:</strong> ${escapeHTML(time)}</p>
+      <p class="pb-meta"><strong>Placement:</strong> ${escapeHTML(place)}</p>
+      <a class="pb-link" href="${escapeHTML(runLink)}" target="_blank" rel="noopener">View Run →</a>
+    </article>
+  `;
 }
 
 async function loadSpeedrunPBs() {
@@ -591,13 +673,7 @@ async function loadSpeedrunPBs() {
   if (!status || !grid) return;
 
   try {
-    const response = await fetch(SPEEDRUN_API_URL);
-
-    if (!response.ok) {
-      throw new Error(`Speedrun.com API error: ${response.status}`);
-    }
-
-    const json = await response.json();
+    const json = await fetchJSON(SPEEDRUN_API_URL);
     const personalBests = Array.isArray(json.data) ? json.data : [];
 
     if (personalBests.length === 0) {
@@ -617,24 +693,8 @@ async function loadSpeedrunPBs() {
     status.textContent =
       `Loaded ${personalBests.length} verified personal best${personalBests.length === 1 ? "" : "s"}.`;
 
-    grid.innerHTML = personalBests.map((item) => {
-      const run = item.run || {};
-      const gameName = escapeHTML(getEmbeddedName(item, "game", "Unknown Game"));
-      const categoryName = escapeHTML(getEmbeddedName(item, "category", "Unknown Category"));
-      const time = escapeHTML(formatSpeedrunTime(run.times?.primary_t));
-      const place = item.place ? `#${escapeHTML(item.place)}` : "Unranked";
-      const runLink = escapeHTML(run.weblink || SPEEDRUN_PROFILE_URL);
-
-      return `
-        <article class="pb-card">
-          <h3>${gameName}</h3>
-          <p class="pb-meta"><strong>Category:</strong> ${categoryName}</p>
-          <p class="pb-meta"><strong>Time:</strong> ${time}</p>
-          <p class="pb-meta"><strong>Placement:</strong> ${place}</p>
-          <a class="pb-link" href="${runLink}" target="_blank" rel="noopener">View Run →</a>
-        </article>
-      `;
-    }).join("");
+    const cards = await Promise.all(personalBests.map(buildPBCard));
+    grid.innerHTML = cards.join("");
 
   } catch (error) {
     console.error(error);
@@ -654,6 +714,5 @@ async function loadSpeedrunPBs() {
 
 loadSpeedrunPBs();
 </script>
-
 </body>
 </html>
