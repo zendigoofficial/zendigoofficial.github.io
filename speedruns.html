@@ -3,32 +3,33 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Speedruns | Zendigo</title>
+<title>Zendigo | Speedruns</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
-
 :root{
-  --cyan:#00FFEE;
-  --magenta:#FF20FF;
-  --purple:#A230F0;
-  --black:#05070d;
-  --panel:#0f0f14;
-  --white:#EEEEEE;
-  --muted:#A9AEC3;
+  --bg:#03050f;
+  --panel:#080a12;
+  --panel2:#0b1020;
+  --cyan:#00ffee;
+  --magenta:#ff20ff;
+  --purple:#a230f0;
+  --white:#eeeeee;
+  --muted:#b7b9c9;
+  --border-cyan:rgba(0,255,238,.55);
+  --border-magenta:rgba(255,32,255,.55);
 }
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box}
 
 body{
+  margin:0;
+  min-height:100vh;
   font-family:Arial, Helvetica, sans-serif;
-  background:#05070d;
   color:var(--white);
-  line-height:1.6;
+  background:
+    radial-gradient(circle at top left, rgba(255,32,255,.18), transparent 34%),
+    radial-gradient(circle at top right, rgba(0,255,238,.16), transparent 32%),
+    linear-gradient(180deg,#03050f,#060716 48%,#03050f);
   overflow-x:hidden;
 }
 
@@ -37,10 +38,10 @@ body::before{
   position:fixed;
   inset:0;
   background:
-    radial-gradient(circle at top left, rgba(255,32,255,.14), transparent 35%),
-    radial-gradient(circle at top right, rgba(0,255,238,.12), transparent 35%),
-    linear-gradient(180deg,#05070d,#080a12 55%,#05070d);
+    repeating-linear-gradient(0deg,rgba(255,32,255,.035) 0px,rgba(255,32,255,.035) 1px,transparent 1px,transparent 9px),
+    repeating-linear-gradient(90deg,rgba(0,255,238,.025) 0px,rgba(0,255,238,.025) 1px,transparent 1px,transparent 20px);
   pointer-events:none;
+  opacity:.55;
   z-index:-2;
 }
 
@@ -48,463 +49,611 @@ body::after{
   content:"";
   position:fixed;
   inset:0;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255,255,255,.018),
-      rgba(255,255,255,.018) 1px,
-      transparent 1px,
-      transparent 5px
-    );
-  opacity:.35;
+  background-image:linear-gradient(transparent 96%,rgba(0,255,238,.045) 100%);
+  background-size:100% 4px;
   pointer-events:none;
+  opacity:.35;
   z-index:-1;
 }
 
-.wrapper{
-  width:min(1400px,95%);
-  margin:auto;
-  padding:18px 0 24px;
+.page{
+  width:min(1440px,100%);
+  margin:0 auto;
+  padding:0 0 28px;
 }
 
 .hero{
-  margin-bottom:12px;
+  border:1px solid var(--border-magenta);
+  border-radius:0 0 12px 12px;
+  background:#05060c;
+  overflow:hidden;
+  box-shadow:
+    0 0 24px rgba(255,32,255,.22),
+    0 0 32px rgba(0,255,238,.10);
 }
 
 .hero img{
   width:100%;
   display:block;
-  border-radius:14px;
-  border:2px solid rgba(255,32,255,.35);
-  box-shadow:
-    0 0 30px rgba(255,32,255,.20),
-    0 0 30px rgba(0,255,238,.15);
 }
 
-.navbar{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:24px;
-  flex-wrap:wrap;
-  margin-bottom:18px;
-  padding:13px 16px;
-  background:rgba(10,10,18,.88);
-  border:1px solid rgba(255,32,255,.35);
+.nav{
+  width:100%;
+  margin:12px auto 18px;
+  padding:16px 20px;
+  border:1px solid rgba(255,32,255,.55);
   border-radius:12px;
-  box-shadow:0 0 18px rgba(162,48,240,.16);
-}
-
-.navbar a{
-  color:var(--white);
-  text-decoration:none;
-  font-family:Orbitron, Arial, sans-serif;
-  font-weight:800;
-  letter-spacing:.5px;
-}
-
-.navbar a:hover,
-.navbar a.active{
-  color:var(--cyan);
-  text-shadow:0 0 10px rgba(0,255,238,.75);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:18px;
-}
-
-.card{
-  background:rgba(15,15,20,.92);
-  border:1px solid rgba(255,32,255,.32);
-  border-radius:16px;
-  padding:20px;
+  background:rgba(7,8,18,.86);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:26px;
+  flex-wrap:wrap;
   box-shadow:0 0 18px rgba(255,32,255,.08);
 }
 
-.card h2{
-  font-family:Orbitron, Arial, sans-serif;
-  color:var(--cyan);
-  margin-bottom:14px;
+.nav a{
+  color:var(--white);
+  text-decoration:none;
+  font-weight:900;
+  letter-spacing:.06em;
   text-transform:uppercase;
-  letter-spacing:1px;
+  transition:.18s ease;
 }
 
-.card h3{
-  font-family:Orbitron, Arial, sans-serif;
-  color:var(--white);
-  margin-bottom:8px;
+.nav a:hover,
+.nav a.active{
+  color:var(--cyan);
+  text-shadow:0 0 12px rgba(0,255,238,.6);
 }
 
-.card p{
-  color:var(--white);
+.section{
+  margin:18px auto;
+  width:calc(100% - 16px);
+  border:1px solid var(--border-magenta);
+  border-radius:16px;
+  padding:22px;
+  background:
+    linear-gradient(135deg,rgba(0,255,238,.045),rgba(255,32,255,.045)),
+    rgba(7,8,16,.88);
+  box-shadow:0 0 24px rgba(0,0,0,.35);
+}
+
+.section.cyan{
+  border-color:var(--border-cyan);
+}
+
+h1,h2,h3{
+  margin:0;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+
+h1{
+  color:var(--cyan);
+  font-size:clamp(2rem,5vw,4rem);
+}
+
+h2{
+  color:var(--cyan);
+  font-size:clamp(1.45rem,3vw,2rem);
+  margin-bottom:18px;
+}
+
+h3{
+  color:var(--cyan);
+  font-size:1.2rem;
+  margin-bottom:12px;
+}
+
+p{
+  line-height:1.58;
 }
 
 .muted{
   color:var(--muted);
 }
 
-.accent-cyan{
-  color:var(--cyan);
-  font-weight:bold;
-}
-
-.accent-magenta{
+.accent{
   color:var(--magenta);
-  font-weight:bold;
 }
 
-.accent-purple{
-  color:var(--purple);
-  font-weight:bold;
-}
-
-.info-grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:14px;
-}
-
-.info-panel{
-  border:1px solid rgba(0,255,238,.28);
-  border-radius:14px;
-  padding:16px;
-  background:rgba(0,255,238,.04);
-}
-
-.info-panel h3{
+.cyan-text{
   color:var(--cyan);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+
+.card{
+  border:1px solid rgba(0,255,238,.5);
+  border-radius:14px;
+  padding:18px;
+  background:
+    linear-gradient(135deg,rgba(0,255,238,.055),rgba(255,32,255,.035)),
+    rgba(8,12,18,.82);
+}
+
+.card.magenta{
+  border-color:rgba(255,32,255,.55);
+}
+
+.card p:last-child{
+  margin-bottom:0;
 }
 
 .event-card{
-  border-color:rgba(162,48,240,.55);
+  border-color:rgba(162,48,240,.75);
   background:
-    linear-gradient(90deg,rgba(162,48,240,.14),rgba(255,32,255,.07),rgba(0,255,238,.06)),
-    rgba(15,15,20,.92);
+    linear-gradient(135deg,rgba(162,48,240,.16),rgba(0,255,238,.05)),
+    rgba(8,12,18,.88);
 }
 
-.event-lockup{
-  display:grid;
-  gap:10px;
-}
-
-.event-hashtag{
-  font-family:Orbitron, Arial, sans-serif;
-  font-size:1.4rem;
+.event-card h3{
   color:var(--magenta);
+  font-size:1.45rem;
+}
+
+.section-header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+.cta-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:18px;
+}
+
+.button,
+.mini-cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  color:var(--cyan);
+  border:1px solid var(--cyan);
+  border-radius:10px;
+  padding:11px 15px;
+  font-weight:900;
+  letter-spacing:.04em;
+  background:rgba(0,255,238,.05);
+  box-shadow:0 0 15px rgba(0,255,238,.12);
+  transition:.18s ease;
+}
+
+.button:hover,
+.mini-cta:hover{
+  color:var(--magenta);
+  border-color:var(--magenta);
+  box-shadow:0 0 18px rgba(255,32,255,.22);
+  transform:translateY(-1px);
+}
+
+.tracker-status{
+  margin-top:18px;
+  color:var(--cyan);
   font-weight:900;
 }
 
-.event-date{
-  color:var(--white);
-  font-weight:bold;
-}
-
-.speed-phrase{
-  display:inline-block;
-  margin-top:8px;
-  color:var(--cyan);
-  font-family:Orbitron, Arial, sans-serif;
-  font-weight:800;
-}
-
-.run-grid{
+.pb-grid{
   display:grid;
-  grid-template-columns:1fr;
-  gap:14px;
-}
-
-.run-card{
-  border:1px solid rgba(255,32,255,.32);
-  border-radius:14px;
-  padding:18px;
-  background:
-    linear-gradient(135deg,rgba(255,32,255,.09),rgba(0,255,238,.05)),
-    rgba(0,0,0,.20);
-  min-height:130px;
-}
-
-.run-card strong{
-  display:block;
-  color:var(--cyan);
-  font-family:Orbitron, Arial, sans-serif;
-  font-size:1.1rem;
-  margin-bottom:8px;
-}
-
-.run-card span{
-  color:var(--muted);
-}
-
-.two-column{
-  display:grid;
-  grid-template-columns:1fr;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:18px;
+  margin-top:22px;
 }
 
-.simple-list{
-  list-style:none;
-  display:grid;
-  gap:10px;
-}
-
-.simple-list li{
-  color:var(--white);
-}
-
-.simple-list strong{
-  color:var(--cyan);
-}
-
-.integration-card{
-  border:1px solid rgba(0,255,238,.35);
+.pb-card{
+  border:1px solid rgba(255,32,255,.65);
   background:
-    linear-gradient(90deg,rgba(0,255,238,.06),rgba(162,48,240,.06)),
-    rgba(15,15,20,.92);
+    linear-gradient(135deg,rgba(0,255,238,.06),rgba(255,32,255,.06)),
+    rgba(8,10,18,.92);
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 0 22px rgba(255,32,255,.08);
 }
 
-.big-tagline{
-  text-align:center;
-  border-color:rgba(0,255,238,.38);
+.pb-card h3{
+  margin:0 0 8px;
+  color:var(--cyan);
+  font-size:1.1rem;
 }
 
-.big-tagline h2{
+.pb-meta{
+  color:var(--white);
+  line-height:1.55;
+  margin:8px 0;
+}
+
+.pb-meta strong{
   color:var(--magenta);
 }
 
-.big-tagline p{
-  font-family:Orbitron, Arial, sans-serif;
+.pb-link{
+  display:inline-block;
+  margin-top:12px;
   color:var(--cyan);
-  font-weight:800;
-  letter-spacing:1px;
+  font-weight:900;
+  text-decoration:none;
 }
 
-.footer{
-  margin-top:18px;
-  padding:18px;
-  border:1px solid rgba(255,32,255,.25);
-  border-radius:14px;
-  background:rgba(10,10,18,.88);
+.pb-link:hover{
+  color:var(--magenta);
+}
+
+.list-clean{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.list-clean li{
+  margin:0 0 12px;
+  color:var(--cyan);
+  font-weight:900;
+}
+
+.focus-line{
+  margin:12px 0;
+}
+
+.focus-line strong{
+  color:var(--cyan);
+}
+
+.believe{
   text-align:center;
+  border-color:var(--border-cyan);
 }
 
-.social-row{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:28px;
-  flex-wrap:wrap;
+.believe h2{
+  color:var(--magenta);
   margin-bottom:10px;
 }
 
-.social-row a{
-  color:var(--white);
-  text-decoration:none;
-  font-family:Orbitron, Arial, sans-serif;
-  font-weight:800;
-  letter-spacing:.5px;
+.footer{
+  width:calc(100% - 52px);
+  margin:20px auto 0;
+  border:1px solid rgba(255,32,255,.45);
+  border-radius:14px;
+  padding:20px;
+  text-align:center;
+  background:rgba(6,7,15,.92);
 }
 
-.social-row a:hover{
+.footer-links{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:28px;
+  margin-bottom:14px;
+}
+
+.footer-links a{
+  color:var(--white);
+  text-decoration:none;
+  font-weight:900;
+}
+
+.footer-links a:hover{
   color:var(--cyan);
-  text-shadow:0 0 10px rgba(0,255,238,.75);
 }
 
 .footer small{
   color:var(--muted);
+  display:block;
+  margin-top:8px;
 }
 
-@media(min-width:900px){
-  .info-grid{
-    grid-template-columns:repeat(2,1fr);
+@media (max-width:760px){
+  .grid{
+    grid-template-columns:1fr;
   }
 
-  .run-grid{
-    grid-template-columns:repeat(2,1fr);
+  .nav{
+    gap:14px;
+    padding:14px 10px;
   }
 
-  .two-column{
-    grid-template-columns:1fr 1fr;
+  .section{
+    padding:18px;
+  }
+
+  .footer{
+    width:calc(100% - 16px);
   }
 }
 </style>
 </head>
 
 <body>
-
-<div class="wrapper">
+<main class="page">
 
   <header class="hero">
-    <img src="speedruns_banner.png" alt="Zendigo Speedruns">
+    <img src="speedruns_banner.png" alt="Zendigo Speedruns Banner">
   </header>
 
-  <nav class="navbar">
-    <a href="index.html">HOME</a>
-    <a href="events.html">EVENTS</a>
-    <a href="hidden-gem.html">HIDDEN GEM</a>
-    <a class="active" href="speedruns.html">SPEEDRUNS</a>
-    <a href="glitch.html">GLITCH</a>
-    <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">MERCH</a>
-    <a href="about.html">ABOUT</a>
-    <a href="contact.html">CONTACT</a>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="events.html">Events</a>
+    <a href="hidden-gem.html">Hidden Gem</a>
+    <a class="active" href="speedruns.html">Speedruns</a>
+    <a href="glitch.html">Glitch</a>
+    <a href="merch.html">Merch</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
   </nav>
 
-  <main class="grid">
+  <section class="section cyan">
+    <h2>What Is Speedrunning?</h2>
 
-    <section class="card">
-      <h2>What Is Speedrunning?</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>Speedrunning</h3>
+        <p>Speedrunning is the challenge of completing a game as quickly and efficiently as possible. Players learn routes, strategies, shortcuts, and movement techniques to improve their times and push themselves further with every run.</p>
+      </article>
 
-      <div class="info-grid">
+      <article class="card">
+        <h3>Personal Bests (PBs)</h3>
+        <p>A Personal Best (PB) is the fastest time you have ever completed a category. Every run is an opportunity to improve, whether that means saving a few seconds or achieving a major breakthrough.</p>
+      </article>
 
-        <div class="info-panel">
-          <h3>Speedrunning</h3>
-          <p>
-            Speedrunning is the challenge of completing a game as quickly and efficiently as possible.
-            Players learn routes, strategies, shortcuts, and movement techniques to improve their times
-            and push themselves further with every run.
-          </p>
-        </div>
+      <article class="card">
+        <h3>World Records (WRs)</h3>
+        <p>A World Record (WR) is the fastest verified time achieved by any runner in a specific category. While world records are often the most visible achievements, most runners spend their time chasing personal improvement, consistency, and new milestones of their own.</p>
+      </article>
 
-        <div class="info-panel">
-          <h3>Personal Bests (PBs)</h3>
-          <p>
-            A Personal Best (PB) is the fastest time you've ever completed a category. Every run is an
-            opportunity to improve, whether that means saving a few seconds or achieving a major breakthrough.
-            For many runners, beating their own PB is the first major goal.
-          </p>
-        </div>
+      <article class="card">
+        <h3>Community Competition</h3>
+        <p>Speedrunning is more than racing the clock. Players compare times, share strategies, help each other learn, and compete on global leaderboards. Whether you are a world record holder or just starting your first run, there is always another goal to chase.</p>
+      </article>
 
-        <div class="info-panel">
-          <h3>World Records (WRs)</h3>
-          <p>
-            A World Record (WR) is the fastest verified time achieved by any runner in a specific category.
-            While world records are often the most visible achievements in speedrunning, most runners spend
-            their time chasing personal improvement, consistency, and new milestones of their own.
-          </p>
-        </div>
+      <article class="card">
+        <h3>Learning & Improvement</h3>
+        <p>Most speedruns are not world records. They are practice, experimentation, mistakes, discoveries, and gradual improvement. Every reset, every completed run, and every saved second teaches something new.</p>
+      </article>
+    </div>
+  </section>
 
-        <div class="info-panel">
-          <h3>Community Competition</h3>
-          <p>
-            Speedrunning is more than racing the clock. Players compare times, share strategies, help each
-            other learn, and compete on global leaderboards. Whether you're a world record holder or just
-            starting your first run, there's always another goal to chase.
-          </p>
-        </div>
+  <section class="section event-card">
+    <h2>Current Event</h2>
+    <h3>#SonicSpeedEvent</h3>
+    <p><strong>May 25 – July 12, 2026</strong></p>
+    <p class="cyan-text"><strong>#BelieveInSpeed • スピードを信じろ</strong></p>
+    <p>A 7-week Zendigo speedrun event focused on Sonic runs, personal bests, creator badge rewards, community challenges, and weekly progress.</p>
 
-        <div class="info-panel">
-          <h3>Learning & Improvement</h3>
-          <p>
-            Most speedruns aren't world records. They're practice, experimentation, mistakes, discoveries,
-            and gradual improvement. Every reset, every completed run, and every saved second teaches
-            something new.
-          </p>
-        </div>
+    <div class="cta-row">
+      <a class="button" href="events.html">View Event Page</a>
+      <a class="button" href="https://zendigo.s.gy/z6W6N9" target="_blank" rel="noopener">Watch Live</a>
+    </div>
+  </section>
 
-      </div>
-    </section>
+  <section class="section">
+    <h2>Current Runs</h2>
 
-    <section class="card event-card">
-      <h2>Current Event</h2>
+    <div class="grid">
+      <article class="card magenta">
+        <h3>Sonic Rumble Party</h3>
+        <p class="muted">Primary active run.</p>
+      </article>
 
-      <div class="event-lockup">
-        <div class="event-hashtag">#SonicSpeedEvent</div>
-        <div class="event-date">May 25 – July 12, 2026</div>
-        <div class="speed-phrase">#BelieveInSpeed • スピードを信じろ</div>
-      </div>
-    </section>
+      <article class="card magenta">
+        <h3>Sonic the Hedgehog</h3>
+        <p class="muted">Current event focus.</p>
+      </article>
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>Current Runs</h2>
-
-      <div class="run-grid">
-
-        <div class="run-card">
-          <strong>Sonic Rumble Party</strong>
-          <span>Primary active run.</span>
-        </div>
-
-        <div class="run-card">
-          <strong>Sonic the Hedgehog</strong>
-          <span>Current event focus.</span>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="two-column">
-
-      <div class="card">
+  <section class="section">
+    <div class="grid">
+      <article class="card magenta">
         <h2>Coming Up</h2>
-
-        <ul class="simple-list">
-          <li><strong>Sonic the Hedgehog 2</strong></li>
-          <li><strong>Sonic the Hedgehog 3</strong></li>
-          <li><strong>Sonic &amp; Knuckles</strong></li>
-          <li><strong>Disney Vault Runs</strong></li>
+        <ul class="list-clean">
+          <li>Sonic the Hedgehog 2</li>
+          <li>Sonic the Hedgehog 3</li>
+          <li>Sonic & Knuckles</li>
+          <li>Disney Vault Runs</li>
         </ul>
-      </div>
+      </article>
 
-      <div class="card">
+      <article class="card magenta">
         <h2>Personal Bests</h2>
+        <p>No PBs displayed yet.</p>
+        <p class="focus-line"><strong>Current Focus:</strong> Learning routes</p>
+        <p class="focus-line"><strong>Current Goal:</strong> Building consistency</p>
+        <p class="focus-line"><strong>Long-Term Goal:</strong> Completing event goals</p>
+      </article>
+    </div>
+  </section>
 
-        <p>
-          No PBs displayed yet.
+  <section class="section cyan speedrun-tracker-card">
+    <div class="section-header-row">
+      <div>
+        <h2>Speedrun.com Tracker</h2>
+        <p class="muted">
+          Verified runs, personal bests, categories, and leaderboard progress pulled from Zendigo's Speedrun.com profile.
         </p>
-
-        <br>
-
-        <ul class="simple-list">
-          <li><strong>Current Focus:</strong> Learning routes</li>
-          <li><strong>Current Goal:</strong> Building consistency</li>
-          <li><strong>Long-Term Goal:</strong> Completing event goals</li>
-        </ul>
       </div>
 
-    </section>
-
-    <section class="card integration-card">
-      <h2>Speedrun.com Integration</h2>
-
-      <p>
-        Future Zendigo speedrun panels will display current PBs, categories, rankings,
-        recent runs, event stats, and profile highlights in the same neon Twitch-panel
-        style used across the website.
-      </p>
-
-      <br>
-
-      <p class="muted">
-        Coming soon.
-      </p>
-    </section>
-
-    <section class="card big-tagline">
-      <h2>#BelieveInSpeed</h2>
-      <p>スピードを信じろ</p>
-    </section>
-
-  </main>
-
-  <footer class="footer">
-
-    <div class="social-row">
-      <a href="https://zendigo.s.gy/z6W6N9" target="_blank">Twitch</a>
-      <a href="https://zendigo.s.gy/UkSAT1" target="_blank">YouTube</a>
-      <a href="https://zendigo.s.gy/krqFJy" target="_blank">Discord</a>
-      <a href="https://zendigo.s.gy/yJtsVD" target="_blank">Steam</a>
-      <a href="https://zendigo.s.gy/iK4kUt" target="_blank">X</a>
+      <a class="mini-cta" href="https://www.speedrun.com/users/ZendigoPlayz" target="_blank" rel="noopener">
+        View Profile
+      </a>
     </div>
 
-    <small>
-      Retro Games • Speedruns • Community Events • Hidden Gems<br>
-      Contact: zendigoofficial@gmail.com
-    </small>
+    <p id="speedrun-status" class="tracker-status">Loading Speedrun.com data...</p>
 
+    <div id="speedrun-pb-grid" class="pb-grid"></div>
+  </section>
+
+  <section class="section cyan">
+    <h2>Community Speedrun Goals</h2>
+    <p>Viewers can support speedrun segments through Chaos Tokens, community challenges, and event participation.</p>
+
+    <div class="grid">
+      <article class="card">
+        <h3>Bonus Speedrun Attempt</h3>
+        <p>Community challenges may unlock one extra PB attempt or “one more run” segment during speedrun streams.</p>
+      </article>
+
+      <article class="card">
+        <h3>Chaos Wheel Picks</h3>
+        <p>Chaos Tokens can help unlock random game, demo, or retro challenge picks through the community challenge system.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section believe">
+    <h2>#BelieveInSpeed</h2>
+    <p class="cyan-text"><strong>スピードを信じろ</strong></p>
+
+    <div class="cta-row" style="justify-content:center;">
+      <a class="button" href="https://zendigo.s.gy/z6W6N9" target="_blank" rel="noopener">Twitch</a>
+      <a class="button" href="https://zendigo.s.gy/UkSAT1" target="_blank" rel="noopener">YouTube</a>
+      <a class="button" href="https://zendigo.s.gy/krqFJy" target="_blank" rel="noopener">Discord</a>
+      <a class="button" href="https://zendigo.s.gy/QwhPxv" target="_blank" rel="noopener">Speedrun.com</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://zendigo.s.gy/z6W6N9" target="_blank" rel="noopener">Twitch</a>
+      <a href="https://zendigo.s.gy/UkSAT1" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://zendigo.s.gy/krqFJy" target="_blank" rel="noopener">Discord</a>
+      <a href="https://zendigo.s.gy/yJtsVD" target="_blank" rel="noopener">Steam</a>
+      <a href="https://zendigo.s.gy/iK4kUt" target="_blank" rel="noopener">X</a>
+    </div>
+
+    <small>Retro Games • Speedruns • Community Events • Hidden Gems</small>
+    <small>Contact: zendigoofficial@gmail.com</small>
   </footer>
 
-</div>
+</main>
+
+<script>
+const SPEEDRUN_USER = "ZendigoPlayz";
+const SPEEDRUN_PROFILE_URL = "https://www.speedrun.com/users/ZendigoPlayz";
+const SPEEDRUN_API_URL =
+  `https://www.speedrun.com/api/v1/users/${SPEEDRUN_USER}/personal-bests?embed=game,category`;
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function formatSpeedrunTime(totalSeconds) {
+  if (!Number.isFinite(totalSeconds)) return "Time unavailable";
+
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  const secString = seconds % 1 === 0
+    ? String(seconds).padStart(2, "0")
+    : seconds.toFixed(2).padStart(5, "0");
+
+  if (hours > 0) {
+    return `${hours}:${String(minutes).padStart(2, "0")}:${secString}`;
+  }
+
+  return `${minutes}:${secString}`;
+}
+
+function getEmbeddedName(item, key, fallback) {
+  try {
+    const data = item.run?.[key]?.data;
+    if (!data) return fallback;
+
+    if (key === "game") {
+      return data.names?.international || fallback;
+    }
+
+    return data.name || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+async function loadSpeedrunPBs() {
+  const status = document.getElementById("speedrun-status");
+  const grid = document.getElementById("speedrun-pb-grid");
+
+  if (!status || !grid) return;
+
+  try {
+    const response = await fetch(SPEEDRUN_API_URL);
+
+    if (!response.ok) {
+      throw new Error(`Speedrun.com API error: ${response.status}`);
+    }
+
+    const json = await response.json();
+    const personalBests = Array.isArray(json.data) ? json.data : [];
+
+    if (personalBests.length === 0) {
+      status.textContent =
+        "No verified PBs found yet. Current focus: learning routes, building consistency, and preparing runs for submission.";
+
+      grid.innerHTML = `
+        <div class="pb-card">
+          <h3>Current Focus</h3>
+          <p class="pb-meta"><strong>Learning routes</strong>, building consistency, and preparing runs for future Speedrun.com submissions.</p>
+          <a class="pb-link" href="${SPEEDRUN_PROFILE_URL}" target="_blank" rel="noopener">View Speedrun.com Profile →</a>
+        </div>
+      `;
+      return;
+    }
+
+    status.textContent =
+      `Loaded ${personalBests.length} verified personal best${personalBests.length === 1 ? "" : "s"}.`;
+
+    grid.innerHTML = personalBests.map((item) => {
+      const run = item.run || {};
+      const gameName = escapeHTML(getEmbeddedName(item, "game", "Unknown Game"));
+      const categoryName = escapeHTML(getEmbeddedName(item, "category", "Unknown Category"));
+      const time = escapeHTML(formatSpeedrunTime(run.times?.primary_t));
+      const place = item.place ? `#${escapeHTML(item.place)}` : "Unranked";
+      const runLink = escapeHTML(run.weblink || SPEEDRUN_PROFILE_URL);
+
+      return `
+        <article class="pb-card">
+          <h3>${gameName}</h3>
+          <p class="pb-meta"><strong>Category:</strong> ${categoryName}</p>
+          <p class="pb-meta"><strong>Time:</strong> ${time}</p>
+          <p class="pb-meta"><strong>Placement:</strong> ${place}</p>
+          <a class="pb-link" href="${runLink}" target="_blank" rel="noopener">View Run →</a>
+        </article>
+      `;
+    }).join("");
+
+  } catch (error) {
+    console.error(error);
+
+    status.textContent =
+      "Speedrun.com tracker is temporarily unavailable. Static speedrun goals are still listed below.";
+
+    grid.innerHTML = `
+      <div class="pb-card">
+        <h3>Tracker Offline</h3>
+        <p class="pb-meta">Could not load Speedrun.com data right now. Check Zendigo's profile directly for verified runs and leaderboard updates.</p>
+        <a class="pb-link" href="${SPEEDRUN_PROFILE_URL}" target="_blank" rel="noopener">View Speedrun.com Profile →</a>
+      </div>
+    `;
+  }
+}
+
+loadSpeedrunPBs();
+</script>
 
 </body>
 </html>
