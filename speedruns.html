@@ -243,119 +243,64 @@ p{
   font-weight:900;
 }
 
-.pb-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:18px;
-  margin-top:22px;
+.pb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin-top: 22px;
+  align-items: start;
 }
 
-.pb-card{
-  border:1px solid rgba(255,32,255,.65);
+.pb-card.with-cover {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: auto;
+  overflow: hidden;
+}
+
+.pb-cover-wrap {
+  width: 100%;
+  height: 190px;
+  border: 1px solid rgba(0, 255, 238, 0.55);
+  border-radius: 12px;
+  overflow: hidden;
   background:
-    linear-gradient(135deg,rgba(0,255,238,.06),rgba(255,32,255,.06)),
-    rgba(8,10,18,.92);
-  border-radius:16px;
-  padding:18px;
-  box-shadow:0 0 22px rgba(255,32,255,.08);
+    linear-gradient(135deg, rgba(0,255,238,.12), rgba(255,32,255,.08)),
+    rgba(0,0,0,.45);
+  box-shadow: 0 0 16px rgba(0,255,238,.12);
 }
 
-.pb-card h3{
-  margin:0 0 8px;
-  color:var(--cyan);
-  font-size:1.1rem;
+.pb-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
-.pb-meta{
-  color:var(--white);
-  line-height:1.55;
-  margin:8px 0;
+.pb-cover-placeholder {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: .8rem;
+  text-align: center;
+  padding: 8px;
 }
 
-.pb-meta strong{
-  color:var(--magenta);
+.pb-info {
+  min-width: 0;
 }
 
-.pb-link{
-  display:inline-block;
-  margin-top:12px;
-  color:var(--cyan);
-  font-weight:900;
-  text-decoration:none;
+.pb-info h3 {
+  line-height: 1.18;
 }
 
-.pb-link:hover{
-  color:var(--magenta);
-}
-
-.list-clean{
-  list-style:none;
-  padding:0;
-  margin:0;
-}
-
-.list-clean li{
-  margin:0 0 12px;
-  color:var(--cyan);
-  font-weight:900;
-}
-
-.focus-line{
-  margin:12px 0;
-}
-
-.focus-line strong{
-  color:var(--cyan);
-}
-
-.believe{
-  text-align:center;
-  border-color:var(--border-cyan);
-}
-
-.believe h2{
-  color:var(--magenta);
-  margin-bottom:10px;
-}
-
-.footer{
-  width:calc(100% - 52px);
-  margin:20px auto 0;
-  border:1px solid rgba(255,32,255,.45);
-  border-radius:14px;
-  padding:20px;
-  text-align:center;
-  background:rgba(6,7,15,.92);
-}
-
-.footer-links{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:28px;
-  margin-bottom:14px;
-}
-
-.footer-links a{
-  color:var(--white);
-  text-decoration:none;
-  font-weight:900;
-}
-
-.footer-links a:hover{
-  color:var(--cyan);
-}
-
-.footer small{
-  color:var(--muted);
-  display:block;
-  margin-top:8px;
-}
-
-@media (max-width:760px){
-  .grid{
-    grid-template-columns:1fr;
+@media (max-width: 560px) {
+  .pb-cover-wrap {
+    height: 160px;
   }
+}
 
   .nav{
     gap:14px;
