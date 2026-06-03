@@ -575,9 +575,7 @@ function formatSpeedrunTime(totalSeconds) {
 function getResourceId(resource) {
   if (!resource) return null;
 
-  if (typeof resource === "string") {
-    return resource;
-  }
+  if (typeof resource === "string") return resource;
 
   if (typeof resource === "object") {
     return resource.id || resource.data?.id || null;
@@ -596,10 +594,29 @@ async function fetchJSON(url) {
   return response.json();
 }
 
-async function getGameName(gameResource) {
+function getBestCover(gameData) {
+  const assets = gameData?.assets || {};
+
+  return (
+    assets["cover-large"]?.uri ||
+    assets["cover-medium"]?.uri ||
+    assets["cover-small"]?.uri ||
+    assets["cover-tiny"]?.uri ||
+    assets["icon"]?.uri ||
+    ""
+  );
+}
+
+async function getGameData(gameResource) {
   const gameId = getResourceId(gameResource);
 
-  if (!gameId) return "Unknown Game";
+  if (!gameId) {
+    return {
+      name: "Unknown Game",
+      cover: "",
+      weblink: ""
+    };
+  }
 
   if (gameCache.has(gameId)) {
     return gameCache.get(gameId);
@@ -607,17 +624,27 @@ async function getGameName(gameResource) {
 
   try {
     const json = await fetchJSON(`https://www.speedrun.com/api/v1/games/${gameId}`);
-    const name =
-      json.data?.names?.international ||
-      json.data?.abbreviation ||
-      "Unknown Game";
+    const game = json.data || {};
 
-    gameCache.set(gameId, name);
-    return name;
+    const data = {
+      name: game.names?.international || game.abbreviation || "Unknown Game",
+      cover: getBestCover(game),
+      weblink: game.weblink || ""
+    };
+
+    gameCache.set(gameId, data);
+    return data;
   } catch (error) {
-    console.warn("Could not load game name:", gameId, error);
-    gameCache.set(gameId, "Unknown Game");
-    return "Unknown Game";
+    console.warn("Could not load game data:", gameId, error);
+
+    const fallback = {
+      name: "Unknown Game",
+      cover: "",
+      weblink: ""
+    };
+
+    gameCache.set(gameId, fallback);
+    return fallback;
   }
 }
 
@@ -646,22 +673,39 @@ async function getCategoryName(categoryResource) {
 async function buildPBCard(item) {
   const run = item.run || {};
 
-  const [gameName, categoryName] = await Promise.all([
-    getGameName(run.game),
+  const [gameData, categoryName] = await Promise.all([
+    getGameData(run.game),
     getCategoryName(run.category)
   ]);
 
   const time = formatSpeedrunTime(run.times?.primary_t);
   const place = item.place ? `#${item.place}` : "Unranked";
   const runLink = run.weblink || SPEEDRUN_PROFILE_URL;
+  const cover = gameData.cover;
+
+  const coverHTML = cover
+    ? `
+      <div class="pb-cover-wrap">
+        <img class="pb-cover" src="${escapeHTML(cover)}" alt="${escapeHTML(gameData.name)} cover art" loading="lazy">
+      </div>
+    `
+    : `
+      <div class="pb-cover-wrap pb-cover-placeholder">
+        <span>No Cover</span>
+      </div>
+    `;
 
   return `
-    <article class="pb-card">
-      <h3>${escapeHTML(gameName)}</h3>
-      <p class="pb-meta"><strong>Category:</strong> ${escapeHTML(categoryName)}</p>
-      <p class="pb-meta"><strong>Time:</strong> ${escapeHTML(time)}</p>
-      <p class="pb-meta"><strong>Placement:</strong> ${escapeHTML(place)}</p>
-      <a class="pb-link" href="${escapeHTML(runLink)}" target="_blank" rel="noopener">View Run →</a>
+    <article class="pb-card with-cover">
+      ${coverHTML}
+
+      <div class="pb-info">
+        <h3>${escapeHTML(gameData.name)}</h3>
+        <p class="pb-meta"><strong>Category:</strong> ${escapeHTML(categoryName)}</p>
+        <p class="pb-meta"><strong>Time:</strong> ${escapeHTML(time)}</p>
+        <p class="pb-meta"><strong>Placement:</strong> ${escapeHTML(place)}</p>
+        <a class="pb-link" href="${escapeHTML(runLink)}" target="_blank" rel="noopener">View Run →</a>
+      </div>
     </article>
   `;
 }
