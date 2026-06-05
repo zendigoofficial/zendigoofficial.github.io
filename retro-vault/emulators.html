@@ -163,10 +163,10 @@ body::after{
   gap:18px;
 }
 
-.three-column{
+.system-grid{
   display:grid;
   grid-template-columns:1fr;
-  gap:18px;
+  gap:14px;
 }
 
 .emulator-card{
@@ -177,16 +177,43 @@ body::after{
     radial-gradient(circle at top left, rgba(0,255,238,.10), transparent 38%),
     radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 42%),
     rgba(0,0,0,.22);
+  color:inherit;
+  text-decoration:none;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.emulator-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--cyan);
+  box-shadow:
+    0 0 18px rgba(0,255,238,.18),
+    0 0 18px rgba(255,32,255,.10);
 }
 
 .emulator-card h3{
   color:var(--cyan);
 }
 
+.emulator-card.active-card{
+  border-color:var(--magenta);
+  box-shadow:
+    0 0 20px rgba(255,32,255,.22),
+    0 0 18px rgba(0,255,238,.12);
+}
+
 .highlight{
   border-color:rgba(162,48,240,.55);
   background:
     linear-gradient(90deg,rgba(162,48,240,.14),rgba(255,32,255,.07),rgba(0,255,238,.06)),
+    rgba(15,15,20,.92);
+}
+
+.download-panel{
+  border-color:rgba(0,255,238,.50);
+  background:
+    radial-gradient(circle at top left, rgba(0,255,238,.12), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 40%),
     rgba(15,15,20,.92);
 }
 
@@ -223,9 +250,41 @@ body::after{
   text-transform:uppercase;
 }
 
+.status-available{
+  border-color:rgba(0,255,238,.55);
+  color:var(--cyan);
+}
+
+.download-list{
+  display:grid;
+  gap:12px;
+  margin-top:14px;
+}
+
+.download-item{
+  border:1px solid rgba(0,255,238,.28);
+  border-radius:14px;
+  padding:16px;
+  background:rgba(0,255,238,.04);
+}
+
+.download-item strong{
+  display:block;
+  color:var(--cyan);
+  font-family:Orbitron, Arial, sans-serif;
+  margin-bottom:6px;
+  word-break:break-word;
+}
+
+.download-meta{
+  display:block;
+  color:var(--muted);
+  font-size:.9rem;
+  margin-bottom:10px;
+}
+
 .download-link{
   display:inline-block;
-  margin-top:12px;
   color:var(--cyan);
   text-decoration:none;
   font-family:Orbitron, Arial, sans-serif;
@@ -313,7 +372,7 @@ body::after{
     grid-template-columns:1fr 1fr;
   }
 
-  .three-column{
+  .system-grid{
     grid-template-columns:repeat(3,1fr);
   }
 }
@@ -347,11 +406,11 @@ body::after{
 
       <p>
         The Retro Vault emulator section organizes approved emulator ZIPs and setup paths by system.
-        Each system can later include download links, setup notes, controller notes, BIOS notes, and Arcade Scores compatibility guidance.
+        Select a system below to automatically list available emulator downloads from the repo.
       </p>
 
       <p class="signal-line">
-        System tree first. ZIP links added as files are approved and uploaded.
+        Select system. Available ZIP files appear automatically.
       </p>
 
       <div class="button-row">
@@ -367,18 +426,15 @@ body::after{
         <h2>Upload Structure</h2>
 
         <p>
-          Emulator ZIPs should be uploaded into system-specific folders so links stay clean and predictable.
+          Emulator ZIPs should be uploaded into system-specific folders so this page can find them automatically.
         </p>
 
         <ul class="simple-list">
-          <li><strong>Arcade:</strong> downloads/emulators/arcade/</li>
-          <li><strong>NES:</strong> downloads/emulators/nes/</li>
-          <li><strong>SNES:</strong> downloads/emulators/snes/</li>
-          <li><strong>Genesis:</strong> downloads/emulators/genesis/</li>
-          <li><strong>Sega CD:</strong> downloads/emulators/sega-cd/</li>
-          <li><strong>Master System:</strong> downloads/emulators/master-system/</li>
-          <li><strong>Game Boy:</strong> downloads/emulators/game-boy/</li>
-          <li><strong>PC / DOS:</strong> downloads/emulators/pc-dos/</li>
+          <li><strong>Path format:</strong> downloads/emulators/system-folder/</li>
+          <li><strong>Example:</strong> downloads/emulators/sega-genesis/</li>
+          <li><strong>File type:</strong> .zip</li>
+          <li><strong>Recommended filename:</strong> system_emulator-name_version.zip</li>
+          <li><strong>Example:</strong> sega-genesis_emulator-pack_v1.zip</li>
         </ul>
       </div>
 
@@ -389,7 +445,6 @@ body::after{
           <li><strong>System:</strong> platform or console.</li>
           <li><strong>Recommended Emulator:</strong> preferred emulator package.</li>
           <li><strong>Version:</strong> package version or build date.</li>
-          <li><strong>Download:</strong> ZIP file link once uploaded.</li>
           <li><strong>BIOS:</strong> required, not required, or varies.</li>
           <li><strong>Controller Notes:</strong> setup guidance.</li>
           <li><strong>Score Compatibility:</strong> whether it fits Arcade Scores tracking.</li>
@@ -399,115 +454,33 @@ body::after{
     </section>
 
     <section class="card">
-      <h2>System Tree</h2>
+      <h2>Select A System</h2>
 
-      <div class="three-column">
+      <div class="system-grid" id="systemGrid"></div>
+    </section>
 
-        <div class="emulator-card">
-          <h3>Arcade / MAME</h3>
-          <p>
-            Arcade emulation, MAME-style setups, cabinet score games, and high-score challenge preparation.
-          </p>
-          <span class="status-pill">ZIP Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/emulators/arcade/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
+    <section class="card download-panel" id="downloadPanel">
+      <h2 id="downloadTitle">Available Emulator Downloads</h2>
 
-        <div class="emulator-card">
-          <h3>NES</h3>
-          <p>
-            Nintendo Entertainment System emulator packages, setup notes, controller configs, and score/run compatibility.
-          </p>
-          <span class="status-pill">ZIP Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/emulators/nes/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
+      <p id="downloadIntro">
+        Choose a system above to check for uploaded emulator ZIP files.
+      </p>
 
-        <div class="emulator-card">
-          <h3>SNES</h3>
-          <p>
-            Super Nintendo emulator packages, setup paths, event use, and retro score or run preparation.
-          </p>
-          <span class="status-pill">ZIP Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/emulators/snes/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="emulator-card">
-          <h3>Genesis / Mega Drive</h3>
-          <p>
-            SEGA Genesis and Mega Drive emulator packages for SEGA blocks, score hunts, and stream setup.
-          </p>
-          <span class="status-pill">ZIP Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/emulators/genesis/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="emulator-card">
-          <h3>Sega CD</h3>
-          <p>
-            Sega CD emulator setup support. BIOS needs should be clearly marked before any package goes live.
-          </p>
-          <span class="status-pill">BIOS Notes Needed</span>
-          <br>
-          <a class="download-link" href="../downloads/emulators/sega-cd/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="emulator-card">
-          <h3>Master System</h3>
-          <p>
-            SEGA Master System emulator packages and setup support for Retro Vault library organization.
-          </p>
-          <span class="status-pill">ZIP Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/emulators/master-system/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="emulator-card">
-          <h3>Game Boy / GBC / GBA</h3>
-          <p>
-            Nintendo handheld emulator packages, setup notes, and score or event candidate support.
-          </p>
-          <span class="status-pill">ZIP Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/emulators/game-boy/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="emulator-card">
-          <h3>PC / DOS</h3>
-          <p>
-            DOSBox-style packages, PC retro setup notes, and approved configuration resources.
-          </p>
-          <span class="status-pill">ZIP Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/emulators/pc-dos/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="emulator-card">
-          <h3>Multi-System</h3>
-          <p>
-            Multi-system emulator packages or front-end setup resources, if approved for distribution.
-          </p>
-          <span class="status-pill">Planned</span>
-          <br>
-          <a class="download-link" href="../downloads/emulators/multi-system/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-      </div>
+      <div class="download-list" id="downloadList"></div>
     </section>
 
     <section class="card">
       <h2>ZIP Upload Plan</h2>
 
       <p>
-        When an emulator ZIP is uploaded, use a predictable filename and place it in the matching system folder.
+        When an emulator ZIP is uploaded to the correct folder, this page can list it without a manual page rewrite.
       </p>
 
       <ul class="simple-list">
-        <li><strong>Recommended filename:</strong> system_emulator_name_version.zip</li>
-        <li><strong>Example:</strong> genesis_exampleemulator_v1.zip</li>
-        <li><strong>Link style:</strong> ../downloads/emulators/genesis/genesis_exampleemulator_v1.zip</li>
-        <li><strong>Update needed:</strong> replace “ZIP Pending” with “Available” and point the card link directly to the ZIP.</li>
+        <li><strong>Upload path:</strong> downloads/emulators/system-folder/file-name.zip</li>
+        <li><strong>Only ZIP files display:</strong> README files and other files are ignored.</li>
+        <li><strong>System cards:</strong> click a card to fetch that system folder from GitHub.</li>
+        <li><strong>Fallback:</strong> if no ZIPs exist yet, the page displays a pending message.</li>
       </ul>
     </section>
 
@@ -534,6 +507,316 @@ body::after{
   </footer>
 
 </div>
+
+<script>
+const GITHUB_OWNER = "zendigoofficial";
+const GITHUB_REPO = "zendigoofficial.github.io";
+const DOWNLOAD_ROOT = "downloads/emulators";
+
+const systems = [
+  {
+    name: "Arcade",
+    folder: "arcade",
+    description: "Arcade emulator packages, cabinet setup tools, and score-hunt preparation."
+  },
+  {
+    name: "MAME",
+    folder: "mame",
+    description: "MAME-focused emulator packages and Arcade Scores setup support."
+  },
+  {
+    name: "NES",
+    folder: "nes",
+    description: "Nintendo Entertainment System emulator packages and setup notes."
+  },
+  {
+    name: "SNES",
+    folder: "snes",
+    description: "Super Nintendo emulator packages and stream setup support."
+  },
+  {
+    name: "Nintendo 64",
+    folder: "nintendo-64",
+    description: "Nintendo 64 emulator packages and compatibility notes."
+  },
+  {
+    name: "GameCube",
+    folder: "gamecube",
+    description: "GameCube emulator packages and controller setup notes."
+  },
+  {
+    name: "Game Boy",
+    folder: "game-boy",
+    description: "Original Game Boy emulator packages."
+  },
+  {
+    name: "Game Boy Color",
+    folder: "game-boy-color",
+    description: "Game Boy Color emulator packages."
+  },
+  {
+    name: "Game Boy Advance",
+    folder: "game-boy-advance",
+    description: "Game Boy Advance emulator packages."
+  },
+  {
+    name: "Nintendo DS",
+    folder: "nintendo-ds",
+    description: "Nintendo DS emulator packages."
+  },
+  {
+    name: "SEGA Master System",
+    folder: "sega-master-system",
+    description: "Master System emulator packages and setup support."
+  },
+  {
+    name: "SEGA Genesis / Mega Drive",
+    folder: "sega-genesis",
+    description: "Genesis and Mega Drive emulator packages for SEGA score hunts and events."
+  },
+  {
+    name: "SEGA CD",
+    folder: "sega-cd",
+    description: "SEGA CD emulator packages. BIOS notes should be checked before use."
+  },
+  {
+    name: "SEGA 32X",
+    folder: "sega-32x",
+    description: "SEGA 32X emulator packages and setup notes."
+  },
+  {
+    name: "SEGA Saturn",
+    folder: "sega-saturn",
+    description: "Saturn emulator packages and compatibility notes."
+  },
+  {
+    name: "SEGA Dreamcast",
+    folder: "sega-dreamcast",
+    description: "Dreamcast emulator packages and setup notes."
+  },
+  {
+    name: "SEGA Game Gear",
+    folder: "sega-game-gear",
+    description: "Game Gear emulator packages."
+  },
+  {
+    name: "PlayStation",
+    folder: "playstation",
+    description: "PlayStation emulator packages. BIOS notes should be checked before use."
+  },
+  {
+    name: "PlayStation 2",
+    folder: "playstation-2",
+    description: "PlayStation 2 emulator packages and setup notes."
+  },
+  {
+    name: "PlayStation Portable",
+    folder: "playstation-portable",
+    description: "PSP emulator packages and setup notes."
+  },
+  {
+    name: "Atari 2600",
+    folder: "atari-2600",
+    description: "Atari 2600 emulator packages."
+  },
+  {
+    name: "Atari 7800",
+    folder: "atari-7800",
+    description: "Atari 7800 emulator packages."
+  },
+  {
+    name: "Atari Lynx",
+    folder: "atari-lynx",
+    description: "Atari Lynx emulator packages."
+  },
+  {
+    name: "TurboGrafx-16",
+    folder: "turbografx-16",
+    description: "TurboGrafx-16 emulator packages."
+  },
+  {
+    name: "PC Engine",
+    folder: "pc-engine",
+    description: "PC Engine emulator packages."
+  },
+  {
+    name: "Neo Geo AES",
+    folder: "neo-geo-aes",
+    description: "Neo Geo AES emulator packages."
+  },
+  {
+    name: "Neo Geo MVS",
+    folder: "neo-geo-mvs",
+    description: "Neo Geo MVS emulator packages."
+  },
+  {
+    name: "Neo Geo Pocket Color",
+    folder: "neo-geo-pocket-color",
+    description: "Neo Geo Pocket Color emulator packages."
+  },
+  {
+    name: "Commodore 64",
+    folder: "commodore-64",
+    description: "Commodore 64 emulator packages."
+  },
+  {
+    name: "Commodore Amiga",
+    folder: "commodore-amiga",
+    description: "Amiga emulator packages and setup notes."
+  },
+  {
+    name: "MSX",
+    folder: "msx",
+    description: "MSX emulator packages."
+  },
+  {
+    name: "ZX Spectrum",
+    folder: "zx-spectrum",
+    description: "ZX Spectrum emulator packages."
+  },
+  {
+    name: "PC / DOS",
+    folder: "pc-dos",
+    description: "DOS and PC retro emulator packages."
+  },
+  {
+    name: "Classic PC",
+    folder: "classic-pc",
+    description: "Classic PC setup packs and emulator packages."
+  },
+  {
+    name: "Homebrew",
+    folder: "homebrew",
+    description: "Homebrew-focused emulator or launcher packages."
+  },
+  {
+    name: "Public Domain",
+    folder: "public-domain",
+    description: "Public-domain compatible emulator packages or setup tools."
+  },
+  {
+    name: "Approved Demos",
+    folder: "approved-demos",
+    description: "Demo-focused emulator setup packages."
+  },
+  {
+    name: "Multi-System",
+    folder: "multi-system",
+    description: "Multi-system emulator packages or front-end setup resources."
+  }
+];
+
+function formatBytes(bytes){
+  if(!bytes || bytes <= 0) return "File size unavailable";
+  const units = ["B", "KB", "MB", "GB"];
+  let size = bytes;
+  let unitIndex = 0;
+
+  while(size >= 1024 && unitIndex < units.length - 1){
+    size /= 1024;
+    unitIndex++;
+  }
+
+  return `${size.toFixed(size >= 10 || unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+}
+
+function renderSystems(){
+  const grid = document.getElementById("systemGrid");
+
+  systems.forEach(system => {
+    const card = document.createElement("button");
+    card.className = "emulator-card";
+    card.type = "button";
+    card.dataset.folder = system.folder;
+    card.innerHTML = `
+      <h3>${system.name}</h3>
+      <p>${system.description}</p>
+      <span class="status-pill">Click To Check</span>
+    `;
+
+    card.addEventListener("click", () => {
+      document.querySelectorAll(".emulator-card").forEach(item => item.classList.remove("active-card"));
+      card.classList.add("active-card");
+      loadDownloads(system);
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+async function loadDownloads(system){
+  const title = document.getElementById("downloadTitle");
+  const intro = document.getElementById("downloadIntro");
+  const list = document.getElementById("downloadList");
+
+  title.textContent = `${system.name} Downloads`;
+  intro.textContent = `Checking uploads in downloads/emulators/${system.folder}/`;
+  list.innerHTML = `<p class="signal-line">Loading ZIP files...</p>`;
+
+  const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${DOWNLOAD_ROOT}/${system.folder}`;
+
+  try{
+    const response = await fetch(apiUrl, {
+      headers: {
+        "Accept": "application/vnd.github+json"
+      }
+    });
+
+    if(!response.ok){
+      list.innerHTML = `
+        <div class="download-item">
+          <strong>No folder or files found yet.</strong>
+          <span class="download-meta">Upload ZIP files to downloads/emulators/${system.folder}/ and try again.</span>
+        </div>
+      `;
+      return;
+    }
+
+    const files = await response.json();
+
+    const zipFiles = files
+      .filter(file => file.type === "file" && file.name.toLowerCase().endsWith(".zip"))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    if(zipFiles.length === 0){
+      list.innerHTML = `
+        <div class="download-item">
+          <strong>No ZIP files uploaded yet.</strong>
+          <span class="download-meta">Folder checked: downloads/emulators/${system.folder}/</span>
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = "";
+
+    zipFiles.forEach(file => {
+      const item = document.createElement("div");
+      item.className = "download-item";
+      item.innerHTML = `
+        <strong>${file.name}</strong>
+        <span class="download-meta">${formatBytes(file.size)}</span>
+        <a class="download-link" href="${file.download_url}" download>
+          Download ZIP →
+        </a>
+      `;
+      list.appendChild(item);
+    });
+
+    intro.textContent = `${zipFiles.length} ZIP file${zipFiles.length === 1 ? "" : "s"} available for ${system.name}.`;
+
+  }catch(error){
+    list.innerHTML = `
+      <div class="download-item">
+        <strong>Could not load downloads.</strong>
+        <span class="download-meta">Check connection or GitHub API availability.</span>
+      </div>
+    `;
+  }
+}
+
+renderSystems();
+</script>
 
 </body>
 </html>
