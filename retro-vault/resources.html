@@ -163,10 +163,10 @@ body::after{
   gap:18px;
 }
 
-.three-column{
+.resource-grid{
   display:grid;
   grid-template-columns:1fr;
-  gap:18px;
+  gap:14px;
 }
 
 .resource-card{
@@ -177,6 +177,25 @@ body::after{
     radial-gradient(circle at top left, rgba(0,255,238,.10), transparent 38%),
     radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 42%),
     rgba(0,0,0,.22);
+  color:inherit;
+  text-decoration:none;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.resource-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--cyan);
+  box-shadow:
+    0 0 18px rgba(0,255,238,.18),
+    0 0 18px rgba(255,32,255,.10);
+}
+
+.resource-card.active-card{
+  border-color:var(--magenta);
+  box-shadow:
+    0 0 20px rgba(255,32,255,.22),
+    0 0 18px rgba(0,255,238,.12);
 }
 
 .resource-card h3{
@@ -187,6 +206,14 @@ body::after{
   border-color:rgba(162,48,240,.55);
   background:
     linear-gradient(90deg,rgba(162,48,240,.14),rgba(255,32,255,.07),rgba(0,255,238,.06)),
+    rgba(15,15,20,.92);
+}
+
+.resource-panel{
+  border-color:rgba(0,255,238,.50);
+  background:
+    radial-gradient(circle at top left, rgba(0,255,238,.12), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 40%),
     rgba(15,15,20,.92);
 }
 
@@ -223,51 +250,46 @@ body::after{
   text-transform:uppercase;
 }
 
+.resource-list{
+  display:grid;
+  gap:12px;
+  margin-top:14px;
+}
+
+.resource-item{
+  border:1px solid rgba(0,255,238,.28);
+  border-radius:14px;
+  padding:16px;
+  background:rgba(0,255,238,.04);
+}
+
+.resource-item strong{
+  display:block;
+  color:var(--cyan);
+  font-family:Orbitron, Arial, sans-serif;
+  margin-bottom:6px;
+  word-break:break-word;
+}
+
+.resource-meta{
+  display:block;
+  color:var(--muted);
+  font-size:.9rem;
+  margin-bottom:10px;
+}
+
 .resource-link{
   display:inline-block;
-  margin-top:12px;
   color:var(--cyan);
   text-decoration:none;
   font-family:Orbitron, Arial, sans-serif;
   font-weight:900;
+  margin-right:12px;
 }
 
 .resource-link:hover{
   color:var(--magenta);
   text-shadow:0 0 10px rgba(255,32,255,.55);
-}
-
-.resource-table-wrap{
-  overflow-x:auto;
-  border-radius:14px;
-  border:1px solid rgba(0,255,238,.25);
-}
-
-.resource-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:860px;
-  background:rgba(0,0,0,.22);
-}
-
-.resource-table th,
-.resource-table td{
-  padding:13px 14px;
-  text-align:left;
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.resource-table th{
-  font-family:Orbitron, Arial, sans-serif;
-  color:var(--cyan);
-  text-transform:uppercase;
-  font-size:.82rem;
-  letter-spacing:.8px;
-  background:rgba(0,255,238,.06);
-}
-
-.resource-table td{
-  color:var(--white);
 }
 
 .button-row{
@@ -346,7 +368,7 @@ body::after{
     grid-template-columns:1fr 1fr;
   }
 
-  .three-column{
+  .resource-grid{
     grid-template-columns:repeat(3,1fr);
   }
 }
@@ -381,16 +403,15 @@ body::after{
       <p>
         Retro Vault Resources collect the support materials behind Arcade Scores:
         setup guides, download instructions, rulesets, score templates, controller configs,
-        setup packs, and other files needed to keep score submissions clean and repeatable.
+        setup packs, readmes, and other files needed to keep score submissions clean and repeatable.
       </p>
 
       <p>
-        This is the support layer for Emulators, ROMs / Game Files, scoreboards,
-        live score attempts, and future game pages.
+        Select a category below to automatically list uploaded resource files from the repo.
       </p>
 
       <p class="signal-line">
-        Guides, rules, templates, configs, and setup support live here.
+        Select category. Available resources appear automatically.
       </p>
 
       <div class="button-row">
@@ -411,13 +432,10 @@ body::after{
         </p>
 
         <ul class="simple-list">
-          <li><strong>Guides:</strong> downloads/resources/guides/</li>
-          <li><strong>Download Instructions:</strong> downloads/resources/download-instructions/</li>
-          <li><strong>Rulesets:</strong> downloads/resources/rulesets/</li>
-          <li><strong>Score Templates:</strong> downloads/resources/score-templates/</li>
-          <li><strong>Controller Configs:</strong> downloads/resources/controller-configs/</li>
-          <li><strong>Setup Packs:</strong> downloads/resources/setup-packs/</li>
-          <li><strong>Save Files, if allowed:</strong> downloads/resources/saves/</li>
+          <li><strong>Path format:</strong> downloads/resources/category-folder/</li>
+          <li><strong>Example:</strong> downloads/resources/rulesets/</li>
+          <li><strong>Allowed files:</strong> ZIP, PDF, TXT, MD, PNG, JPG, JPEG, WEBP</li>
+          <li><strong>Readme rule:</strong> ZIP packs should include a readme whenever users need instructions.</li>
         </ul>
       </div>
 
@@ -430,7 +448,6 @@ body::after{
           <li><strong>Version:</strong> version or date.</li>
           <li><strong>Related System:</strong> arcade, NES, SEGA, PC / DOS, etc.</li>
           <li><strong>Related Game:</strong> if specific to one game.</li>
-          <li><strong>Download:</strong> file link once uploaded.</li>
           <li><strong>Notes:</strong> setup or usage instructions.</li>
         </ul>
       </div>
@@ -438,148 +455,34 @@ body::after{
     </section>
 
     <section class="card">
-      <h2>Resource Categories</h2>
+      <h2>Select A Resource Category</h2>
 
-      <div class="three-column">
+      <div class="resource-grid" id="resourceGrid"></div>
+    </section>
 
-        <div class="resource-card">
-          <h3>Guides</h3>
-          <p>
-            Setup guides, system walkthroughs, score tracking instructions, and player onboarding documents.
-          </p>
-          <span class="status-pill">Planned</span>
-          <br>
-          <a class="resource-link" href="../downloads/resources/guides/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
+    <section class="card resource-panel" id="resourcePanel">
+      <h2 id="resourceTitle">Available Resources</h2>
 
-        <div class="resource-card">
-          <h3>Download Instructions</h3>
-          <p>
-            Instructions for downloading, extracting, placing files, launching emulators, and joining score hunts.
-          </p>
-          <span class="status-pill">Priority</span>
-          <br>
-          <a class="resource-link" href="../downloads/resources/download-instructions/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
+      <p id="resourceIntro">
+        Choose a resource category above to check for uploaded files.
+      </p>
 
-        <div class="resource-card">
-          <h3>Rulesets</h3>
-          <p>
-            Game-specific rules, category notes, proof requirements, settings, and platform/version requirements.
-          </p>
-          <span class="status-pill">Priority</span>
-          <br>
-          <a class="resource-link" href="../downloads/resources/rulesets/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="resource-card">
-          <h3>Score Templates</h3>
-          <p>
-            Submission templates, leaderboard formats, score log sheets, and review checklists.
-          </p>
-          <span class="status-pill">Planned</span>
-          <br>
-          <a class="resource-link" href="../downloads/resources/score-templates/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="resource-card">
-          <h3>Controller Configs</h3>
-          <p>
-            Controller layouts, emulator input profiles, arcade stick notes, and setup recommendations.
-          </p>
-          <span class="status-pill">Planned</span>
-          <br>
-          <a class="resource-link" href="../downloads/resources/controller-configs/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="resource-card">
-          <h3>Setup Packs</h3>
-          <p>
-            Approved setup packs for events, score hunts, stream preparation, or Arcade Scores onboarding.
-          </p>
-          <span class="status-pill">Planned</span>
-          <br>
-          <a class="resource-link" href="../downloads/resources/setup-packs/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="resource-card">
-          <h3>Save Files</h3>
-          <p>
-            Save files only when allowed and clearly marked. Useful for practice states, unlocks, or event setup.
-          </p>
-          <span class="status-pill">If Allowed</span>
-          <br>
-          <a class="resource-link" href="../downloads/resources/saves/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="resource-card">
-          <h3>Event Packs</h3>
-          <p>
-            Event-specific packs for Arcade Roots, SEGA blocks, score hunts, or themed community challenges.
-          </p>
-          <span class="status-pill">Later</span>
-          <br>
-          <a class="resource-link" href="../downloads/resources/event-packs/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="resource-card">
-          <h3>Readme Files</h3>
-          <p>
-            Plain-English readmes that explain what each downloadable ZIP contains and how it should be used.
-          </p>
-          <span class="status-pill">Required</span>
-          <br>
-          <a class="resource-link" href="../downloads/resources/readmes/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-      </div>
+      <div class="resource-list" id="resourceList"></div>
     </section>
 
     <section class="card">
-      <h2>Current Resource Index</h2>
-
-      <div class="resource-table-wrap">
-        <table class="resource-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Version</th>
-              <th>Related System</th>
-              <th>Related Game</th>
-              <th>Status</th>
-              <th>Download</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>Coming Soon</td>
-              <td>Guide / Ruleset / Template</td>
-              <td>TBD</td>
-              <td>TBD</td>
-              <td>TBD</td>
-              <td><span class="status-pill">Pending Upload</span></td>
-              <td>—</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>ZIP Upload Plan</h2>
+      <h2>Resource Upload Plan</h2>
 
       <p>
-        Resources can be uploaded as ZIP files, PDFs, text files, images, or plain HTML guides depending on what they need to do.
+        When a resource file is uploaded to the correct folder, this page can list it without a manual page rewrite.
       </p>
 
       <ul class="simple-list">
-        <li><strong>Recommended filename:</strong> category_resource-name_version.zip</li>
-        <li><strong>Example:</strong> rulesets_donkey-kong_arcade-v1.zip</li>
-        <li><strong>Link style:</strong> ../downloads/resources/rulesets/rulesets_donkey-kong_arcade-v1.zip</li>
-        <li><strong>Readme rule:</strong> ZIP packs should include a readme whenever users need instructions.</li>
-        <li><strong>Update needed:</strong> add the resource to Current Resource Index and update the related category card.</li>
+        <li><strong>Upload path:</strong> downloads/resources/category-folder/file-name.ext</li>
+        <li><strong>Recommended filename:</strong> category_resource-name_version.ext</li>
+        <li><strong>Example:</strong> rulesets_donkey-kong_arcade-v1.pdf</li>
+        <li><strong>Allowed extensions:</strong> .zip, .pdf, .txt, .md, .png, .jpg, .jpeg, .webp</li>
+        <li><strong>Fallback:</strong> if no files exist yet, the page displays a pending message.</li>
       </ul>
     </section>
 
@@ -606,6 +509,192 @@ body::after{
   </footer>
 
 </div>
+
+<script>
+const GITHUB_OWNER = "zendigoofficial";
+const GITHUB_REPO = "zendigoofficial.github.io";
+const DOWNLOAD_ROOT = "downloads/resources";
+
+const allowedExtensions = [".zip", ".pdf", ".txt", ".md", ".png", ".jpg", ".jpeg", ".webp"];
+
+const resourceCategories = [
+  {
+    name: "Guides",
+    folder: "guides",
+    description: "Setup guides, system walkthroughs, score tracking instructions, and player onboarding documents."
+  },
+  {
+    name: "Download Instructions",
+    folder: "download-instructions",
+    description: "Instructions for downloading, extracting, placing files, launching emulators, and joining score hunts."
+  },
+  {
+    name: "Rulesets",
+    folder: "rulesets",
+    description: "Game-specific rules, category notes, proof requirements, settings, and platform/version requirements."
+  },
+  {
+    name: "Score Templates",
+    folder: "score-templates",
+    description: "Submission templates, leaderboard formats, score log sheets, and review checklists."
+  },
+  {
+    name: "Controller Configs",
+    folder: "controller-configs",
+    description: "Controller layouts, emulator input profiles, arcade stick notes, and setup recommendations."
+  },
+  {
+    name: "Setup Packs",
+    folder: "setup-packs",
+    description: "Approved setup packs for events, score hunts, stream preparation, or Arcade Scores onboarding."
+  },
+  {
+    name: "Save Files",
+    folder: "saves",
+    description: "Save files only when allowed and clearly marked. Useful for practice states, unlocks, or event setup."
+  },
+  {
+    name: "Event Packs",
+    folder: "event-packs",
+    description: "Event-specific packs for Arcade Roots, SEGA blocks, score hunts, or themed community challenges."
+  },
+  {
+    name: "Readme Files",
+    folder: "readmes",
+    description: "Plain-English readmes that explain what downloadable packs contain and how they should be used."
+  }
+];
+
+function formatBytes(bytes){
+  if(!bytes || bytes <= 0) return "File size unavailable";
+  const units = ["B", "KB", "MB", "GB"];
+  let size = bytes;
+  let unitIndex = 0;
+
+  while(size >= 1024 && unitIndex < units.length - 1){
+    size /= 1024;
+    unitIndex++;
+  }
+
+  return `${size.toFixed(size >= 10 || unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+}
+
+function getExtension(filename){
+  const lastDot = filename.lastIndexOf(".");
+  return lastDot >= 0 ? filename.slice(lastDot).toLowerCase() : "";
+}
+
+function cleanTitle(filename){
+  return filename
+    .replace(/\.[^/.]+$/i, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isAllowedFile(filename){
+  return allowedExtensions.includes(getExtension(filename));
+}
+
+function renderResourceCategories(){
+  const grid = document.getElementById("resourceGrid");
+
+  resourceCategories.forEach(category => {
+    const card = document.createElement("button");
+    card.className = "resource-card";
+    card.type = "button";
+    card.dataset.folder = category.folder;
+    card.innerHTML = `
+      <h3>${category.name}</h3>
+      <p>${category.description}</p>
+      <span class="status-pill">Click To Check</span>
+    `;
+
+    card.addEventListener("click", () => {
+      document.querySelectorAll(".resource-card").forEach(item => item.classList.remove("active-card"));
+      card.classList.add("active-card");
+      loadResources(category);
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+async function loadResources(category){
+  const title = document.getElementById("resourceTitle");
+  const intro = document.getElementById("resourceIntro");
+  const list = document.getElementById("resourceList");
+
+  title.textContent = `${category.name} Resources`;
+  intro.textContent = `Checking uploads in downloads/resources/${category.folder}/`;
+  list.innerHTML = `<p class="signal-line">Loading resource files...</p>`;
+
+  const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${DOWNLOAD_ROOT}/${category.folder}`;
+
+  try{
+    const response = await fetch(apiUrl, {
+      headers: {
+        "Accept": "application/vnd.github+json"
+      }
+    });
+
+    if(!response.ok){
+      list.innerHTML = `
+        <div class="resource-item">
+          <strong>No folder or files found yet.</strong>
+          <span class="resource-meta">Upload files to downloads/resources/${category.folder}/ and try again.</span>
+        </div>
+      `;
+      return;
+    }
+
+    const files = await response.json();
+
+    const resourceFiles = files
+      .filter(file => file.type === "file" && isAllowedFile(file.name))
+      .sort((a, b) => cleanTitle(a.name).localeCompare(cleanTitle(b.name)));
+
+    if(resourceFiles.length === 0){
+      list.innerHTML = `
+        <div class="resource-item">
+          <strong>No resource files uploaded yet.</strong>
+          <span class="resource-meta">Folder checked: downloads/resources/${category.folder}/</span>
+        </div>
+      `;
+      return;
+    }
+
+    intro.textContent = `${resourceFiles.length} resource file${resourceFiles.length === 1 ? "" : "s"} available for ${category.name}.`;
+    list.innerHTML = "";
+
+    resourceFiles.forEach(file => {
+      const ext = getExtension(file.name).replace(".", "").toUpperCase();
+      const item = document.createElement("div");
+      item.className = "resource-item";
+
+      item.innerHTML = `
+        <strong>${cleanTitle(file.name)}</strong>
+        <span class="resource-meta">${file.name} • ${ext} • ${formatBytes(file.size)}</span>
+        <a class="resource-link" href="${file.download_url}" download>
+          Download / Open →
+        </a>
+      `;
+
+      list.appendChild(item);
+    });
+
+  }catch(error){
+    list.innerHTML = `
+      <div class="resource-item">
+        <strong>Could not load resources.</strong>
+        <span class="resource-meta">Check connection or GitHub API availability.</span>
+      </div>
+    `;
+  }
+}
+
+renderResourceCategories();
+</script>
 
 </body>
 </html>
