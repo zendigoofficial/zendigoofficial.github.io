@@ -18,18 +18,18 @@ const CONFIG = {
   flapPower: -7.2,
   playerX: 190,
 
-  // Forgiving collision hitbox. The face art is larger than this.
   playerRadius: 24,
-
-  // Visible face sprite size.
   playerSpriteW: 112,
   playerSpriteH: 112,
 
-  obstacleWidth: 72,
+  obstacleWidth: 86,
   obstacleGap: 235,
   obstacleSpeed: 2.45,
   obstacleSpacing: 390,
-  floorHeight: 46
+
+  floorHeight: 46,
+
+  backgroundSpeed: 1.15
 };
 
 let gameState = "title";
@@ -45,16 +45,8 @@ let stars;
 const faceImage = new Image();
 faceImage.src = "assets/player_face.png";
 
-let faceLoaded = false;
-let faceFailed = false;
-
-faceImage.onload = () => {
-  faceLoaded = true;
-};
-
-faceImage.onerror = () => {
-  faceFailed = true;
-};
+const bgImage = new Image();
+bgImage.src = "assets/bg_neon_city.png";
 
 const pipeTopImage = new Image();
 pipeTopImage.src = "assets/pipe_top.png";
@@ -62,8 +54,32 @@ pipeTopImage.src = "assets/pipe_top.png";
 const pipeBottomImage = new Image();
 pipeBottomImage.src = "assets/pipe_bottom.png";
 
+let faceLoaded = false;
+let faceFailed = false;
+
+let bgLoaded = false;
+let bgFailed = false;
+
 let pipeTopLoaded = false;
 let pipeBottomLoaded = false;
+
+faceImage.onload = () => {
+  faceLoaded = true;
+};
+
+faceImage.onerror = () => {
+  faceFailed = true;
+  console.log("Face failed to load:", faceImage.src);
+};
+
+bgImage.onload = () => {
+  bgLoaded = true;
+};
+
+bgImage.onerror = () => {
+  bgFailed = true;
+  console.log("Background failed to load:", bgImage.src);
+};
 
 pipeTopImage.onload = () => {
   pipeTopLoaded = true;
@@ -71,6 +87,14 @@ pipeTopImage.onload = () => {
 
 pipeBottomImage.onload = () => {
   pipeBottomLoaded = true;
+};
+
+pipeTopImage.onerror = () => {
+  console.log("Top pipe failed to load:", pipeTopImage.src);
+};
+
+pipeBottomImage.onerror = () => {
+  console.log("Bottom pipe failed to load:", pipeBottomImage.src);
 };
 
 function resetGame(){
@@ -88,19 +112,19 @@ function resetGame(){
   particles = [];
   stars = makeStars();
 
-  spawnObstacle(WIDTH + 160);
+  spawnObstacle(WIDTH + 180);
 }
 
 function makeStars(){
   const list = [];
 
-  for(let i = 0; i < 90; i++){
+  for(let i = 0; i < 65; i++){
     list.push({
       x: Math.random() * WIDTH,
-      y: Math.random() * HEIGHT,
+      y: Math.random() * (HEIGHT - CONFIG.floorHeight),
       size: Math.random() * 2 + 0.5,
-      speed: Math.random() * 0.45 + 0.18,
-      alpha: Math.random() * 0.55 + 0.25
+      speed: Math.random() * 0.35 + 0.12,
+      alpha: Math.random() * 0.45 + 0.18
     });
   }
 
@@ -168,7 +192,7 @@ function update(){
   const spawnRate = Math.floor(CONFIG.obstacleSpacing / CONFIG.obstacleSpeed);
 
   if(frame % spawnRate === 0){
-    spawnObstacle(WIDTH + 60);
+    spawnObstacle(WIDTH + 80);
   }
 
   obstacles.forEach(obstacle => {
@@ -186,7 +210,7 @@ function update(){
     }
   });
 
-  obstacles = obstacles.filter(obstacle => obstacle.x + obstacle.width > -80);
+  obstacles = obstacles.filter(obstacle => obstacle.x + obstacle.width > -120);
 
   if(player.y - CONFIG.playerRadius < 0 || player.y + CONFIG.playerRadius > HEIGHT - CONFIG.floorHeight){
     endGame();
@@ -206,7 +230,7 @@ function updateStars(){
 
     if(star.x < -4){
       star.x = WIDTH + Math.random() * 40;
-      star.y = Math.random() * HEIGHT;
+      star.y = Math.random() * (HEIGHT - CONFIG.floorHeight);
     }
   });
 }
@@ -275,7 +299,36 @@ function drawBackground(){
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
+  if(bgLoaded){
+    const bgDrawHeight = HEIGHT - CONFIG.floorHeight;
+    const scale = bgDrawHeight / bgImage.height;
+    const bgDrawWidth = bgImage.width * scale;
+    const offset = (frame * CONFIG.backgroundSpeed) % bgDrawWidth;
+
+    for(let x = -offset; x < WIDTH + bgDrawWidth; x += bgDrawWidth){
+      ctx.drawImage(
+        bgImage,
+        x,
+        0,
+        bgDrawWidth,
+        bgDrawHeight
+      );
+    }
+
+    ctx.save();
+    ctx.fillStyle = "rgba(5,7,13,.18)";
+    ctx.fillRect(0, 0, WIDTH, bgDrawHeight);
+    ctx.restore();
+  }
+
+  if(bgFailed){
+    drawFallbackGrid();
+  }
+}
+
+function drawFallbackGrid(){
   ctx.save();
+
   ctx.globalAlpha = 0.12;
   ctx.strokeStyle = COLORS.cyan;
   ctx.lineWidth = 1;
@@ -300,6 +353,10 @@ function drawBackground(){
 }
 
 function drawStars(){
+  if(bgLoaded){
+    return;
+  }
+
   stars.forEach(star => {
     ctx.globalAlpha = star.alpha;
     ctx.fillStyle = COLORS.white;
