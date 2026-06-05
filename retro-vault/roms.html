@@ -163,10 +163,10 @@ body::after{
   gap:18px;
 }
 
-.three-column{
+.system-grid{
   display:grid;
   grid-template-columns:1fr;
-  gap:18px;
+  gap:14px;
 }
 
 .game-file-card{
@@ -177,6 +177,25 @@ body::after{
     radial-gradient(circle at top left, rgba(0,255,238,.10), transparent 38%),
     radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 42%),
     rgba(0,0,0,.22);
+  color:inherit;
+  text-decoration:none;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.game-file-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--cyan);
+  box-shadow:
+    0 0 18px rgba(0,255,238,.18),
+    0 0 18px rgba(255,32,255,.10);
+}
+
+.game-file-card.active-card{
+  border-color:var(--magenta);
+  box-shadow:
+    0 0 20px rgba(255,32,255,.22),
+    0 0 18px rgba(0,255,238,.12);
 }
 
 .game-file-card h3{
@@ -187,6 +206,14 @@ body::after{
   border-color:rgba(162,48,240,.55);
   background:
     linear-gradient(90deg,rgba(162,48,240,.14),rgba(255,32,255,.07),rgba(0,255,238,.06)),
+    rgba(15,15,20,.92);
+}
+
+.download-panel{
+  border-color:rgba(0,255,238,.50);
+  background:
+    radial-gradient(circle at top left, rgba(0,255,238,.12), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 40%),
     rgba(15,15,20,.92);
 }
 
@@ -223,9 +250,61 @@ body::after{
   text-transform:uppercase;
 }
 
+.letter-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:16px;
+}
+
+.letter-button{
+  padding:8px 11px;
+  border-radius:999px;
+  border:1px solid rgba(0,255,238,.45);
+  background:rgba(0,255,238,.05);
+  color:var(--white);
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.letter-button:hover,
+.letter-button.active-letter{
+  color:#05070d;
+  background:var(--cyan);
+  box-shadow:0 0 14px rgba(0,255,238,.28);
+}
+
+.download-list{
+  display:grid;
+  gap:12px;
+  margin-top:14px;
+}
+
+.download-item{
+  border:1px solid rgba(0,255,238,.28);
+  border-radius:14px;
+  padding:16px;
+  background:rgba(0,255,238,.04);
+}
+
+.download-item strong{
+  display:block;
+  color:var(--cyan);
+  font-family:Orbitron, Arial, sans-serif;
+  margin-bottom:6px;
+  word-break:break-word;
+}
+
+.download-meta{
+  display:block;
+  color:var(--muted);
+  font-size:.9rem;
+  margin-bottom:10px;
+}
+
 .download-link{
   display:inline-block;
-  margin-top:12px;
   color:var(--cyan);
   text-decoration:none;
   font-family:Orbitron, Arial, sans-serif;
@@ -235,39 +314,6 @@ body::after{
 .download-link:hover{
   color:var(--magenta);
   text-shadow:0 0 10px rgba(255,32,255,.55);
-}
-
-.file-table-wrap{
-  overflow-x:auto;
-  border-radius:14px;
-  border:1px solid rgba(0,255,238,.25);
-}
-
-.file-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:860px;
-  background:rgba(0,0,0,.22);
-}
-
-.file-table th,
-.file-table td{
-  padding:13px 14px;
-  text-align:left;
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.file-table th{
-  font-family:Orbitron, Arial, sans-serif;
-  color:var(--cyan);
-  text-transform:uppercase;
-  font-size:.82rem;
-  letter-spacing:.8px;
-  background:rgba(0,255,238,.06);
-}
-
-.file-table td{
-  color:var(--white);
 }
 
 .button-row{
@@ -346,7 +392,7 @@ body::after{
     grid-template-columns:1fr 1fr;
   }
 
-  .three-column{
+  .system-grid{
     grid-template-columns:repeat(3,1fr);
   }
 }
@@ -384,13 +430,12 @@ body::after{
       </p>
 
       <p>
-        Files should only be listed here after they have been checked and cleared for use.
-        This page is built to support future Arcade Scores leaderboards, Retro Vault library tracking,
-        score hunts, and event planning.
+        Select a system below to load uploaded ZIP files. After the system loads, use the A–Z filter
+        to narrow the visible file list.
       </p>
 
       <p class="signal-line">
-        Legal files only. System tree first. ZIP links added as files are uploaded.
+        Select system. Filter alphabetically. Download approved ZIP files.
       </p>
 
       <div class="button-row">
@@ -406,19 +451,15 @@ body::after{
         <h2>Upload Structure</h2>
 
         <p>
-          Game ZIPs should be uploaded into system-specific folders so the Vault stays organized as it grows.
+          Game ZIPs should be uploaded into system-specific folders so this page can find them automatically.
         </p>
 
         <ul class="simple-list">
-          <li><strong>Arcade:</strong> downloads/roms/arcade/</li>
-          <li><strong>NES:</strong> downloads/roms/nes/</li>
-          <li><strong>SNES:</strong> downloads/roms/snes/</li>
-          <li><strong>Genesis:</strong> downloads/roms/genesis/</li>
-          <li><strong>Sega CD:</strong> downloads/roms/sega-cd/</li>
-          <li><strong>Master System:</strong> downloads/roms/master-system/</li>
-          <li><strong>Game Boy:</strong> downloads/roms/game-boy/</li>
-          <li><strong>PC / DOS:</strong> downloads/roms/pc-dos/</li>
-          <li><strong>Homebrew / Approved:</strong> downloads/roms/approved/</li>
+          <li><strong>Path format:</strong> downloads/roms/system-folder/</li>
+          <li><strong>Example:</strong> downloads/roms/sega-genesis/</li>
+          <li><strong>File type:</strong> .zip</li>
+          <li><strong>Recommended filename:</strong> system_game-title_version.zip</li>
+          <li><strong>Example:</strong> sega-genesis_homebrew-title_v1.zip</li>
         </ul>
       </div>
 
@@ -430,7 +471,6 @@ body::after{
           <li><strong>System:</strong> platform or console.</li>
           <li><strong>File Type:</strong> ROM, demo, homebrew, public domain, patch, or package.</li>
           <li><strong>Version / Region:</strong> if relevant.</li>
-          <li><strong>Download:</strong> ZIP file link once uploaded.</li>
           <li><strong>Legal Status:</strong> approved for use/distribution.</li>
           <li><strong>Scoreboard:</strong> available, planned, or not applicable.</li>
         </ul>
@@ -439,118 +479,36 @@ body::after{
     </section>
 
     <section class="card">
-      <h2>System Tree</h2>
+      <h2>Select A System</h2>
 
-      <div class="three-column">
-
-        <div class="game-file-card">
-          <h3>Arcade</h3>
-          <p>
-            Legal arcade-related game files, homebrew arcade releases, approved demos, and score-hunt packages.
-          </p>
-          <span class="status-pill">Files Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/roms/arcade/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="game-file-card">
-          <h3>Nintendo</h3>
-          <p>
-            Approved NES, SNES, Game Boy, and Nintendo-related homebrew or public domain files.
-          </p>
-          <span class="status-pill">Files Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/roms/nes/" target="_blank" rel="noopener">NES Folder →</a>
-        </div>
-
-        <div class="game-file-card">
-          <h3>SEGA</h3>
-          <p>
-            Approved Genesis, Mega Drive, Sega CD, Master System, and SEGA-related legal game files.
-          </p>
-          <span class="status-pill">Files Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/roms/genesis/" target="_blank" rel="noopener">Genesis Folder →</a>
-        </div>
-
-        <div class="game-file-card">
-          <h3>PC / DOS</h3>
-          <p>
-            Legal freeware, shareware, public domain, demo, or DOS-compatible game packages.
-          </p>
-          <span class="status-pill">Files Pending</span>
-          <br>
-          <a class="download-link" href="../downloads/roms/pc-dos/" target="_blank" rel="noopener">Folder Path →</a>
-        </div>
-
-        <div class="game-file-card">
-          <h3>Homebrew</h3>
-          <p>
-            Homebrew games that are approved for distribution and may support future scoreboards.
-          </p>
-          <span class="status-pill">Priority</span>
-          <br>
-          <a class="download-link" href="../downloads/roms/approved/" target="_blank" rel="noopener">Approved Folder →</a>
-        </div>
-
-        <div class="game-file-card">
-          <h3>Demos</h3>
-          <p>
-            Developer-approved demos, event demos, Hidden Gem candidates, and legal downloadable builds.
-          </p>
-          <span class="status-pill">Planned</span>
-          <br>
-          <a class="download-link" href="../downloads/roms/demos/" target="_blank" rel="noopener">Demos Folder →</a>
-        </div>
-
-      </div>
+      <div class="system-grid" id="systemGrid"></div>
     </section>
 
-    <section class="card">
-      <h2>Current File Index</h2>
+    <section class="card download-panel" id="downloadPanel">
+      <h2 id="downloadTitle">Available Game Files</h2>
 
-      <div class="file-table-wrap">
-        <table class="file-table">
-          <thead>
-            <tr>
-              <th>Game</th>
-              <th>System</th>
-              <th>File Type</th>
-              <th>Version</th>
-              <th>Scoreboard</th>
-              <th>Status</th>
-              <th>Download</th>
-            </tr>
-          </thead>
+      <p id="downloadIntro">
+        Choose a system above to check for uploaded ROM/game-file ZIPs.
+      </p>
 
-          <tbody>
-            <tr>
-              <td>Coming Soon</td>
-              <td>TBD</td>
-              <td>ZIP</td>
-              <td>TBD</td>
-              <td>Planned</td>
-              <td><span class="status-pill">Pending Upload</span></td>
-              <td>—</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="letter-row" id="letterRow"></div>
+
+      <div class="download-list" id="downloadList"></div>
     </section>
 
     <section class="card">
       <h2>ZIP Upload Plan</h2>
 
       <p>
-        When a game file ZIP is uploaded, use a predictable filename and place it in the matching system folder.
+        When a legal-to-use ROM or game-file ZIP is uploaded to the correct folder, this page can list it without a manual page rewrite.
       </p>
 
       <ul class="simple-list">
-        <li><strong>Recommended filename:</strong> system_game-title_version.zip</li>
-        <li><strong>Example:</strong> genesis_homebrew-title_v1.zip</li>
-        <li><strong>Link style:</strong> ../downloads/roms/genesis/genesis_homebrew-title_v1.zip</li>
-        <li><strong>Update needed:</strong> add the file to Current File Index and update the related system card.</li>
-        <li><strong>Optional next step:</strong> connect uploaded files to game pages, scoreboards, and event blocks.</li>
+        <li><strong>Upload path:</strong> downloads/roms/system-folder/file-name.zip</li>
+        <li><strong>Only ZIP files display:</strong> README files and other files are ignored.</li>
+        <li><strong>System cards:</strong> click a card to fetch that system folder from GitHub.</li>
+        <li><strong>Alphabet filter:</strong> after loading a system, filter by the first letter of the filename.</li>
+        <li><strong>Fallback:</strong> if no ZIPs exist yet, the page displays a pending message.</li>
       </ul>
     </section>
 
@@ -577,6 +535,256 @@ body::after{
   </footer>
 
 </div>
+
+<script>
+const GITHUB_OWNER = "zendigoofficial";
+const GITHUB_REPO = "zendigoofficial.github.io";
+const DOWNLOAD_ROOT = "downloads/roms";
+
+let currentFiles = [];
+let currentSystem = null;
+let currentLetter = "ALL";
+
+const systems = [
+  { name: "Arcade", folder: "arcade", description: "Legal arcade-related game files, homebrew arcade releases, and approved score-hunt packages." },
+  { name: "MAME", folder: "mame", description: "Approved MAME-compatible legal game files and score-hunt packages." },
+  { name: "NES", folder: "nes", description: "Approved NES homebrew, demos, public domain releases, and legal game files." },
+  { name: "SNES", folder: "snes", description: "Approved Super Nintendo homebrew, demos, and legal game files." },
+  { name: "Nintendo 64", folder: "nintendo-64", description: "Approved Nintendo 64 legal game files, demos, or related packages." },
+  { name: "GameCube", folder: "gamecube", description: "Approved GameCube-compatible legal files and related packages." },
+  { name: "Game Boy", folder: "game-boy", description: "Approved Game Boy homebrew, demos, and legal game files." },
+  { name: "Game Boy Color", folder: "game-boy-color", description: "Approved Game Boy Color homebrew, demos, and legal game files." },
+  { name: "Game Boy Advance", folder: "game-boy-advance", description: "Approved Game Boy Advance homebrew, demos, and legal game files." },
+  { name: "Nintendo DS", folder: "nintendo-ds", description: "Approved Nintendo DS legal files and demo packages." },
+  { name: "SEGA Master System", folder: "sega-master-system", description: "Approved Master System homebrew, demos, and legal game files." },
+  { name: "SEGA Genesis / Mega Drive", folder: "sega-genesis", description: "Approved Genesis and Mega Drive homebrew, demos, and legal game files." },
+  { name: "SEGA CD", folder: "sega-cd", description: "Approved SEGA CD-compatible legal files and related packages." },
+  { name: "SEGA 32X", folder: "sega-32x", description: "Approved SEGA 32X-compatible legal files and packages." },
+  { name: "SEGA Saturn", folder: "sega-saturn", description: "Approved Saturn-compatible legal files and packages." },
+  { name: "SEGA Dreamcast", folder: "sega-dreamcast", description: "Approved Dreamcast-compatible legal files and packages." },
+  { name: "SEGA Game Gear", folder: "sega-game-gear", description: "Approved Game Gear homebrew, demos, and legal game files." },
+  { name: "PlayStation", folder: "playstation", description: "Approved PlayStation-compatible legal files and packages." },
+  { name: "PlayStation 2", folder: "playstation-2", description: "Approved PlayStation 2-compatible legal files and packages." },
+  { name: "PlayStation Portable", folder: "playstation-portable", description: "Approved PSP-compatible legal files and packages." },
+  { name: "Atari 2600", folder: "atari-2600", description: "Approved Atari 2600 homebrew, public domain, and legal game files." },
+  { name: "Atari 7800", folder: "atari-7800", description: "Approved Atari 7800 homebrew, public domain, and legal game files." },
+  { name: "Atari Lynx", folder: "atari-lynx", description: "Approved Atari Lynx homebrew, public domain, and legal game files." },
+  { name: "TurboGrafx-16", folder: "turbografx-16", description: "Approved TurboGrafx-16 legal game files and packages." },
+  { name: "PC Engine", folder: "pc-engine", description: "Approved PC Engine legal game files and packages." },
+  { name: "Neo Geo AES", folder: "neo-geo-aes", description: "Approved Neo Geo AES-compatible legal game files." },
+  { name: "Neo Geo MVS", folder: "neo-geo-mvs", description: "Approved Neo Geo MVS-compatible legal game files." },
+  { name: "Neo Geo Pocket Color", folder: "neo-geo-pocket-color", description: "Approved Neo Geo Pocket Color homebrew and legal game files." },
+  { name: "Commodore 64", folder: "commodore-64", description: "Approved Commodore 64 public domain, freeware, and legal game files." },
+  { name: "Commodore Amiga", folder: "commodore-amiga", description: "Approved Amiga public domain, freeware, and legal game files." },
+  { name: "MSX", folder: "msx", description: "Approved MSX homebrew, public domain, and legal game files." },
+  { name: "ZX Spectrum", folder: "zx-spectrum", description: "Approved ZX Spectrum freeware, homebrew, public domain, and legal game files." },
+  { name: "PC / DOS", folder: "pc-dos", description: "Legal DOS-compatible freeware, shareware, public domain, demos, and game packages." },
+  { name: "Classic PC", folder: "classic-pc", description: "Classic PC legal game files, demos, freeware, and setup packages." },
+  { name: "Homebrew", folder: "homebrew", description: "Approved homebrew games that are legal to distribute." },
+  { name: "Public Domain", folder: "public-domain", description: "Public domain game files and legal releases." },
+  { name: "Approved Demos", folder: "approved-demos", description: "Developer-approved demos, event demos, and legal downloadable builds." }
+];
+
+function formatBytes(bytes){
+  if(!bytes || bytes <= 0) return "File size unavailable";
+  const units = ["B", "KB", "MB", "GB"];
+  let size = bytes;
+  let unitIndex = 0;
+
+  while(size >= 1024 && unitIndex < units.length - 1){
+    size /= 1024;
+    unitIndex++;
+  }
+
+  return `${size.toFixed(size >= 10 || unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+}
+
+function cleanTitle(filename){
+  return filename
+    .replace(/\.zip$/i, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getFileLetter(filename){
+  const cleaned = cleanTitle(filename).toUpperCase();
+  const first = cleaned.charAt(0);
+  return /^[A-Z]$/.test(first) ? first : "#";
+}
+
+function renderSystems(){
+  const grid = document.getElementById("systemGrid");
+
+  systems.forEach(system => {
+    const card = document.createElement("button");
+    card.className = "game-file-card";
+    card.type = "button";
+    card.dataset.folder = system.folder;
+    card.innerHTML = `
+      <h3>${system.name}</h3>
+      <p>${system.description}</p>
+      <span class="status-pill">Click To Check</span>
+    `;
+
+    card.addEventListener("click", () => {
+      document.querySelectorAll(".game-file-card").forEach(item => item.classList.remove("active-card"));
+      card.classList.add("active-card");
+      loadDownloads(system);
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+function renderLetters(){
+  const letterRow = document.getElementById("letterRow");
+  letterRow.innerHTML = "";
+
+  if(currentFiles.length === 0){
+    return;
+  }
+
+  const letters = ["ALL", "#", ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+  const availableLetters = new Set(currentFiles.map(file => getFileLetter(file.name)));
+
+  letters.forEach(letter => {
+    if(letter !== "ALL" && letter !== "#" && !availableLetters.has(letter)){
+      return;
+    }
+
+    if(letter === "#" && !availableLetters.has("#")){
+      return;
+    }
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "letter-button";
+    button.textContent = letter;
+
+    if(letter === currentLetter){
+      button.classList.add("active-letter");
+    }
+
+    button.addEventListener("click", () => {
+      currentLetter = letter;
+      document.querySelectorAll(".letter-button").forEach(item => item.classList.remove("active-letter"));
+      button.classList.add("active-letter");
+      renderDownloads();
+    });
+
+    letterRow.appendChild(button);
+  });
+}
+
+function renderDownloads(){
+  const list = document.getElementById("downloadList");
+  const intro = document.getElementById("downloadIntro");
+
+  if(!currentSystem){
+    list.innerHTML = "";
+    return;
+  }
+
+  let filteredFiles = currentFiles;
+
+  if(currentLetter !== "ALL"){
+    filteredFiles = currentFiles.filter(file => getFileLetter(file.name) === currentLetter);
+  }
+
+  if(filteredFiles.length === 0){
+    list.innerHTML = `
+      <div class="download-item">
+        <strong>No files found for this filter.</strong>
+        <span class="download-meta">Try ALL or another available letter.</span>
+      </div>
+    `;
+    return;
+  }
+
+  intro.textContent = `${filteredFiles.length} file${filteredFiles.length === 1 ? "" : "s"} shown for ${currentSystem.name}${currentLetter === "ALL" ? "" : " under " + currentLetter}.`;
+
+  list.innerHTML = "";
+
+  filteredFiles.forEach(file => {
+    const item = document.createElement("div");
+    item.className = "download-item";
+    item.innerHTML = `
+      <strong>${cleanTitle(file.name)}</strong>
+      <span class="download-meta">${file.name} • ${formatBytes(file.size)}</span>
+      <a class="download-link" href="${file.download_url}" download>
+        Download ZIP →
+      </a>
+    `;
+    list.appendChild(item);
+  });
+}
+
+async function loadDownloads(system){
+  const title = document.getElementById("downloadTitle");
+  const intro = document.getElementById("downloadIntro");
+  const list = document.getElementById("downloadList");
+  const letterRow = document.getElementById("letterRow");
+
+  currentSystem = system;
+  currentFiles = [];
+  currentLetter = "ALL";
+
+  title.textContent = `${system.name} Game Files`;
+  intro.textContent = `Checking uploads in downloads/roms/${system.folder}/`;
+  list.innerHTML = `<p class="signal-line">Loading ZIP files...</p>`;
+  letterRow.innerHTML = "";
+
+  const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${DOWNLOAD_ROOT}/${system.folder}`;
+
+  try{
+    const response = await fetch(apiUrl, {
+      headers: {
+        "Accept": "application/vnd.github+json"
+      }
+    });
+
+    if(!response.ok){
+      list.innerHTML = `
+        <div class="download-item">
+          <strong>No folder or files found yet.</strong>
+          <span class="download-meta">Upload ZIP files to downloads/roms/${system.folder}/ and try again.</span>
+        </div>
+      `;
+      return;
+    }
+
+    const files = await response.json();
+
+    currentFiles = files
+      .filter(file => file.type === "file" && file.name.toLowerCase().endsWith(".zip"))
+      .sort((a, b) => cleanTitle(a.name).localeCompare(cleanTitle(b.name)));
+
+    if(currentFiles.length === 0){
+      list.innerHTML = `
+        <div class="download-item">
+          <strong>No ZIP files uploaded yet.</strong>
+          <span class="download-meta">Folder checked: downloads/roms/${system.folder}/</span>
+        </div>
+      `;
+      return;
+    }
+
+    renderLetters();
+    renderDownloads();
+
+  }catch(error){
+    list.innerHTML = `
+      <div class="download-item">
+        <strong>Could not load downloads.</strong>
+        <span class="download-meta">Check connection or GitHub API availability.</span>
+      </div>
+    `;
+  }
+}
+
+renderSystems();
+</script>
 
 </body>
 </html>
