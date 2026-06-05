@@ -175,6 +175,13 @@ body::after{
     rgba(15,15,20,.92);
 }
 
+.discord-card{
+  border-color:rgba(162,48,240,.55);
+  background:
+    linear-gradient(90deg,rgba(162,48,240,.14),rgba(255,32,255,.07),rgba(0,255,238,.06)),
+    rgba(15,15,20,.92);
+}
+
 .signal-line{
   font-family:Orbitron, Arial, sans-serif;
   color:var(--magenta);
@@ -194,6 +201,33 @@ body::after{
 
 .simple-list strong{
   color:var(--cyan);
+}
+
+.channel-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+  margin-top:14px;
+}
+
+.channel-card{
+  border:1px solid rgba(0,255,238,.28);
+  border-radius:14px;
+  padding:16px;
+  background:rgba(0,255,238,.04);
+}
+
+.channel-card h3{
+  color:var(--cyan);
+  margin-bottom:8px;
+}
+
+.channel-id{
+  display:block;
+  margin-top:8px;
+  color:var(--muted);
+  font-size:.82rem;
+  word-break:break-word;
 }
 
 .score-table-wrap{
@@ -365,6 +399,10 @@ body::after{
   .three-column{
     grid-template-columns:repeat(3,1fr);
   }
+
+  .channel-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
 }
 </style>
 </head>
@@ -428,6 +466,73 @@ body::after{
         </ul>
       </div>
 
+    </section>
+
+    <section class="card discord-card">
+      <h2>Discord Arcade Scores Workflow</h2>
+
+      <p>
+        Arcade Scores submissions currently run through Discord while the website system is being planned.
+        Use the correct channel so score claims, game suggestions, rules, live attempts, and verified results stay organized.
+      </p>
+
+      <div class="channel-grid">
+
+        <div class="channel-card">
+          <h3>📥 Score Submissions</h3>
+          <p>
+            Submit score claims here with game, category, score, platform, proof, and notes.
+          </p>
+          <span class="channel-id">Channel ID: 1512334182863339663</span>
+        </div>
+
+        <div class="channel-card">
+          <h3>🎮 Game Suggestions</h3>
+          <p>
+            Suggest games that should receive Arcade Scores leaderboard support.
+          </p>
+          <span class="channel-id">Channel ID: 1512335443742556302</span>
+        </div>
+
+        <div class="channel-card">
+          <h3>🧾 Rules</h3>
+          <p>
+            Check proof requirements, platform notes, category standards, and verification rules.
+          </p>
+          <span class="channel-id">Channel ID: 1512334822268342363</span>
+        </div>
+
+        <div class="channel-card">
+          <h3>✅ Verified Results</h3>
+          <p>
+            Approved scores after review. These may be added to the website leaderboard.
+          </p>
+          <span class="channel-id">Channel ID: 1512336241184477315</span>
+        </div>
+
+        <div class="channel-card">
+          <h3>📺 Live Score Attempts</h3>
+          <p>
+            Post when you are live grinding a tracked score or arcade challenge.
+          </p>
+          <span class="channel-id">Channel ID: 1512336760942891008</span>
+        </div>
+
+        <div class="channel-card">
+          <h3>🕹️ Full Arcade Hub</h3>
+          <p>
+            Join Discord first, then use the Arcade Scores category channels for the correct submission path.
+          </p>
+          <span class="channel-id">Discord Invite: https://discord.gg/vu9pVaEqH3</span>
+        </div>
+
+      </div>
+
+      <div class="button-row">
+        <a class="button" href="https://discord.gg/vu9pVaEqH3" target="_blank" rel="noopener">
+          Join Discord →
+        </a>
+      </div>
     </section>
 
     <section class="card">
@@ -521,8 +626,8 @@ body::after{
         <h2>Submit A Score</h2>
 
         <p>
-          Score submissions will start manually through Discord while the full system is planned.
-          For now, submissions should include the game, category, score, platform, proof, and notes.
+          Score submissions start in Discord. Use the score-submissions channel and include the game,
+          category, score, platform, proof, and notes.
         </p>
 
         <ul class="simple-list">
@@ -531,6 +636,7 @@ body::after{
           <li><strong>Score:</strong> final score or tracked result.</li>
           <li><strong>Proof:</strong> screenshot, clip, stream VOD, or video link.</li>
           <li><strong>Platform:</strong> arcade, emulator, console, collection, or PC release.</li>
+          <li><strong>Discord Channel:</strong> 📥｜score-submissions</li>
         </ul>
 
         <div class="button-row">
@@ -544,7 +650,7 @@ body::after{
         <h2>Submit A Game</h2>
 
         <p>
-          Game submissions will help decide what gets leaderboard support first.
+          Game submissions help decide what gets leaderboard support first.
           Suggested games should be score-friendly, rule-friendly, and reasonable to verify.
         </p>
 
@@ -554,6 +660,7 @@ body::after{
           <li><strong>Score Type:</strong> points, waves, survival, distance, or custom.</li>
           <li><strong>Rules:</strong> suggested settings and limitations.</li>
           <li><strong>Reason:</strong> why this game belongs on the board.</li>
+          <li><strong>Discord Channel:</strong> 🎮｜game-submissions</li>
         </ul>
 
         <div class="button-row">
@@ -595,6 +702,10 @@ body::after{
         </div>
 
       </div>
+
+      <p class="signal-line">
+        Live score attempts belong in 📺｜live-score-grinds.
+      </p>
     </section>
 
     <section class="card">
@@ -605,6 +716,7 @@ body::after{
         <li><strong>Proof Matters:</strong> screenshots may work for casual boards, but top scores should need stronger proof.</li>
         <li><strong>Rules Per Game:</strong> every tracked game needs clear rules before serious leaderboard tracking.</li>
         <li><strong>Platform Clarity:</strong> arcade, emulator, console, remake, and collection versions should be separated when needed.</li>
+        <li><strong>Verified Results:</strong> approved scores may be posted in ✅｜verified-scores and added to the website leaderboard.</li>
         <li><strong>Community Expansion:</strong> account-based submissions, game pages, and public leaderboards come later.</li>
       </ul>
     </section>
