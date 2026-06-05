@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Arcade Scores | Zendigo</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
+
+:root{
+  --cyan:#00FFEE;
+  --magenta:#FF20FF;
+  --purple:#A230F0;
+  --black:#05070d;
+  --panel:#0f0f14;
+  --white:#EEEEEE;
+  --muted:#A9AEC3;
+  --gold:#FFD84D;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#05070d;
+  color:var(--white);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top left, rgba(255,32,255,.14), transparent 35%),
+    radial-gradient(circle at top right, rgba(0,255,238,.12), transparent 35%),
+    linear-gradient(180deg,#05070d,#080a12 55%,#05070d);
+  pointer-events:none;
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.018),
+      rgba(255,255,255,.018) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  opacity:.35;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.wrapper{
+  width:min(1400px,95%);
+  margin:auto;
+  padding:18px 0 24px;
+}
+
+.hero{
+  margin-bottom:12px;
+}
+
+.hero-placeholder{
+  min-height:230px;
+  border-radius:14px;
+  border:2px solid rgba(255,32,255,.35);
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255,32,255,.24), transparent 30%),
+    radial-gradient(circle at 82% 26%, rgba(0,255,238,.18), transparent 32%),
+    linear-gradient(135deg,rgba(0,255,238,.08),rgba(255,32,255,.10)),
+    rgba(5,7,13,.92);
+  box-shadow:
+    0 0 30px rgba(255,32,255,.20),
+    0 0 30px rgba(0,255,238,.15);
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:26px;
+}
+
+.hero-placeholder h1{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--cyan);
+  font-size:clamp(2.2rem,6vw,5rem);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  text-shadow:
+    0 0 16px rgba(0,255,238,.65),
+    0 0 26px rgba(255,32,255,.35);
+}
+
+.hero-placeholder p{
+  color:var(--white);
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  margin-top:8px;
+}
+
+.navbar{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:24px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+  padding:13px 16px;
+  background:rgba(10,10,18,.88);
+  border:1px solid rgba(255,32,255,.35);
+  border-radius:12px;
+  box-shadow:0 0 18px rgba(162,48,240,.16);
+}
+
+.navbar a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+.navbar a:hover,
+.navbar a.active{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.card{
+  background:rgba(15,15,20,.92);
+  border:1px solid rgba(255,32,255,.32);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 0 18px rgba(255,32,255,.08);
+}
+
+.card h2{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--cyan);
+  margin-bottom:14px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.card h3{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--white);
+  margin-bottom:10px;
+  text-transform:uppercase;
+}
+
+.card p{
+  color:var(--white);
+  margin-bottom:14px;
+}
+
+.card p:last-child{
+  margin-bottom:0;
+}
+
+.two-column{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.three-column{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.highlight{
+  border-color:rgba(0,255,238,.35);
+  background:
+    linear-gradient(90deg,rgba(0,255,238,.06),rgba(255,32,255,.05)),
+    rgba(15,15,20,.92);
+}
+
+.arcade-glow{
+  border-color:rgba(0,255,238,.50);
+  background:
+    radial-gradient(circle at top left, rgba(0,255,238,.12), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 40%),
+    rgba(15,15,20,.92);
+}
+
+.signal-line{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--magenta);
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.simple-list{
+  list-style:none;
+  display:grid;
+  gap:10px;
+}
+
+.simple-list li{
+  color:var(--white);
+}
+
+.simple-list strong{
+  color:var(--cyan);
+}
+
+.score-table-wrap{
+  overflow-x:auto;
+  border-radius:14px;
+  border:1px solid rgba(0,255,238,.25);
+}
+
+.score-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:780px;
+  background:rgba(0,0,0,.22);
+}
+
+.score-table th,
+.score-table td{
+  padding:13px 14px;
+  text-align:left;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.score-table th{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--cyan);
+  text-transform:uppercase;
+  font-size:.82rem;
+  letter-spacing:.8px;
+  background:rgba(0,255,238,.06);
+}
+
+.score-table td{
+  color:var(--white);
+}
+
+.score-rank{
+  color:var(--gold);
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:900;
+}
+
+.status-pill{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:999px;
+  border:1px solid rgba(0,255,238,.45);
+  color:var(--cyan);
+  font-size:.78rem;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.pending{
+  border-color:rgba(255,32,255,.45);
+  color:var(--magenta);
+}
+
+.hunt-card{
+  border:1px solid rgba(162,48,240,.45);
+  border-radius:14px;
+  padding:18px;
+  background:
+    linear-gradient(135deg,rgba(162,48,240,.14),rgba(0,255,238,.05)),
+    rgba(0,0,0,.20);
+}
+
+.hunt-card h3{
+  color:var(--cyan);
+}
+
+.live-card{
+  border:1px solid rgba(0,255,238,.45);
+  border-radius:14px;
+  padding:18px;
+  background:
+    linear-gradient(135deg,rgba(0,255,238,.09),rgba(255,32,255,.05)),
+    rgba(0,0,0,.22);
+}
+
+.live-label{
+  display:inline-block;
+  margin-bottom:10px;
+  padding:5px 10px;
+  border-radius:999px;
+  color:#05070d;
+  background:var(--cyan);
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:900;
+  font-size:.78rem;
+  letter-spacing:1px;
+}
+
+.button-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:16px;
+}
+
+.button{
+  display:inline-block;
+  padding:12px 18px;
+  color:white;
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  border-radius:10px;
+  border:2px solid var(--purple);
+  background:linear-gradient(90deg,rgba(162,48,240,.25),rgba(255,32,255,.15));
+}
+
+.button:hover{
+  border-color:var(--cyan);
+  color:var(--cyan);
+  box-shadow:0 0 18px rgba(0,255,238,.35);
+}
+
+.footer{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(255,32,255,.25);
+  border-radius:14px;
+  background:rgba(10,10,18,.88);
+  text-align:center;
+}
+
+.social-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:28px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.social-row a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+.social-row a:hover{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
+}
+
+.footer small{
+  color:var(--muted);
+}
+
+.footer small a{
+  color:var(--cyan);
+  text-decoration:none;
+  font-weight:800;
+}
+
+.footer small a:hover{
+  color:var(--magenta);
+  text-shadow:0 0 10px rgba(255,32,255,.55);
+}
+
+@media(min-width:900px){
+  .two-column{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .three-column{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <header class="hero">
+    <div class="hero-placeholder">
+      <div>
+        <h1>Arcade Scores</h1>
+        <p>Insert Coin • Submit Score • Chase The Board</p>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar">
+    <a href="index.html">HOME</a>
+    <a href="events.html">EVENTS</a>
+    <a href="hidden-gem.html">HIDDEN GEM</a>
+    <a href="speedruns.html">SPEEDRUNS</a>
+    <a class="active" href="arcade-scores.html">ARCADE SCORES</a>
+    <a href="glitch.html">GLITCH</a>
+    <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">MERCH</a>
+    <a href="about.html">ABOUT</a>
+    <a href="contact.html">CONTACT</a>
+  </nav>
+
+  <main class="grid">
+
+    <section class="two-column">
+
+      <div class="card arcade-glow">
+        <h2>What Is Arcade Scores?</h2>
+
+        <p>
+          Arcade Scores is the starting point for Zendigo’s high-score tracking system:
+          arcade runs, retro score hunts, manual scoreboards, future community submissions,
+          and eventually full game leaderboards.
+        </p>
+
+        <p>
+          This first version is manual and simple. The long-term goal is a full score hub
+          with player accounts, submitted games, verification, and live broadcasting status.
+        </p>
+
+        <p class="signal-line">
+          High scores first. Full arcade hub later.
+        </p>
+      </div>
+
+      <div class="card highlight">
+        <h2>Future Platform Direction</h2>
+
+        <p>
+          The future version should work like a mix of arcade leaderboard, score archive,
+          and live community hub.
+        </p>
+
+        <ul class="simple-list">
+          <li><strong>User Accounts:</strong> player profiles, avatars, history, badges, and linked socials.</li>
+          <li><strong>Social Linking:</strong> Twitch, Kick, YouTube, Steam, Speedrun, X, Bluesky, and more.</li>
+          <li><strong>Live Status:</strong> Twitch and Kick first, showing who is live for tracked games.</li>
+          <li><strong>Submissions:</strong> users submit games, scores, proof, and corrections.</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <section class="card">
+      <h2>Featured Score Hunts</h2>
+
+      <div class="three-column">
+
+        <div class="hunt-card">
+          <h3>Arcade Roots</h3>
+          <p>
+            Early arcade score hunts, original arcade games, MAME-style tracking,
+            and score-based challenges.
+          </p>
+          <p class="signal-line">Coming First</p>
+        </div>
+
+        <div class="hunt-card">
+          <h3>Donkey Kong</h3>
+          <p>
+            Target game for classic arcade score tracking. Categories and rules will be defined before scores go public.
+          </p>
+          <p class="signal-line">Rules Pending</p>
+        </div>
+
+        <div class="hunt-card">
+          <h3>SEGA Score Runs</h3>
+          <p>
+            SEGA arcade and console score hunts, including games that fit the Arcade Roots event path.
+          </p>
+          <p class="signal-line">Event Linked</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Current Manual Leaderboard</h2>
+
+      <div class="score-table-wrap">
+        <table class="score-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Game</th>
+              <th>Category</th>
+              <th>Player</th>
+              <th>Score</th>
+              <th>Platform</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="score-rank">#1</td>
+              <td>Coming Soon</td>
+              <td>Arcade Original / Points</td>
+              <td>Zendigo</td>
+              <td>—</td>
+              <td>Arcade / Emulator</td>
+              <td><span class="status-pill pending">Pending</span></td>
+            </tr>
+
+            <tr>
+              <td class="score-rank">#2</td>
+              <td>Coming Soon</td>
+              <td>Score Attack</td>
+              <td>Open Slot</td>
+              <td>—</td>
+              <td>TBD</td>
+              <td><span class="status-pill pending">Open</span></td>
+            </tr>
+
+            <tr>
+              <td class="score-rank">#3</td>
+              <td>Coming Soon</td>
+              <td>Score Attack</td>
+              <td>Open Slot</td>
+              <td>—</td>
+              <td>TBD</td>
+              <td><span class="status-pill pending">Open</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="two-column">
+
+      <div class="card">
+        <h2>Submit A Score</h2>
+
+        <p>
+          Score submissions will start manually through Discord while the full system is planned.
+          For now, submissions should include the game, category, score, platform, proof, and notes.
+        </p>
+
+        <ul class="simple-list">
+          <li><strong>Game:</strong> title and version.</li>
+          <li><strong>Category:</strong> score attack, arcade original, one credit, or custom ruleset.</li>
+          <li><strong>Score:</strong> final score or tracked result.</li>
+          <li><strong>Proof:</strong> screenshot, clip, stream VOD, or video link.</li>
+          <li><strong>Platform:</strong> arcade, emulator, console, collection, or PC release.</li>
+        </ul>
+
+        <div class="button-row">
+          <a class="button" href="https://discord.gg/vu9pVaEqH3" target="_blank" rel="noopener">
+            Submit Through Discord →
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Submit A Game</h2>
+
+        <p>
+          Game submissions will help decide what gets leaderboard support first.
+          Suggested games should be score-friendly, rule-friendly, and reasonable to verify.
+        </p>
+
+        <ul class="simple-list">
+          <li><strong>Game Title:</strong> exact name.</li>
+          <li><strong>Platform:</strong> arcade board, emulator, console, or collection.</li>
+          <li><strong>Score Type:</strong> points, waves, survival, distance, or custom.</li>
+          <li><strong>Rules:</strong> suggested settings and limitations.</li>
+          <li><strong>Reason:</strong> why this game belongs on the board.</li>
+        </ul>
+
+        <div class="button-row">
+          <a class="button" href="https://discord.gg/vu9pVaEqH3" target="_blank" rel="noopener">
+            Suggest A Game →
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="card">
+      <h2>Currently Live Direction</h2>
+
+      <div class="three-column">
+
+        <div class="live-card">
+          <span class="live-label">Twitch</span>
+          <h3>Live Game Status</h3>
+          <p>
+            Future game pages should show linked users who are live on Twitch while playing that tracked game or category.
+          </p>
+        </div>
+
+        <div class="live-card">
+          <span class="live-label">Kick</span>
+          <h3>Alt Live Space</h3>
+          <p>
+            Kick should be planned alongside Twitch as a primary live platform for player profiles and game pages.
+          </p>
+        </div>
+
+        <div class="live-card">
+          <span class="live-label">YouTube</span>
+          <h3>Archive First</h3>
+          <p>
+            YouTube remains important for videos, VODs, clips, and proof. Live detection can come later if practical.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Verification Rules Preview</h2>
+
+      <ul class="simple-list">
+        <li><strong>Manual Review First:</strong> early scores are reviewed manually before being treated as verified.</li>
+        <li><strong>Proof Matters:</strong> screenshots may work for casual boards, but top scores should need stronger proof.</li>
+        <li><strong>Rules Per Game:</strong> every tracked game needs clear rules before serious leaderboard tracking.</li>
+        <li><strong>Platform Clarity:</strong> arcade, emulator, console, remake, and collection versions should be separated when needed.</li>
+        <li><strong>Community Expansion:</strong> account-based submissions, game pages, and public leaderboards come later.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+
+    <div class="social-row">
+      <a href="https://www.twitch.tv/zendigo_playz" target="_blank" rel="noopener">Twitch</a>
+      <a href="https://www.youtube.com/@zendigoplayz" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://discord.gg/vu9pVaEqH3" target="_blank" rel="noopener">Discord</a>
+      <a href="https://www.speedrun.com/users/ZendigoPlayz" target="_blank" rel="noopener">Speedrun</a>
+      <a href="https://steamcommunity.com/id/Zendigo" target="_blank" rel="noopener">Steam</a>
+      <a href="https://x.com/ZendigoPlayz" target="_blank" rel="noopener">X</a>
+      <a href="https://www.facebook.com/profile.php?id=61575062652351" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://bsky.app/profile/zendigoplayz.bsky.social" target="_blank" rel="noopener">Bluesky</a>
+    </div>
+
+    <small>
+      Retro Games • Speedruns • Community Events • Hidden Gems<br>
+      Contact: <a href="mailto:zendigoofficial@gmail.com">zendigoofficial@gmail.com</a>
+    </small>
+
+  </footer>
+
+</div>
+
+</body>
+</html>
