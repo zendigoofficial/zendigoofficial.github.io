@@ -4,9 +4,536 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Emulators | Retro Vault</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
+
+:root{
+  --cyan:#00FFEE;
+  --magenta:#FF20FF;
+  --purple:#A230F0;
+  --black:#05070d;
+  --panel:#0f0f14;
+  --white:#EEEEEE;
+  --muted:#A9AEC3;
+  --gold:#FFD84D;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#05070d;
+  color:var(--white);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top left, rgba(255,32,255,.14), transparent 35%),
+    radial-gradient(circle at top right, rgba(0,255,238,.12), transparent 35%),
+    linear-gradient(180deg,#05070d,#080a12 55%,#05070d);
+  pointer-events:none;
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.018),
+      rgba(255,255,255,.018) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  opacity:.35;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.wrapper{
+  width:min(1400px,95%);
+  margin:auto;
+  padding:18px 0 24px;
+}
+
+.hero{
+  margin-bottom:12px;
+}
+
+.hero img{
+  width:100%;
+  display:block;
+  border-radius:14px;
+  border:2px solid rgba(255,32,255,.35);
+  box-shadow:
+    0 0 30px rgba(255,32,255,.20),
+    0 0 30px rgba(0,255,238,.15);
+}
+
+.navbar{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:24px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+  padding:13px 16px;
+  background:rgba(10,10,18,.88);
+  border:1px solid rgba(255,32,255,.35);
+  border-radius:12px;
+  box-shadow:0 0 18px rgba(162,48,240,.16);
+}
+
+.navbar a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+.navbar a:hover,
+.navbar a.active{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.card{
+  background:rgba(15,15,20,.92);
+  border:1px solid rgba(255,32,255,.32);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 0 18px rgba(255,32,255,.08);
+}
+
+.card h1,
+.card h2,
+.card h3{
+  font-family:Orbitron, Arial, sans-serif;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.card h1{
+  color:var(--cyan);
+  font-size:clamp(2rem,5vw,4rem);
+  margin-bottom:10px;
+}
+
+.card h2{
+  color:var(--cyan);
+  margin-bottom:14px;
+}
+
+.card h3{
+  color:var(--white);
+  margin-bottom:10px;
+}
+
+.card p{
+  color:var(--white);
+  margin-bottom:14px;
+}
+
+.card p:last-child{
+  margin-bottom:0;
+}
+
+.two-column{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.three-column{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.emulator-card{
+  border:1px solid rgba(0,255,238,.35);
+  border-radius:14px;
+  padding:18px;
+  background:
+    radial-gradient(circle at top left, rgba(0,255,238,.10), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 42%),
+    rgba(0,0,0,.22);
+}
+
+.emulator-card h3{
+  color:var(--cyan);
+}
+
+.highlight{
+  border-color:rgba(162,48,240,.55);
+  background:
+    linear-gradient(90deg,rgba(162,48,240,.14),rgba(255,32,255,.07),rgba(0,255,238,.06)),
+    rgba(15,15,20,.92);
+}
+
+.signal-line{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--magenta);
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.simple-list{
+  list-style:none;
+  display:grid;
+  gap:10px;
+}
+
+.simple-list li{
+  color:var(--white);
+}
+
+.simple-list strong{
+  color:var(--cyan);
+}
+
+.status-pill{
+  display:inline-block;
+  margin-top:8px;
+  padding:5px 9px;
+  border-radius:999px;
+  border:1px solid rgba(255,32,255,.45);
+  color:var(--magenta);
+  font-size:.78rem;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.download-link{
+  display:inline-block;
+  margin-top:12px;
+  color:var(--cyan);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:900;
+}
+
+.download-link:hover{
+  color:var(--magenta);
+  text-shadow:0 0 10px rgba(255,32,255,.55);
+}
+
+.button-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:16px;
+}
+
+.button{
+  display:inline-block;
+  padding:12px 18px;
+  color:white;
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  border-radius:10px;
+  border:2px solid var(--purple);
+  background:linear-gradient(90deg,rgba(162,48,240,.25),rgba(255,32,255,.15));
+}
+
+.button:hover{
+  border-color:var(--cyan);
+  color:var(--cyan);
+  box-shadow:0 0 18px rgba(0,255,238,.35);
+}
+
+.footer{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(255,32,255,.25);
+  border-radius:14px;
+  background:rgba(10,10,18,.88);
+  text-align:center;
+}
+
+.social-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:28px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.social-row a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+.social-row a:hover{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
+}
+
+.footer small{
+  color:var(--muted);
+}
+
+.footer small a{
+  color:var(--cyan);
+  text-decoration:none;
+  font-weight:800;
+}
+
+.footer small a:hover{
+  color:var(--magenta);
+  text-shadow:0 0 10px rgba(255,32,255,.55);
+}
+
+@media(min-width:900px){
+  .two-column{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .three-column{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+</style>
 </head>
+
 <body>
-  <h1>Emulators</h1>
-  <p>Retro Vault emulator section coming soon.</p>
+
+<div class="wrapper">
+
+  <header class="hero">
+    <img src="../arcade_scores_banner.png" alt="Retro Vault Emulators">
+  </header>
+
+  <nav class="navbar">
+    <a href="../index.html">HOME</a>
+    <a href="../events.html">EVENTS</a>
+    <a href="../hidden-gem.html">HIDDEN GEM</a>
+    <a href="../speedruns.html">SPEEDRUNS</a>
+    <a class="active" href="../arcade-scores.html">ARCADE SCORES</a>
+    <a href="../glitch.html">GLITCH</a>
+    <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">MERCH</a>
+    <a href="../about.html">ABOUT</a>
+    <a href="../contact.html">CONTACT</a>
+  </nav>
+
+  <main class="grid">
+
+    <section class="card highlight">
+      <h1>Emulators</h1>
+
+      <p>
+        The Retro Vault emulator section organizes approved emulator ZIPs and setup paths by system.
+        Each system can later include download links, setup notes, controller notes, BIOS notes, and Arcade Scores compatibility guidance.
+      </p>
+
+      <p class="signal-line">
+        System tree first. ZIP links added as files are approved and uploaded.
+      </p>
+
+      <div class="button-row">
+        <a class="button" href="index.html">Back To Retro Vault →</a>
+        <a class="button" href="roms.html">ROMs / Game Files →</a>
+        <a class="button" href="resources.html">Resources →</a>
+      </div>
+    </section>
+
+    <section class="two-column">
+
+      <div class="card">
+        <h2>Upload Structure</h2>
+
+        <p>
+          Emulator ZIPs should be uploaded into system-specific folders so links stay clean and predictable.
+        </p>
+
+        <ul class="simple-list">
+          <li><strong>Arcade:</strong> downloads/emulators/arcade/</li>
+          <li><strong>NES:</strong> downloads/emulators/nes/</li>
+          <li><strong>SNES:</strong> downloads/emulators/snes/</li>
+          <li><strong>Genesis:</strong> downloads/emulators/genesis/</li>
+          <li><strong>Sega CD:</strong> downloads/emulators/sega-cd/</li>
+          <li><strong>Master System:</strong> downloads/emulators/master-system/</li>
+          <li><strong>Game Boy:</strong> downloads/emulators/game-boy/</li>
+          <li><strong>PC / DOS:</strong> downloads/emulators/pc-dos/</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Emulator Entry Format</h2>
+
+        <ul class="simple-list">
+          <li><strong>System:</strong> platform or console.</li>
+          <li><strong>Recommended Emulator:</strong> preferred emulator package.</li>
+          <li><strong>Version:</strong> package version or build date.</li>
+          <li><strong>Download:</strong> ZIP file link once uploaded.</li>
+          <li><strong>BIOS:</strong> required, not required, or varies.</li>
+          <li><strong>Controller Notes:</strong> setup guidance.</li>
+          <li><strong>Score Compatibility:</strong> whether it fits Arcade Scores tracking.</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <section class="card">
+      <h2>System Tree</h2>
+
+      <div class="three-column">
+
+        <div class="emulator-card">
+          <h3>Arcade / MAME</h3>
+          <p>
+            Arcade emulation, MAME-style setups, cabinet score games, and high-score challenge preparation.
+          </p>
+          <span class="status-pill">ZIP Pending</span>
+          <br>
+          <a class="download-link" href="../downloads/emulators/arcade/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="emulator-card">
+          <h3>NES</h3>
+          <p>
+            Nintendo Entertainment System emulator packages, setup notes, controller configs, and score/run compatibility.
+          </p>
+          <span class="status-pill">ZIP Pending</span>
+          <br>
+          <a class="download-link" href="../downloads/emulators/nes/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="emulator-card">
+          <h3>SNES</h3>
+          <p>
+            Super Nintendo emulator packages, setup paths, event use, and retro score or run preparation.
+          </p>
+          <span class="status-pill">ZIP Pending</span>
+          <br>
+          <a class="download-link" href="../downloads/emulators/snes/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="emulator-card">
+          <h3>Genesis / Mega Drive</h3>
+          <p>
+            SEGA Genesis and Mega Drive emulator packages for SEGA blocks, score hunts, and stream setup.
+          </p>
+          <span class="status-pill">ZIP Pending</span>
+          <br>
+          <a class="download-link" href="../downloads/emulators/genesis/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="emulator-card">
+          <h3>Sega CD</h3>
+          <p>
+            Sega CD emulator setup support. BIOS needs should be clearly marked before any package goes live.
+          </p>
+          <span class="status-pill">BIOS Notes Needed</span>
+          <br>
+          <a class="download-link" href="../downloads/emulators/sega-cd/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="emulator-card">
+          <h3>Master System</h3>
+          <p>
+            SEGA Master System emulator packages and setup support for Retro Vault library organization.
+          </p>
+          <span class="status-pill">ZIP Pending</span>
+          <br>
+          <a class="download-link" href="../downloads/emulators/master-system/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="emulator-card">
+          <h3>Game Boy / GBC / GBA</h3>
+          <p>
+            Nintendo handheld emulator packages, setup notes, and score or event candidate support.
+          </p>
+          <span class="status-pill">ZIP Pending</span>
+          <br>
+          <a class="download-link" href="../downloads/emulators/game-boy/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="emulator-card">
+          <h3>PC / DOS</h3>
+          <p>
+            DOSBox-style packages, PC retro setup notes, and approved configuration resources.
+          </p>
+          <span class="status-pill">ZIP Pending</span>
+          <br>
+          <a class="download-link" href="../downloads/emulators/pc-dos/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="emulator-card">
+          <h3>Multi-System</h3>
+          <p>
+            Multi-system emulator packages or front-end setup resources, if approved for distribution.
+          </p>
+          <span class="status-pill">Planned</span>
+          <br>
+          <a class="download-link" href="../downloads/emulators/multi-system/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>ZIP Upload Plan</h2>
+
+      <p>
+        When an emulator ZIP is uploaded, use a predictable filename and place it in the matching system folder.
+      </p>
+
+      <ul class="simple-list">
+        <li><strong>Recommended filename:</strong> system_emulator_name_version.zip</li>
+        <li><strong>Example:</strong> genesis_exampleemulator_v1.zip</li>
+        <li><strong>Link style:</strong> ../downloads/emulators/genesis/genesis_exampleemulator_v1.zip</li>
+        <li><strong>Update needed:</strong> replace “ZIP Pending” with “Available” and point the card link directly to the ZIP.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+
+    <div class="social-row">
+      <a href="https://www.twitch.tv/zendigo_playz" target="_blank" rel="noopener">Twitch</a>
+      <a href="https://www.youtube.com/@zendigoplayz" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://discord.gg/vu9pVaEqH3" target="_blank" rel="noopener">Discord</a>
+      <a href="https://www.speedrun.com/users/ZendigoPlayz" target="_blank" rel="noopener">Speedrun</a>
+      <a href="https://steamcommunity.com/id/Zendigo" target="_blank" rel="noopener">Steam</a>
+      <a href="https://x.com/ZendigoPlayz" target="_blank" rel="noopener">X</a>
+      <a href="https://www.facebook.com/profile.php?id=61575062652351" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://bsky.app/profile/zendigoplayz.bsky.social" target="_blank" rel="noopener">Bluesky</a>
+    </div>
+
+    <small>
+      Retro Games • Speedruns • Community Events • Hidden Gems<br>
+      Contact: <a href="mailto:zendigoofficial@gmail.com">zendigoofficial@gmail.com</a>
+    </small>
+
+  </footer>
+
+</div>
+
 </body>
 </html>
