@@ -212,6 +212,35 @@ body::after{
   gap:18px;
 }
 
+.card-link{
+  display:block;
+  color:inherit;
+  text-decoration:none;
+  transition:.2s ease;
+}
+
+.card-link:hover{
+  transform:translateY(-2px);
+}
+
+.card-link:hover .card{
+  border-color:var(--cyan);
+  box-shadow:
+    0 0 22px rgba(0,255,238,.18),
+    0 0 26px rgba(255,32,255,.16);
+}
+
+.card-banner{
+  width:100%;
+  display:block;
+  margin-bottom:16px;
+  border-radius:12px;
+  border:1px solid rgba(0,255,238,.35);
+  box-shadow:
+    0 0 18px rgba(0,255,238,.13),
+    0 0 18px rgba(255,32,255,.10);
+}
+
 .status-list{
   list-style:none;
   display:grid;
@@ -340,24 +369,32 @@ body::after{
 
     <section class="two-column">
 
-      <div class="card">
-        <h2>Speedrun Corner</h2>
+      <a class="card-link" href="speedruns.html" aria-label="Open Speedruns page">
+        <div class="card">
+          <img class="card-banner" src="speedruns_banner.png" alt="Speedruns">
 
-        <ul class="status-list">
-          <li><strong>Current Project:</strong> Sonic Speedruns</li>
-          <li><strong>Current Event:</strong> #SonicSpeedEvent</li>
-          <li><strong>PBs:</strong> Live Speedrun tracker on the Speedruns page</li>
-        </ul>
-      </div>
+          <h2>Speedrun Corner</h2>
 
-      <div class="card glitch-panel">
-        <h2>Glitch AI Companion</h2>
+          <ul class="status-list">
+            <li><strong>Current Project:</strong> Sonic Speedruns</li>
+            <li><strong>Current Event:</strong> #SonicSpeedEvent</li>
+            <li><strong>PBs:</strong> Live Speedrun tracker on the Speedruns page</li>
+          </ul>
+        </div>
+      </a>
 
-        <p>
-          AI digital co-host. Chaos certified. Signal corrupted.
-          Built for streams, reactions, and future interactive chaos.
-        </p>
-      </div>
+      <a class="card-link" href="glitch.html" aria-label="Open Glitch page">
+        <div class="card glitch-panel">
+          <img class="card-banner" src="glitch_banner.png" alt="Glitch AI Digital Co-Host">
+
+          <h2>Glitch AI Companion</h2>
+
+          <p>
+            AI digital co-host. Chaos certified. Signal corrupted.
+            Built for streams, reactions, and future interactive chaos.
+          </p>
+        </div>
+      </a>
 
     </section>
 
