@@ -139,6 +139,11 @@ body::after{
 
 .card p{
   color:var(--white);
+  margin-bottom:14px;
+}
+
+.card p:last-child{
+  margin-bottom:0;
 }
 
 .muted{
@@ -212,6 +217,10 @@ body::after{
   color:var(--white);
 }
 
+.simple-list strong{
+  color:var(--cyan);
+}
+
 .two-column{
   display:grid;
   grid-template-columns:1fr;
@@ -256,7 +265,8 @@ body::after{
   font-weight:800;
 }
 
-.review-button{
+.review-button,
+.discord-button{
   display:inline-block;
   margin-top:14px;
   padding:12px 18px;
@@ -269,10 +279,28 @@ body::after{
   background:linear-gradient(90deg,rgba(162,48,240,.25),rgba(255,32,255,.15));
 }
 
-.review-button:hover{
+.review-button:hover,
+.discord-button:hover{
   border-color:var(--cyan);
   color:var(--cyan);
   box-shadow:0 0 18px rgba(0,255,238,.35);
+}
+
+.submission-card{
+  border-color:rgba(0,255,238,.45);
+  background:
+    linear-gradient(90deg,rgba(0,255,238,.08),rgba(255,32,255,.06),rgba(162,48,240,.08)),
+    rgba(15,15,20,.92);
+}
+
+.submission-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.submission-note{
+  color:var(--muted);
 }
 
 .footer{
@@ -328,6 +356,10 @@ body::after{
   .latest-review{
     grid-template-columns:.85fr 1.15fr;
   }
+
+  .submission-grid{
+    grid-template-columns:1.15fr .85fr;
+  }
 }
 </style>
 </head>
@@ -363,13 +395,9 @@ body::after{
           indie games, retro releases, and random discoveries from across the gaming world.
         </p>
 
-        <br>
-
         <p>
           Every game faces the same question:
         </p>
-
-        <br>
 
         <p>
           Is it a <span class="accent-cyan">Hidden Gem</span>?
@@ -450,7 +478,7 @@ body::after{
               Full review, score breakdown, and final verdict will appear here once the episode is published.
             </p>
 
-            <a class="review-button" href="#" target="_blank">
+            <a class="review-button" href="#" target="_blank" rel="noopener">
               READ REVIEW →
             </a>
           </div>
@@ -465,33 +493,77 @@ body::after{
           <li>🎮 Upcoming Demos</li>
           <li>🚀 More Steam Discoveries</li>
           <li>👥 Community Suggestions</li>
+          <li>📩 Indie Dev Submissions</li>
           <li>❓ Wildcard Picks</li>
         </ul>
       </div>
 
     </section>
 
+    <section class="card submission-card">
+      <h2>Dev Submissions</h2>
+
+      <div class="submission-grid">
+
+        <div>
+          <p>
+            Developers, publishers, and creators can submit games or demos for possible
+            Hidden Gem or Hot Garbage coverage through the Zendigo Discord.
+          </p>
+
+          <p>
+            This is the best path for indie devs who want Zendigo to take a fair look at
+            a game, demo, early project, or upcoming release.
+          </p>
+
+          <p class="submission-note">
+            Submitting a game does not guarantee coverage, review, promotion, or a positive verdict.
+            If selected, the game may be judged as Hidden Gem, Needs Polish, or Hot Garbage.
+          </p>
+
+          <a class="discord-button" href="https://zendigo.s.gy/krqFJy" target="_blank" rel="noopener">
+            Submit Through Discord →
+          </a>
+        </div>
+
+        <div>
+          <h3>Submission Info</h3>
+
+          <ul class="simple-list">
+            <li><strong>Game/Demo Title:</strong> name of the project.</li>
+            <li><strong>Playable Link:</strong> Steam, Itch, Newgrounds, demo page, or store link.</li>
+            <li><strong>Developer / Team:</strong> who made it.</li>
+            <li><strong>Genre:</strong> what kind of game it is.</li>
+            <li><strong>Release Status:</strong> demo, early access, full release, or upcoming.</li>
+            <li><strong>Estimated Playtime:</strong> rough time needed for a fair look.</li>
+            <li><strong>Important Notes:</strong> bugs, spoilers, content warnings, or anything to know before playing.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <footer class="footer">
 
-  <div class="social-row">
-    <a href="https://zendigo.s.gy/z6W6N9" target="_blank" rel="noopener">Twitch</a>
-    <a href="https://zendigo.s.gy/UkSAT1" target="_blank" rel="noopener">YouTube</a>
-    <a href="https://zendigo.s.gy/krqFJy" target="_blank" rel="noopener">Discord</a>
-    <a href="https://zendigo.s.gy/QwhPxv" target="_blank" rel="noopener">Speedrun.com</a>
-    <a href="https://zendigo.s.gy/yJtsVD" target="_blank" rel="noopener">Steam</a>
-    <a href="https://zendigo.s.gy/iK4kUt" target="_blank" rel="noopener">X</a>
-    <a href="https://www.facebook.com/profile.php?id=61575062652351" target="_blank" rel="noopener">Facebook</a>
-    <a href="https://bsky.app/profile/zendigoplayz.bsky.social" target="_blank" rel="noopener">Bluesky</a>
-  </div>
+    <div class="social-row">
+      <a href="https://zendigo.s.gy/z6W6N9" target="_blank" rel="noopener">Twitch</a>
+      <a href="https://zendigo.s.gy/UkSAT1" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://zendigo.s.gy/krqFJy" target="_blank" rel="noopener">Discord</a>
+      <a href="https://zendigo.s.gy/QwhPxv" target="_blank" rel="noopener">Speedrun.com</a>
+      <a href="https://zendigo.s.gy/yJtsVD" target="_blank" rel="noopener">Steam</a>
+      <a href="https://zendigo.s.gy/iK4kUt" target="_blank" rel="noopener">X</a>
+      <a href="https://www.facebook.com/profile.php?id=61575062652351" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://bsky.app/profile/zendigoplayz.bsky.social" target="_blank" rel="noopener">Bluesky</a>
+    </div>
 
-  <small>
-    Retro Games • Speedruns • Community Events • Hidden Gems<br>
-    Contact: zendigoofficial@gmail.com
-  </small>
+    <small>
+      Retro Games • Speedruns • Community Events • Hidden Gems<br>
+      Contact: zendigoofficial@gmail.com
+    </small>
 
-</footer>
+  </footer>
 
 </div>
 
