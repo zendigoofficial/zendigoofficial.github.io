@@ -14,16 +14,16 @@ const COLORS = {
 };
 
 const CONFIG = {
-  gravity: 0.48,
-  flapPower: -8.6,
+  gravity: 0.34,
+  flapPower: -7.2,
   playerX: 190,
-  playerRadius: 28,
+  playerRadius: 24,
   playerSpriteW: 104,
   playerSpriteH: 104,
-  obstacleWidth: 78,
-  obstacleGap: 158,
-  obstacleSpeed: 3.15,
-  obstacleSpacing: 275,
+  obstacleWidth: 72,
+  obstacleGap: 235,
+  obstacleSpeed: 2.45,
+  obstacleSpacing: 390,
   floorHeight: 46
 };
 
