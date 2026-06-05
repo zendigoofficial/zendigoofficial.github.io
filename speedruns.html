@@ -19,7 +19,9 @@
   --border-magenta:rgba(255,32,255,.55);
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
@@ -243,64 +245,169 @@ p{
   font-weight:900;
 }
 
-.pb-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
-  margin-top: 22px;
-  align-items: start;
+.pb-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+  margin-top:22px;
+  align-items:start;
 }
 
-.pb-card.with-cover {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  min-height: auto;
-  overflow: hidden;
-}
-
-.pb-cover-wrap {
-  width: 100%;
-  height: 190px;
-  border: 1px solid rgba(0, 255, 238, 0.55);
-  border-radius: 12px;
-  overflow: hidden;
+.pb-card{
+  border:1px solid rgba(255,32,255,.65);
   background:
-    linear-gradient(135deg, rgba(0,255,238,.12), rgba(255,32,255,.08)),
+    linear-gradient(135deg,rgba(0,255,238,.06),rgba(255,32,255,.06)),
+    rgba(8,10,18,.92);
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 0 22px rgba(255,32,255,.08);
+}
+
+.pb-card.with-cover{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  min-height:100%;
+  overflow:hidden;
+}
+
+.pb-cover-wrap{
+  width:100%;
+  height:190px;
+  border:1px solid rgba(0,255,238,.55);
+  border-radius:12px;
+  overflow:hidden;
+  background:
+    linear-gradient(135deg,rgba(0,255,238,.12),rgba(255,32,255,.08)),
     rgba(0,0,0,.45);
-  box-shadow: 0 0 16px rgba(0,255,238,.12);
+  box-shadow:0 0 16px rgba(0,255,238,.12);
 }
 
-.pb-cover {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
+.pb-cover{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+  display:block;
 }
 
-.pb-cover-placeholder {
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-  font-size: .8rem;
-  text-align: center;
-  padding: 8px;
+.pb-cover-placeholder{
+  display:grid;
+  place-items:center;
+  color:var(--muted);
+  font-size:.8rem;
+  text-align:center;
+  padding:8px;
 }
 
-.pb-info {
-  min-width: 0;
+.pb-info{
+  min-width:0;
 }
 
-.pb-info h3 {
-  line-height: 1.18;
+.pb-info h3{
+  min-height:2.4em;
+  line-height:1.18;
+  margin:0 0 8px;
+  color:var(--cyan);
+  font-size:1.1rem;
 }
 
-@media (max-width: 560px) {
-  .pb-cover-wrap {
-    height: 160px;
+.pb-meta{
+  color:var(--white);
+  line-height:1.55;
+  margin:10px 0;
+}
+
+.pb-meta strong{
+  color:var(--magenta);
+}
+
+.pb-link,
+.pb-link:visited{
+  color:var(--cyan);
+  font-weight:900;
+  text-decoration:none;
+}
+
+.pb-link:hover,
+.pb-link:focus{
+  color:var(--magenta);
+  text-shadow:0 0 10px rgba(255,32,255,.55);
+}
+
+.pb-subcategories{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:10px 0 12px;
+}
+
+.pb-subcategory{
+  display:inline-block;
+  border:1px solid rgba(162,48,240,.7);
+  border-radius:999px;
+  padding:5px 9px;
+  background:rgba(162,48,240,.12);
+  color:var(--white);
+  font-size:.82rem;
+  line-height:1.2;
+}
+
+.pb-subcategory strong{
+  color:var(--magenta);
+}
+
+.believe{
+  text-align:center;
+  border-color:var(--border-cyan);
+}
+
+.believe h2{
+  color:var(--magenta);
+  margin-bottom:10px;
+}
+
+.footer{
+  width:calc(100% - 16px);
+  margin:18px auto 0;
+  padding:18px;
+  border:1px solid rgba(255,32,255,.25);
+  border-radius:14px;
+  background:rgba(10,10,18,.88);
+  text-align:center;
+}
+
+.footer-links{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:28px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.footer-links a{
+  color:var(--white);
+  text-decoration:none;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+.footer-links a:hover{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
+}
+
+.footer small{
+  color:var(--muted);
+  display:block;
+  margin-top:6px;
+}
+
+@media(max-width:760px){
+  .grid{
+    grid-template-columns:1fr;
   }
-}
 
   .nav{
     gap:14px;
@@ -311,58 +418,9 @@ p{
     padding:18px;
   }
 
-  .footer{
-    width:calc(100% - 16px);
+  .pb-cover-wrap{
+    height:160px;
   }
-}
-  .pb-link,
-.pb-link:visited {
-  color: var(--cyan);
-  font-weight: 900;
-  text-decoration: none;
-}
-
-.pb-link:hover,
-.pb-link:focus {
-  color: var(--magenta);
-  text-shadow: 0 0 10px rgba(255, 32, 255, 0.55);
-}
-
-.pb-card.with-cover {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  min-height: 100%;
-  overflow: hidden;
-}
-
-.pb-cover-wrap {
-  width: 100%;
-  height: 190px;
-  border: 1px solid rgba(0, 255, 238, 0.55);
-  border-radius: 12px;
-  overflow: hidden;
-  background:
-    linear-gradient(135deg, rgba(0,255,238,.12), rgba(255,32,255,.08)),
-    rgba(0,0,0,.45);
-  box-shadow: 0 0 16px rgba(0,255,238,.12);
-}
-
-.pb-cover {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-}
-
-.pb-info h3 {
-  min-height: 2.4em;
-  line-height: 1.18;
-}
-
-.pb-meta {
-  margin: 10px 0;
 }
 </style>
 </head>
@@ -380,7 +438,7 @@ p{
     <a href="hidden-gem.html">Hidden Gem</a>
     <a class="active" href="speedruns.html">Speedruns</a>
     <a href="glitch.html">Glitch</a>
-    <a href="merch.html">Merch</a>
+    <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">Merch</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
   </nav>
@@ -434,7 +492,7 @@ p{
       <div>
         <h2>Speedrun.com Tracker</h2>
         <p class="muted">
-          Verified runs, personal bests, categories, and leaderboard progress pulled from Zendigo's Speedrun.com profile.
+          Verified runs, personal bests, categories, subcategories, and leaderboard progress pulled from Zendigo's Speedrun.com profile.
         </p>
       </div>
 
@@ -482,8 +540,11 @@ p{
       <a href="https://zendigo.s.gy/z6W6N9" target="_blank" rel="noopener">Twitch</a>
       <a href="https://zendigo.s.gy/UkSAT1" target="_blank" rel="noopener">YouTube</a>
       <a href="https://zendigo.s.gy/krqFJy" target="_blank" rel="noopener">Discord</a>
+      <a href="https://zendigo.s.gy/QwhPxv" target="_blank" rel="noopener">Speedrun.com</a>
       <a href="https://zendigo.s.gy/yJtsVD" target="_blank" rel="noopener">Steam</a>
       <a href="https://zendigo.s.gy/iK4kUt" target="_blank" rel="noopener">X</a>
+      <a href="https://www.facebook.com/profile.php?id=61575062652351" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://bsky.app/profile/zendigoplayz.bsky.social" target="_blank" rel="noopener">Bluesky</a>
     </div>
 
     <small>Retro Games • Speedruns • Community Events • Hidden Gems</small>
@@ -500,6 +561,8 @@ const SPEEDRUN_API_URL =
 
 const gameCache = new Map();
 const categoryCache = new Map();
+const categoryVariableCache = new Map();
+const gameVariableCache = new Map();
 
 function escapeHTML(value) {
   return String(value ?? "")
@@ -568,6 +631,7 @@ async function getGameData(gameResource) {
 
   if (!gameId) {
     return {
+      id: "",
       name: "Unknown Game",
       cover: "",
       weblink: ""
@@ -583,6 +647,7 @@ async function getGameData(gameResource) {
     const game = json.data || {};
 
     const data = {
+      id: gameId,
       name: game.names?.international || game.abbreviation || "Unknown Game",
       cover: getBestCover(game),
       weblink: game.weblink || ""
@@ -594,6 +659,7 @@ async function getGameData(gameResource) {
     console.warn("Could not load game data:", gameId, error);
 
     const fallback = {
+      id: gameId,
       name: "Unknown Game",
       cover: "",
       weblink: ""
@@ -626,12 +692,139 @@ async function getCategoryName(categoryResource) {
   }
 }
 
+async function getCategoryVariables(categoryResource) {
+  const categoryId = getResourceId(categoryResource);
+
+  if (!categoryId) return [];
+
+  if (categoryVariableCache.has(categoryId)) {
+    return categoryVariableCache.get(categoryId);
+  }
+
+  try {
+    const json = await fetchJSON(`https://www.speedrun.com/api/v1/categories/${categoryId}/variables`);
+    const variables = Array.isArray(json.data) ? json.data : [];
+
+    categoryVariableCache.set(categoryId, variables);
+    return variables;
+  } catch (error) {
+    console.warn("Could not load category variables:", categoryId, error);
+    categoryVariableCache.set(categoryId, []);
+    return [];
+  }
+}
+
+async function getGameVariables(gameResource) {
+  const gameId = getResourceId(gameResource);
+
+  if (!gameId) return [];
+
+  if (gameVariableCache.has(gameId)) {
+    return gameVariableCache.get(gameId);
+  }
+
+  try {
+    const json = await fetchJSON(`https://www.speedrun.com/api/v1/games/${gameId}/variables`);
+    const variables = Array.isArray(json.data) ? json.data : [];
+
+    gameVariableCache.set(gameId, variables);
+    return variables;
+  } catch (error) {
+    console.warn("Could not load game variables:", gameId, error);
+    gameVariableCache.set(gameId, []);
+    return [];
+  }
+}
+
+function getRunValues(run) {
+  return run?.values && typeof run.values === "object" ? run.values : {};
+}
+
+function getVariableValueLabel(variable, valueId) {
+  if (!variable || !valueId) return "";
+
+  const values = variable.values?.values || {};
+  const valueData = values[valueId];
+
+  return (
+    valueData?.label ||
+    valueData?.name ||
+    valueId
+  );
+}
+
+function shouldDisplayVariable(variable, valueId) {
+  if (!variable || !valueId) return false;
+
+  const label = getVariableValueLabel(variable, valueId);
+  if (!label) return false;
+
+  const cleanLabel = String(label).trim().toLowerCase();
+
+  if (
+    cleanLabel === "n/a" ||
+    cleanLabel === "none" ||
+    cleanLabel === "default" ||
+    cleanLabel === "any"
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+async function getRunSubcategories(run) {
+  const runValues = getRunValues(run);
+  const valueEntries = Object.entries(runValues);
+
+  if (valueEntries.length === 0) return [];
+
+  const [categoryVariables, gameVariables] = await Promise.all([
+    getCategoryVariables(run.category),
+    getGameVariables(run.game)
+  ]);
+
+  const allVariables = [...categoryVariables, ...gameVariables];
+
+  return valueEntries
+    .map(([variableId, valueId]) => {
+      const variable = allVariables.find(item => item.id === variableId);
+
+      if (!shouldDisplayVariable(variable, valueId)) {
+        return null;
+      }
+
+      return {
+        name: variable?.name || "Subcategory",
+        value: getVariableValueLabel(variable, valueId)
+      };
+    })
+    .filter(Boolean);
+}
+
+function renderSubcategoryHTML(subcategories) {
+  if (!Array.isArray(subcategories) || subcategories.length === 0) {
+    return "";
+  }
+
+  return `
+    <div class="pb-subcategories">
+      ${subcategories.map(item => `
+        <span class="pb-subcategory">
+          <strong>${escapeHTML(item.name)}:</strong> ${escapeHTML(item.value)}
+        </span>
+      `).join("")}
+    </div>
+  `;
+}
+
 async function buildPBCard(item) {
   const run = item.run || {};
 
-  const [gameData, categoryName] = await Promise.all([
+  const [gameData, categoryName, subcategories] = await Promise.all([
     getGameData(run.game),
-    getCategoryName(run.category)
+    getCategoryName(run.category),
+    getRunSubcategories(run)
   ]);
 
   const time = formatSpeedrunTime(run.times?.primary_t);
@@ -658,6 +851,7 @@ async function buildPBCard(item) {
       <div class="pb-info">
         <h3>${escapeHTML(gameData.name)}</h3>
         <p class="pb-meta"><strong>Category:</strong> ${escapeHTML(categoryName)}</p>
+        ${renderSubcategoryHTML(subcategories)}
         <p class="pb-meta"><strong>Time:</strong> ${escapeHTML(time)}</p>
         <p class="pb-meta"><strong>Placement:</strong> ${escapeHTML(place)}</p>
         <a class="pb-link" href="${escapeHTML(runLink)}" target="_blank" rel="noopener">View Run →</a>
@@ -714,5 +908,6 @@ async function loadSpeedrunPBs() {
 
 loadSpeedrunPBs();
 </script>
+
 </body>
 </html>
