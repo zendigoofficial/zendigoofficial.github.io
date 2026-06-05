@@ -17,9 +17,14 @@ const CONFIG = {
   gravity: 0.34,
   flapPower: -7.2,
   playerX: 190,
+
+  // Forgiving collision hitbox. The face art is larger than this.
   playerRadius: 24,
-  playerSpriteW: 104,
-  playerSpriteH: 104,
+
+  // Visible face sprite size.
+  playerSpriteW: 112,
+  playerSpriteH: 112,
+
   obstacleWidth: 72,
   obstacleGap: 235,
   obstacleSpeed: 2.45,
@@ -51,6 +56,23 @@ faceImage.onerror = () => {
   faceFailed = true;
 };
 
+const pipeTopImage = new Image();
+pipeTopImage.src = "assets/pipe_top.png";
+
+const pipeBottomImage = new Image();
+pipeBottomImage.src = "assets/pipe_bottom.png";
+
+let pipeTopLoaded = false;
+let pipeBottomLoaded = false;
+
+pipeTopImage.onload = () => {
+  pipeTopLoaded = true;
+};
+
+pipeBottomImage.onload = () => {
+  pipeBottomLoaded = true;
+};
+
 function resetGame(){
   frame = 0;
   score = 0;
@@ -66,7 +88,7 @@ function resetGame(){
   particles = [];
   stars = makeStars();
 
-  spawnObstacle(WIDTH + 120);
+  spawnObstacle(WIDTH + 160);
 }
 
 function makeStars(){
@@ -141,12 +163,12 @@ function update(){
 
   player.vy += CONFIG.gravity;
   player.y += player.vy;
-  player.rotation = Math.max(-0.45, Math.min(0.75, player.vy / 12));
+  player.rotation = Math.max(-0.38, Math.min(0.62, player.vy / 13));
 
   const spawnRate = Math.floor(CONFIG.obstacleSpacing / CONFIG.obstacleSpeed);
 
   if(frame % spawnRate === 0){
-    spawnObstacle(WIDTH + 40);
+    spawnObstacle(WIDTH + 60);
   }
 
   obstacles.forEach(obstacle => {
@@ -164,7 +186,7 @@ function update(){
     }
   });
 
-  obstacles = obstacles.filter(obstacle => obstacle.x + obstacle.width > -40);
+  obstacles = obstacles.filter(obstacle => obstacle.x + obstacle.width > -80);
 
   if(player.y - CONFIG.playerRadius < 0 || player.y + CONFIG.playerRadius > HEIGHT - CONFIG.floorHeight){
     endGame();
@@ -289,16 +311,39 @@ function drawStars(){
 
 function drawObstacles(){
   obstacles.forEach(obstacle => {
-    drawGate(obstacle.x, 0, obstacle.width, obstacle.gapY, true);
+    drawPipeTop(obstacle.x, 0, obstacle.width, obstacle.gapY);
 
-    drawGate(
+    drawPipeBottom(
       obstacle.x,
       obstacle.gapY + obstacle.gap,
       obstacle.width,
-      HEIGHT - CONFIG.floorHeight - (obstacle.gapY + obstacle.gap),
-      false
+      HEIGHT - CONFIG.floorHeight - (obstacle.gapY + obstacle.gap)
     );
   });
+}
+
+function drawPipeTop(x, y, width, height){
+  if(height <= 0){
+    return;
+  }
+
+  if(pipeTopLoaded){
+    ctx.drawImage(pipeTopImage, x, y, width, height);
+  }else{
+    drawGate(x, y, width, height, true);
+  }
+}
+
+function drawPipeBottom(x, y, width, height){
+  if(height <= 0){
+    return;
+  }
+
+  if(pipeBottomLoaded){
+    ctx.drawImage(pipeBottomImage, x, y, width, height);
+  }else{
+    drawGate(x, y, width, height, false);
+  }
 }
 
 function drawGate(x, y, width, height, top){
@@ -372,8 +417,6 @@ function drawPlayer(){
   ctx.translate(player.x, player.y);
   ctx.rotate(player.rotation);
 
-  drawWings();
-
   ctx.save();
   ctx.shadowColor = COLORS.cyan;
   ctx.shadowBlur = 18;
@@ -400,27 +443,6 @@ function drawPlayer(){
     ctx.fillText("NO FACE", 0, 46);
     ctx.restore();
   }
-
-  ctx.restore();
-}
-
-function drawWings(){
-  const flapOffset = Math.sin(frame / 4) * 7;
-
-  ctx.save();
-  ctx.fillStyle = "rgba(255,32,255,.72)";
-  ctx.strokeStyle = COLORS.cyan;
-  ctx.lineWidth = 2;
-
-  ctx.beginPath();
-  ctx.ellipse(-44, 8 + flapOffset, 24, 11, -0.4, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.ellipse(35, 8 - flapOffset, 22, 10, 0.4, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
 
   ctx.restore();
 }
