@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>About | Zendigo</title>
 
 <style>
@@ -100,6 +100,7 @@ body::after{
   text-decoration:none;
   font-family:Orbitron, Arial, sans-serif;
   font-weight:800;
+  letter-spacing:.5px;
 }
 
 .navbar a:hover,
@@ -110,6 +111,7 @@ body::after{
 
 .grid{
   display:grid;
+  grid-template-columns:1fr;
   gap:18px;
 }
 
@@ -126,9 +128,18 @@ body::after{
   color:var(--cyan);
   margin-bottom:14px;
   text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.card h3{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--white);
+  margin-bottom:10px;
+  text-transform:uppercase;
 }
 
 .card p{
+  color:var(--white);
   margin-bottom:14px;
 }
 
@@ -136,37 +147,45 @@ body::after{
   margin-bottom:0;
 }
 
-.project-grid{
+.two-column{
   display:grid;
   grid-template-columns:1fr;
-  gap:14px;
+  gap:18px;
+}
+
+.highlight{
+  border-color:rgba(0,255,238,.35);
+  background:
+    linear-gradient(90deg,rgba(0,255,238,.06),rgba(255,32,255,.05)),
+    rgba(15,15,20,.92);
 }
 
 .project-card{
-  border:1px solid rgba(0,255,238,.25);
-  border-radius:14px;
-  padding:18px;
-  background:rgba(0,255,238,.04);
+  border-color:rgba(162,48,240,.55);
+  background:
+    linear-gradient(90deg,rgba(162,48,240,.14),rgba(255,32,255,.07),rgba(0,255,238,.06)),
+    rgba(15,15,20,.92);
 }
 
-.project-card h3{
+.signal-line{
   font-family:Orbitron, Arial, sans-serif;
-  color:var(--cyan);
-  margin-bottom:8px;
-}
-
-.faq-item{
-  margin-bottom:18px;
-}
-
-.faq-item:last-child{
-  margin-bottom:0;
-}
-
-.faq-item h3{
   color:var(--magenta);
-  margin-bottom:8px;
-  font-family:Orbitron, Arial, sans-serif;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.simple-list{
+  list-style:none;
+  display:grid;
+  gap:10px;
+}
+
+.simple-list li{
+  color:var(--white);
+}
+
+.simple-list strong{
+  color:var(--cyan);
 }
 
 .footer{
@@ -181,20 +200,23 @@ body::after{
 .social-row{
   display:flex;
   justify-content:center;
+  align-items:center;
   gap:28px;
   flex-wrap:wrap;
   margin-bottom:10px;
 }
 
 .social-row a{
-  color:white;
+  color:var(--white);
   text-decoration:none;
   font-family:Orbitron, Arial, sans-serif;
   font-weight:800;
+  letter-spacing:.5px;
 }
 
 .social-row a:hover{
   color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
 }
 
 .footer small{
@@ -202,8 +224,8 @@ body::after{
 }
 
 @media(min-width:900px){
-  .project-grid{
-    grid-template-columns:repeat(2,1fr);
+  .two-column{
+    grid-template-columns:1fr 1fr;
   }
 }
 </style>
@@ -213,160 +235,132 @@ body::after{
 
 <div class="wrapper">
 
-<header class="hero">
-  <img src="about_banner.png" alt="About Zendigo">
-</header>
+  <header class="hero">
+    <img src="about_banner.png" alt="About Zendigo">
+  </header>
 
-<nav class="navbar">
-  <a href="index.html">HOME</a>
-  <a href="events.html">EVENTS</a>
-  <a href="hidden-gem.html">HIDDEN GEM</a>
-  <a href="speedruns.html">SPEEDRUNS</a>
-  <a href="glitch.html">GLITCH</a>
-  <a href="https://zendigo-shop.fourthwall.com/" target="_blank">MERCH</a>
-  <a class="active" href="about.html">ABOUT</a>
-  <a href="contact.html">CONTACT</a>
-</nav>
+  <nav class="navbar">
+    <a href="index.html">HOME</a>
+    <a href="events.html">EVENTS</a>
+    <a href="hidden-gem.html">HIDDEN GEM</a>
+    <a href="speedruns.html">SPEEDRUNS</a>
+    <a href="glitch.html">GLITCH</a>
+    <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">MERCH</a>
+    <a class="active" href="about.html">ABOUT</a>
+    <a href="contact.html">CONTACT</a>
+  </nav>
 
-<main class="grid">
+  <main class="grid">
 
-<section class="card">
-  <h2>What Is Zendigo?</h2>
+    <section class="two-column">
 
-  <p>
-    Zendigo is a gaming and entertainment channel focused on retro games,
-    speedruns, community events, game discoveries, and the occasional dose of chaos.
-  </p>
+      <div class="card">
+        <h2>What Is Zendigo?</h2>
 
-  <p>
-    Whether it's chasing a new personal best, testing a strange demo,
-    running a community challenge, or building something new with Glitch,
-    the goal is simple:
-  </p>
+        <p>
+          Zendigo is a live broadcast identity built around retro games, speedruns, hidden gems, community events, and strange discoveries from across gaming.
+        </p>
 
-  <p>
-    Create entertaining experiences, build a welcoming community,
-    and have fun doing it.
-  </p>
+        <p>
+          The channel blends speedrun progress, first impressions, game reviews, event blocks, and live experimentation into one ongoing broadcast.
+        </p>
 
-  <p>
-    The channel continues to grow, evolve, and experiment with new ideas,
-    but at its core, Zendigo is about sharing the journey.
-  </p>
-</section>
+        <p>
+          Some streams chase personal bests. Some streams judge whether a game is a hidden gem or hot garbage. Some streams become chaos.
+        </p>
 
-<section class="card">
-  <h2>What You'll Find Here</h2>
+        <p class="signal-line">
+          Retro Games. Speedruns. Hidden Gems. Community Events.
+        </p>
+      </div>
 
-  <div class="project-grid">
+      <div class="card highlight">
+        <h2>The Broadcast</h2>
 
-    <div class="project-card">
-      <h3>Speedruns</h3>
-      <p>Personal bests, event runs, challenges, and the pursuit of improvement.</p>
+        <p>
+          Zendigo is centered on live content first. Twitch is the main broadcast, YouTube is the archive, Discord is the community hub, and the website connects everything together.
+        </p>
+
+        <p>
+          The goal is to build a recognizable creator ecosystem where events, reviews, streams, social posts, and community interaction all feed into each other.
+        </p>
+
+        <p>
+          Glitch, the AI digital co-host, adds another layer to the broadcast as the system evolves.
+        </p>
+
+        <p class="signal-line">
+          The signal is live.
+        </p>
+      </div>
+
+    </section>
+
+    <section class="card project-card">
+      <h2>What We Cover</h2>
+
+      <ul class="simple-list">
+        <li><strong>Speedruns:</strong> practice, PB attempts, event goals, and progress over time.</li>
+        <li><strong>Hidden Gem or Hot Garbage:</strong> demos, indie games, Steam finds, retro releases, and viewer/dev submissions.</li>
+        <li><strong>Retro Events:</strong> themed blocks built around companies, characters, anniversaries, and seasonal ideas.</li>
+        <li><strong>Community Challenges:</strong> Chaos Tokens, channel points, badge events, and viewer-powered goals.</li>
+        <li><strong>Glitch Experiments:</strong> AI co-host features, stream reactions, Twitch chat awareness, and interactive systems.</li>
+      </ul>
+    </section>
+
+    <section class="two-column">
+
+      <div class="card">
+        <h2>Current Focus</h2>
+
+        <p>
+          The current focus is #SonicSpeedEvent, a multi-week Sonic speedrun event built around personal progress, creator badge rewards, community goals, and speedrun learning.
+        </p>
+
+        <p>
+          After that, future retro blocks will expand into arcade roots, SEGA, Nintendo, Disney, Mickey, cartoon games, holiday chaos, and other themed events.
+        </p>
+
+        <p class="signal-line">
+          #BelieveInSpeed • スピードを信じろ
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Where Everything Lives</h2>
+
+        <ul class="simple-list">
+          <li><strong>Twitch:</strong> live streams and community moments.</li>
+          <li><strong>YouTube:</strong> highlights, archives, reviews, and episodes.</li>
+          <li><strong>Discord:</strong> community hub, events, suggestions, and submissions.</li>
+          <li><strong>Website:</strong> central hub for pages, events, links, and future trackers.</li>
+          <li><strong>Fourthwall:</strong> merch, branded drops, and store support.</li>
+        </ul>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+
+    <div class="social-row">
+      <a href="https://zendigo.s.gy/z6W6N9" target="_blank" rel="noopener">Twitch</a>
+      <a href="https://zendigo.s.gy/UkSAT1" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://zendigo.s.gy/krqFJy" target="_blank" rel="noopener">Discord</a>
+      <a href="https://zendigo.s.gy/QwhPxv" target="_blank" rel="noopener">Speedrun.com</a>
+      <a href="https://zendigo.s.gy/yJtsVD" target="_blank" rel="noopener">Steam</a>
+      <a href="https://zendigo.s.gy/iK4kUt" target="_blank" rel="noopener">X</a>
+      <a href="https://www.facebook.com/profile.php?id=61575062652351" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://bsky.app/profile/zendigoplayz.bsky.social" target="_blank" rel="noopener">Bluesky</a>
     </div>
 
-    <div class="project-card">
-      <h3>Retro Games</h3>
-      <p>Classic titles, forgotten gems, nostalgic favorites, and gaming history.</p>
-    </div>
+    <small>
+      Retro Games • Speedruns • Community Events • Hidden Gems<br>
+      Contact: zendigoofficial@gmail.com
+    </small>
 
-    <div class="project-card">
-      <h3>Community Events</h3>
-      <p>Challenges, badge drops, giveaways, seasonal events, and community participation.</p>
-    </div>
-
-    <div class="project-card">
-      <h3>Creative Chaos</h3>
-      <p>Experiments, unexpected ideas, and projects that don't fit neatly into a category.</p>
-    </div>
-
-  </div>
-
-</section>
-
-<section class="card">
-  <h2>Core Projects</h2>
-
-  <div class="project-grid">
-
-    <div class="project-card">
-      <h3>Speedruns</h3>
-      <p>Learning routes, chasing PBs, and participating in speedrunning communities.</p>
-    </div>
-
-    <div class="project-card">
-      <h3>Hidden Gem or Hot Garbage</h3>
-      <p>Discovering new games and deciding whether they're worth your time.</p>
-    </div>
-
-    <div class="project-card">
-      <h3>Glitch</h3>
-      <p>An evolving AI co-host, stream companion, and ongoing experiment.</p>
-    </div>
-
-    <div class="project-card">
-      <h3>Community Events</h3>
-      <p>Special events, creator challenges, and community-driven activities.</p>
-    </div>
-
-  </div>
-
-</section>
-
-<section class="card">
-  <h2>Frequently Asked Questions</h2>
-
-  <div class="faq-item">
-    <h3>What is Hidden Gem or Hot Garbage?</h3>
-    <p>
-      A game discovery series where games are judged as Hidden Gems,
-      Needs Polish, or Hot Garbage.
-    </p>
-  </div>
-
-  <div class="faq-item">
-    <h3>Who is Glitch?</h3>
-    <p>
-      Glitch is Zendigo's AI co-host, digital troublemaker,
-      and ongoing stream experiment.
-    </p>
-  </div>
-
-  <div class="faq-item">
-    <h3>What is #BelieveInSpeed?</h3>
-    <p>
-      The official speedrun event slogan used across Zendigo speedrunning events.
-    </p>
-  </div>
-
-  <div class="faq-item">
-    <h3>How can I participate in events?</h3>
-    <p>
-      Follow event announcements on the Events page, Discord,
-      Twitch streams, and social media.
-    </p>
-  </div>
-
-</section>
-
-</main>
-
-<footer class="footer">
-
-  <div class="social-row">
-    <a href="https://zendigo.s.gy/z6W6N9" target="_blank">Twitch</a>
-    <a href="https://zendigo.s.gy/UkSAT1" target="_blank">YouTube</a>
-    <a href="https://zendigo.s.gy/krqFJy" target="_blank">Discord</a>
-    <a href="https://zendigo.s.gy/yJtsVD" target="_blank">Steam</a>
-    <a href="https://zendigo.s.gy/iK4kUt" target="_blank">X</a>
-  </div>
-
-  <small>
-    Retro Games • Speedruns • Community Events • Hidden Gems<br>
-    Contact: zendigoofficial@gmail.com
-  </small>
-
-</footer>
+  </footer>
 
 </div>
 
