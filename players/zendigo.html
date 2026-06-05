@@ -4,9 +4,619 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Zendigo | Arcade Scores Player Profile</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
+
+:root{
+  --cyan:#00FFEE;
+  --magenta:#FF20FF;
+  --purple:#A230F0;
+  --black:#05070d;
+  --panel:#0f0f14;
+  --white:#EEEEEE;
+  --muted:#A9AEC3;
+  --gold:#FFD84D;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#05070d;
+  color:var(--white);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top left, rgba(255,32,255,.14), transparent 35%),
+    radial-gradient(circle at top right, rgba(0,255,238,.12), transparent 35%),
+    linear-gradient(180deg,#05070d,#080a12 55%,#05070d);
+  pointer-events:none;
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.018),
+      rgba(255,255,255,.018) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  opacity:.35;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.wrapper{
+  width:min(1400px,95%);
+  margin:auto;
+  padding:18px 0 24px;
+}
+
+.hero{
+  margin-bottom:12px;
+}
+
+.hero img{
+  width:100%;
+  display:block;
+  border-radius:14px;
+  border:2px solid rgba(255,32,255,.35);
+  box-shadow:
+    0 0 30px rgba(255,32,255,.20),
+    0 0 30px rgba(0,255,238,.15);
+}
+
+.navbar{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:24px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+  padding:13px 16px;
+  background:rgba(10,10,18,.88);
+  border:1px solid rgba(255,32,255,.35);
+  border-radius:12px;
+  box-shadow:0 0 18px rgba(162,48,240,.16);
+}
+
+.navbar a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+.navbar a:hover,
+.navbar a.active{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.card{
+  background:rgba(15,15,20,.92);
+  border:1px solid rgba(255,32,255,.32);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 0 18px rgba(255,32,255,.08);
+}
+
+.card h1,
+.card h2,
+.card h3{
+  font-family:Orbitron, Arial, sans-serif;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.card h1{
+  color:var(--cyan);
+  font-size:clamp(2rem,5vw,4rem);
+  margin-bottom:6px;
+}
+
+.card h2{
+  color:var(--cyan);
+  margin-bottom:14px;
+}
+
+.card h3{
+  color:var(--white);
+  margin-bottom:10px;
+}
+
+.card p{
+  color:var(--white);
+  margin-bottom:14px;
+}
+
+.card p:last-child{
+  margin-bottom:0;
+}
+
+.profile-header{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:22px;
+  align-items:center;
+}
+
+.profile-main{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.profile-top{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+.avatar{
+  width:116px;
+  height:116px;
+  border-radius:50%;
+  border:3px solid rgba(0,255,238,.65);
+  background:
+    linear-gradient(135deg,rgba(0,255,238,.20),rgba(255,32,255,.18)),
+    rgba(0,0,0,.45);
+  display:grid;
+  place-items:center;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:900;
+  font-size:3rem;
+  color:var(--cyan);
+  box-shadow:
+    0 0 24px rgba(0,255,238,.20),
+    0 0 24px rgba(255,32,255,.12);
+}
+
+.profile-tag{
+  color:var(--magenta);
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.profile-status{
+  display:inline-block;
+  width:max-content;
+  padding:7px 12px;
+  border-radius:999px;
+  border:1px solid rgba(0,255,238,.55);
+  color:var(--cyan);
+  background:rgba(0,255,238,.06);
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:900;
+  font-size:.82rem;
+}
+
+.two-column{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.three-column{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.stat-card{
+  border:1px solid rgba(0,255,238,.35);
+  border-radius:14px;
+  padding:18px;
+  background:
+    radial-gradient(circle at top left, rgba(0,255,238,.10), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 42%),
+    rgba(0,0,0,.22);
+}
+
+.stat-number{
+  display:block;
+  color:var(--gold);
+  font-family:Orbitron, Arial, sans-serif;
+  font-size:2rem;
+  font-weight:900;
+  line-height:1;
+}
+
+.stat-label{
+  display:block;
+  margin-top:8px;
+  color:var(--white);
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  text-transform:uppercase;
+  font-size:.82rem;
+}
+
+.social-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.social-links a,
+.button{
+  display:inline-block;
+  padding:10px 14px;
+  color:white;
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  border-radius:10px;
+  border:2px solid var(--purple);
+  background:linear-gradient(90deg,rgba(162,48,240,.25),rgba(255,32,255,.15));
+}
+
+.social-links a:hover,
+.button:hover{
+  border-color:var(--cyan);
+  color:var(--cyan);
+  box-shadow:0 0 18px rgba(0,255,238,.35);
+}
+
+.button-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:16px;
+}
+
+.signal-line{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--magenta);
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.simple-list{
+  list-style:none;
+  display:grid;
+  gap:10px;
+}
+
+.simple-list li{
+  color:var(--white);
+}
+
+.simple-list strong{
+  color:var(--cyan);
+}
+
+.score-table-wrap{
+  overflow-x:auto;
+  border-radius:14px;
+  border:1px solid rgba(0,255,238,.25);
+}
+
+.score-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:760px;
+  background:rgba(0,0,0,.22);
+}
+
+.score-table th,
+.score-table td{
+  padding:13px 14px;
+  text-align:left;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.score-table th{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--cyan);
+  text-transform:uppercase;
+  font-size:.82rem;
+  letter-spacing:.8px;
+  background:rgba(0,255,238,.06);
+}
+
+.score-table td{
+  color:var(--white);
+}
+
+.status-pill{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:999px;
+  border:1px solid rgba(255,32,255,.45);
+  color:var(--magenta);
+  font-size:.78rem;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.live-card{
+  border-color:rgba(0,255,238,.50);
+  background:
+    radial-gradient(circle at top left, rgba(0,255,238,.12), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 40%),
+    rgba(15,15,20,.92);
+}
+
+.footer{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(255,32,255,.25);
+  border-radius:14px;
+  background:rgba(10,10,18,.88);
+  text-align:center;
+}
+
+.social-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:28px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.social-row a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+.social-row a:hover{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
+}
+
+.footer small{
+  color:var(--muted);
+}
+
+.footer small a{
+  color:var(--cyan);
+  text-decoration:none;
+  font-weight:800;
+}
+
+.footer small a:hover{
+  color:var(--magenta);
+  text-shadow:0 0 10px rgba(255,32,255,.55);
+}
+
+@media(min-width:900px){
+  .profile-header{
+    grid-template-columns:1.25fr .75fr;
+  }
+
+  .two-column{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .three-column{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+</style>
 </head>
+
 <body>
-  <h1>Zendigo</h1>
-  <p>Prototype player profile coming soon.</p>
+
+<div class="wrapper">
+
+  <header class="hero">
+    <img src="../arcade_scores_banner.png" alt="Zendigo Player Profile">
+  </header>
+
+  <nav class="navbar">
+    <a href="../index.html">HOME</a>
+    <a href="../events.html">EVENTS</a>
+    <a href="../hidden-gem.html">HIDDEN GEM</a>
+    <a href="../speedruns.html">SPEEDRUNS</a>
+    <a class="active" href="../arcade-scores.html">ARCADE SCORES</a>
+    <a href="../glitch.html">GLITCH</a>
+    <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">MERCH</a>
+    <a href="../about.html">ABOUT</a>
+    <a href="../contact.html">CONTACT</a>
+  </nav>
+
+  <main class="grid">
+
+    <section class="card">
+      <div class="profile-header">
+
+        <div class="profile-main">
+          <div class="profile-top">
+            <div class="avatar">Z</div>
+
+            <div>
+              <h1>Zendigo</h1>
+              <div class="profile-tag">Founder Profile • Arcade Scores Prototype</div>
+            </div>
+          </div>
+
+          <p>
+            Retro games, speedruns, arcade score hunts, Hidden Gem or Hot Garbage,
+            and ongoing Glitch AI co-host experiments.
+          </p>
+
+          <span class="profile-status">Current Status: Active</span>
+        </div>
+
+        <div class="card live-card">
+          <h2>Live Status</h2>
+          <p>
+            Twitch and Kick live-status linking will be added later for tracked games.
+            For now, use the links below to check current broadcasts.
+          </p>
+
+          <div class="button-row">
+            <a class="button" href="https://www.twitch.tv/zendigo_playz" target="_blank" rel="noopener">Twitch →</a>
+            <a class="button" href="https://www.youtube.com/@zendigoplayz" target="_blank" rel="noopener">YouTube →</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="three-column">
+
+      <div class="stat-card">
+        <span class="stat-number">0</span>
+        <span class="stat-label">Verified Scores</span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-number">0</span>
+        <span class="stat-label">Pending Scores</span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-number">1</span>
+        <span class="stat-label">Player Profile</span>
+      </div>
+
+    </section>
+
+    <section class="two-column">
+
+      <div class="card">
+        <h2>Social Links</h2>
+
+        <div class="social-links">
+          <a href="https://www.twitch.tv/zendigo_playz" target="_blank" rel="noopener">Twitch</a>
+          <a href="https://www.youtube.com/@zendigoplayz" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://www.speedrun.com/users/ZendigoPlayz" target="_blank" rel="noopener">Speedrun</a>
+          <a href="https://steamcommunity.com/id/Zendigo" target="_blank" rel="noopener">Steam</a>
+          <a href="https://x.com/ZendigoPlayz" target="_blank" rel="noopener">X</a>
+          <a href="https://bsky.app/profile/zendigoplayz.bsky.social" target="_blank" rel="noopener">Bluesky</a>
+          <a href="https://www.facebook.com/profile.php?id=61575062652351" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Player Focus</h2>
+
+        <ul class="simple-list">
+          <li><strong>Current Event:</strong> #SonicSpeedEvent</li>
+          <li><strong>Upcoming Score Focus:</strong> Arcade Roots</li>
+          <li><strong>Primary Platforms:</strong> Twitch, YouTube, Discord</li>
+          <li><strong>Future Live Linking:</strong> Twitch + Kick</li>
+          <li><strong>Score Status:</strong> Manual tracking begins soon</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <section class="card">
+      <h2>Verified Scores</h2>
+
+      <div class="score-table-wrap">
+        <table class="score-table">
+          <thead>
+            <tr>
+              <th>Game</th>
+              <th>Category</th>
+              <th>Score</th>
+              <th>Platform</th>
+              <th>Status</th>
+              <th>Proof</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Coming Soon</td>
+              <td>Arcade Original / Points</td>
+              <td>—</td>
+              <td>Arcade / Emulator</td>
+              <td><span class="status-pill">Pending</span></td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="two-column">
+
+      <div class="card">
+        <h2>Profile Notes</h2>
+
+        <p>
+          This is the first prototype player profile. Future player pages will support linked socials,
+          verified scores, pending submissions, score history, badges, and live score-grind status.
+        </p>
+
+        <p class="signal-line">
+          Player profile system in progress.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Apply For Profile</h2>
+
+        <p>
+          Player profiles are manually approved first. Users can apply for a profile through the Arcade Scores application page.
+        </p>
+
+        <div class="button-row">
+          <a class="button" href="../applications/player-application.html">Apply For A Player Profile →</a>
+          <a class="button" href="index.html">View All Players →</a>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+
+    <div class="social-row">
+      <a href="https://www.twitch.tv/zendigo_playz" target="_blank" rel="noopener">Twitch</a>
+      <a href="https://www.youtube.com/@zendigoplayz" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://discord.gg/vu9pVaEqH3" target="_blank" rel="noopener">Discord</a>
+      <a href="https://www.speedrun.com/users/ZendigoPlayz" target="_blank" rel="noopener">Speedrun</a>
+      <a href="https://steamcommunity.com/id/Zendigo" target="_blank" rel="noopener">Steam</a>
+      <a href="https://x.com/ZendigoPlayz" target="_blank" rel="noopener">X</a>
+      <a href="https://www.facebook.com/profile.php?id=61575062652351" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://bsky.app/profile/zendigoplayz.bsky.social" target="_blank" rel="noopener">Bluesky</a>
+    </div>
+
+    <small>
+      Retro Games • Speedruns • Community Events • Hidden Gems<br>
+      Contact: <a href="mailto:zendigoofficial@gmail.com">zendigoofficial@gmail.com</a>
+    </small>
+
+  </footer>
+
+</div>
+
 </body>
 </html>
