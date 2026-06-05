@@ -651,8 +651,12 @@ async function loadResources(category){
     const files = await response.json();
 
     const resourceFiles = files
-      .filter(file => file.type === "file" && isAllowedFile(file.name))
-      .sort((a, b) => cleanTitle(a.name).localeCompare(cleanTitle(b.name)));
+  .filter(file =>
+    file.type === "file" &&
+    isAllowedFile(file.name) &&
+    file.name.toLowerCase() !== "readme.md"
+  )
+  .sort((a, b) => cleanTitle(a.name).localeCompare(cleanTitle(b.name)));
 
     if(resourceFiles.length === 0){
       list.innerHTML = `
