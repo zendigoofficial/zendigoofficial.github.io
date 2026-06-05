@@ -182,6 +182,14 @@ body::after{
     rgba(15,15,20,.92);
 }
 
+.player-card{
+  border-color:rgba(0,255,238,.45);
+  background:
+    radial-gradient(circle at top left, rgba(0,255,238,.11), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 40%),
+    rgba(15,15,20,.92);
+}
+
 .signal-line{
   font-family:Orbitron, Arial, sans-serif;
   color:var(--magenta);
@@ -484,6 +492,24 @@ body::after{
 
     </section>
 
+    <section class="card player-card">
+      <h2>Players & Applications</h2>
+
+      <p>
+        Player profiles are starting as manually approved pages. Approved players can appear in the Arcade Scores
+        player directory, link their socials, and eventually connect verified scores and live score-grind status.
+      </p>
+
+      <p class="signal-line">
+        Player pages now. Full user accounts later.
+      </p>
+
+      <div class="button-row">
+        <a class="button" href="players/index.html">View Players →</a>
+        <a class="button" href="applications/player-application.html">Apply For Profile →</a>
+      </div>
+    </section>
+
     <section class="card discord-card">
       <h2>Discord Arcade Scores Workflow</h2>
 
@@ -600,7 +626,7 @@ body::after{
               <td class="score-rank">#1</td>
               <td>Coming Soon</td>
               <td>Arcade Original / Points</td>
-              <td>Zendigo</td>
+              <td><a href="players/zendigo.html" style="color:var(--cyan); text-decoration:none; font-weight:800;">Zendigo</a></td>
               <td>—</td>
               <td>Arcade / Emulator</td>
               <td><span class="status-pill pending">Pending</span></td>
