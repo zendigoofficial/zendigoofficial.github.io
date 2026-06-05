@@ -404,6 +404,17 @@ p{
   margin-top:6px;
 }
 
+.footer small a{
+  color:var(--cyan);
+  text-decoration:none;
+  font-weight:900;
+}
+
+.footer small a:hover{
+  color:var(--magenta);
+  text-shadow:0 0 10px rgba(255,32,255,.55);
+}
+
 @media(max-width:760px){
   .grid{
     grid-template-columns:1fr;
@@ -437,6 +448,7 @@ p{
     <a href="events.html">Events</a>
     <a href="hidden-gem.html">Hidden Gem</a>
     <a class="active" href="speedruns.html">Speedruns</a>
+    <a href="arcade-scores.html">Arcade Scores</a>
     <a href="glitch.html">Glitch</a>
     <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">Merch</a>
     <a href="about.html">About</a>
@@ -483,16 +495,16 @@ p{
 
     <div class="cta-row">
       <a class="button" href="events.html">View Event Page</a>
-      <a class="button" href="https://zendigo.s.gy/z6W6N9" target="_blank" rel="noopener">Watch Live</a>
+      <a class="button" href="https://www.twitch.tv/zendigo_playz" target="_blank" rel="noopener">Watch Live</a>
     </div>
   </section>
 
   <section class="section cyan speedrun-tracker-card">
     <div class="section-header-row">
       <div>
-        <h2>Speedrun.com Tracker</h2>
+        <h2>Speedrun Tracker</h2>
         <p class="muted">
-          Verified runs, personal bests, categories, subcategories, and leaderboard progress pulled from Zendigo's Speedrun.com profile.
+          Verified runs, personal bests, categories, subcategories, and leaderboard progress pulled from Zendigo's Speedrun profile.
         </p>
       </div>
 
@@ -501,7 +513,7 @@ p{
       </a>
     </div>
 
-    <p id="speedrun-status" class="tracker-status">Loading Speedrun.com data...</p>
+    <p id="speedrun-status" class="tracker-status">Loading Speedrun data...</p>
 
     <div id="speedrun-pb-grid" class="pb-grid"></div>
   </section>
@@ -528,27 +540,27 @@ p{
     <p class="cyan-text"><strong>スピードを信じろ</strong></p>
 
     <div class="cta-row" style="justify-content:center;">
-      <a class="button" href="https://zendigo.s.gy/z6W6N9" target="_blank" rel="noopener">Twitch</a>
-      <a class="button" href="https://zendigo.s.gy/UkSAT1" target="_blank" rel="noopener">YouTube</a>
-      <a class="button" href="https://zendigo.s.gy/krqFJy" target="_blank" rel="noopener">Discord</a>
-      <a class="button" href="https://zendigo.s.gy/QwhPxv" target="_blank" rel="noopener">Speedrun.com</a>
+      <a class="button" href="https://www.twitch.tv/zendigo_playz" target="_blank" rel="noopener">Twitch</a>
+      <a class="button" href="https://www.youtube.com/@zendigoplayz" target="_blank" rel="noopener">YouTube</a>
+      <a class="button" href="https://discord.gg/vu9pVaEqH3" target="_blank" rel="noopener">Discord</a>
+      <a class="button" href="https://www.speedrun.com/users/ZendigoPlayz" target="_blank" rel="noopener">Speedrun</a>
     </div>
   </section>
 
   <footer class="footer">
     <div class="footer-links">
-      <a href="https://zendigo.s.gy/z6W6N9" target="_blank" rel="noopener">Twitch</a>
-      <a href="https://zendigo.s.gy/UkSAT1" target="_blank" rel="noopener">YouTube</a>
-      <a href="https://zendigo.s.gy/krqFJy" target="_blank" rel="noopener">Discord</a>
-      <a href="https://zendigo.s.gy/QwhPxv" target="_blank" rel="noopener">Speedrun.com</a>
-      <a href="https://zendigo.s.gy/yJtsVD" target="_blank" rel="noopener">Steam</a>
-      <a href="https://zendigo.s.gy/iK4kUt" target="_blank" rel="noopener">X</a>
+      <a href="https://www.twitch.tv/zendigo_playz" target="_blank" rel="noopener">Twitch</a>
+      <a href="https://www.youtube.com/@zendigoplayz" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://discord.gg/vu9pVaEqH3" target="_blank" rel="noopener">Discord</a>
+      <a href="https://www.speedrun.com/users/ZendigoPlayz" target="_blank" rel="noopener">Speedrun</a>
+      <a href="https://steamcommunity.com/id/Zendigo" target="_blank" rel="noopener">Steam</a>
+      <a href="https://x.com/ZendigoPlayz" target="_blank" rel="noopener">X</a>
       <a href="https://www.facebook.com/profile.php?id=61575062652351" target="_blank" rel="noopener">Facebook</a>
       <a href="https://bsky.app/profile/zendigoplayz.bsky.social" target="_blank" rel="noopener">Bluesky</a>
     </div>
 
     <small>Retro Games • Speedruns • Community Events • Hidden Gems</small>
-    <small>Contact: zendigoofficial@gmail.com</small>
+    <small>Contact: <a href="mailto:zendigoofficial@gmail.com">zendigoofficial@gmail.com</a></small>
   </footer>
 
 </main>
@@ -877,8 +889,8 @@ async function loadSpeedrunPBs() {
       grid.innerHTML = `
         <div class="pb-card">
           <h3>Current Focus</h3>
-          <p class="pb-meta"><strong>Learning routes</strong>, building consistency, and preparing runs for future Speedrun.com submissions.</p>
-          <a class="pb-link" href="${SPEEDRUN_PROFILE_URL}" target="_blank" rel="noopener">View Speedrun.com Profile →</a>
+          <p class="pb-meta"><strong>Learning routes</strong>, building consistency, and preparing runs for future Speedrun submissions.</p>
+          <a class="pb-link" href="${SPEEDRUN_PROFILE_URL}" target="_blank" rel="noopener">View Speedrun Profile →</a>
         </div>
       `;
       return;
@@ -894,13 +906,13 @@ async function loadSpeedrunPBs() {
     console.error(error);
 
     status.textContent =
-      "Speedrun.com tracker is temporarily unavailable. Static speedrun goals are still listed below.";
+      "Speedrun tracker is temporarily unavailable. Static speedrun goals are still listed below.";
 
     grid.innerHTML = `
       <div class="pb-card">
         <h3>Tracker Offline</h3>
-        <p class="pb-meta">Could not load Speedrun.com data right now. Check Zendigo's profile directly for verified runs and leaderboard updates.</p>
-        <a class="pb-link" href="${SPEEDRUN_PROFILE_URL}" target="_blank" rel="noopener">View Speedrun.com Profile →</a>
+        <p class="pb-meta">Could not load Speedrun data right now. Check Zendigo's profile directly for verified runs and leaderboard updates.</p>
+        <a class="pb-link" href="${SPEEDRUN_PROFILE_URL}" target="_blank" rel="noopener">View Speedrun Profile →</a>
       </div>
     `;
   }
