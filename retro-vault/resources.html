@@ -4,9 +4,608 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Resources | Retro Vault</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
+
+:root{
+  --cyan:#00FFEE;
+  --magenta:#FF20FF;
+  --purple:#A230F0;
+  --black:#05070d;
+  --panel:#0f0f14;
+  --white:#EEEEEE;
+  --muted:#A9AEC3;
+  --gold:#FFD84D;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#05070d;
+  color:var(--white);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top left, rgba(255,32,255,.14), transparent 35%),
+    radial-gradient(circle at top right, rgba(0,255,238,.12), transparent 35%),
+    linear-gradient(180deg,#05070d,#080a12 55%,#05070d);
+  pointer-events:none;
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.018),
+      rgba(255,255,255,.018) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  opacity:.35;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.wrapper{
+  width:min(1400px,95%);
+  margin:auto;
+  padding:18px 0 24px;
+}
+
+.hero{
+  margin-bottom:12px;
+}
+
+.hero img{
+  width:100%;
+  display:block;
+  border-radius:14px;
+  border:2px solid rgba(255,32,255,.35);
+  box-shadow:
+    0 0 30px rgba(255,32,255,.20),
+    0 0 30px rgba(0,255,238,.15);
+}
+
+.navbar{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:24px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+  padding:13px 16px;
+  background:rgba(10,10,18,.88);
+  border:1px solid rgba(255,32,255,.35);
+  border-radius:12px;
+  box-shadow:0 0 18px rgba(162,48,240,.16);
+}
+
+.navbar a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+.navbar a:hover,
+.navbar a.active{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.card{
+  background:rgba(15,15,20,.92);
+  border:1px solid rgba(255,32,255,.32);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 0 18px rgba(255,32,255,.08);
+}
+
+.card h1,
+.card h2,
+.card h3{
+  font-family:Orbitron, Arial, sans-serif;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.card h1{
+  color:var(--cyan);
+  font-size:clamp(2rem,5vw,4rem);
+  margin-bottom:10px;
+}
+
+.card h2{
+  color:var(--cyan);
+  margin-bottom:14px;
+}
+
+.card h3{
+  color:var(--white);
+  margin-bottom:10px;
+}
+
+.card p{
+  color:var(--white);
+  margin-bottom:14px;
+}
+
+.card p:last-child{
+  margin-bottom:0;
+}
+
+.two-column{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.three-column{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.resource-card{
+  border:1px solid rgba(0,255,238,.35);
+  border-radius:14px;
+  padding:18px;
+  background:
+    radial-gradient(circle at top left, rgba(0,255,238,.10), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(255,32,255,.10), transparent 42%),
+    rgba(0,0,0,.22);
+}
+
+.resource-card h3{
+  color:var(--cyan);
+}
+
+.highlight{
+  border-color:rgba(162,48,240,.55);
+  background:
+    linear-gradient(90deg,rgba(162,48,240,.14),rgba(255,32,255,.07),rgba(0,255,238,.06)),
+    rgba(15,15,20,.92);
+}
+
+.signal-line{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--magenta);
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.simple-list{
+  list-style:none;
+  display:grid;
+  gap:10px;
+}
+
+.simple-list li{
+  color:var(--white);
+}
+
+.simple-list strong{
+  color:var(--cyan);
+}
+
+.status-pill{
+  display:inline-block;
+  margin-top:8px;
+  padding:5px 9px;
+  border-radius:999px;
+  border:1px solid rgba(255,32,255,.45);
+  color:var(--magenta);
+  font-size:.78rem;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.resource-link{
+  display:inline-block;
+  margin-top:12px;
+  color:var(--cyan);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:900;
+}
+
+.resource-link:hover{
+  color:var(--magenta);
+  text-shadow:0 0 10px rgba(255,32,255,.55);
+}
+
+.resource-table-wrap{
+  overflow-x:auto;
+  border-radius:14px;
+  border:1px solid rgba(0,255,238,.25);
+}
+
+.resource-table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:860px;
+  background:rgba(0,0,0,.22);
+}
+
+.resource-table th,
+.resource-table td{
+  padding:13px 14px;
+  text-align:left;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.resource-table th{
+  font-family:Orbitron, Arial, sans-serif;
+  color:var(--cyan);
+  text-transform:uppercase;
+  font-size:.82rem;
+  letter-spacing:.8px;
+  background:rgba(0,255,238,.06);
+}
+
+.resource-table td{
+  color:var(--white);
+}
+
+.button-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:16px;
+}
+
+.button{
+  display:inline-block;
+  padding:12px 18px;
+  color:white;
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  border-radius:10px;
+  border:2px solid var(--purple);
+  background:linear-gradient(90deg,rgba(162,48,240,.25),rgba(255,32,255,.15));
+}
+
+.button:hover{
+  border-color:var(--cyan);
+  color:var(--cyan);
+  box-shadow:0 0 18px rgba(0,255,238,.35);
+}
+
+.footer{
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(255,32,255,.25);
+  border-radius:14px;
+  background:rgba(10,10,18,.88);
+  text-align:center;
+}
+
+.social-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:28px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.social-row a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+.social-row a:hover{
+  color:var(--cyan);
+  text-shadow:0 0 10px rgba(0,255,238,.75);
+}
+
+.footer small{
+  color:var(--muted);
+}
+
+.footer small a{
+  color:var(--cyan);
+  text-decoration:none;
+  font-weight:800;
+}
+
+.footer small a:hover{
+  color:var(--magenta);
+  text-shadow:0 0 10px rgba(255,32,255,.55);
+}
+
+@media(min-width:900px){
+  .two-column{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .three-column{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+</style>
 </head>
+
 <body>
-  <h1>Resources</h1>
-  <p>Retro Vault guides, rulesets, templates, configs, and setup resources coming soon.</p>
+
+<div class="wrapper">
+
+  <header class="hero">
+    <img src="../arcade_scores_banner.png" alt="Retro Vault Resources">
+  </header>
+
+  <nav class="navbar">
+    <a href="../index.html">HOME</a>
+    <a href="../events.html">EVENTS</a>
+    <a href="../hidden-gem.html">HIDDEN GEM</a>
+    <a href="../speedruns.html">SPEEDRUNS</a>
+    <a class="active" href="../arcade-scores.html">ARCADE SCORES</a>
+    <a href="../glitch.html">GLITCH</a>
+    <a href="https://zendigo-shop.fourthwall.com/" target="_blank" rel="noopener">MERCH</a>
+    <a href="../about.html">ABOUT</a>
+    <a href="../contact.html">CONTACT</a>
+  </nav>
+
+  <main class="grid">
+
+    <section class="card highlight">
+      <h1>Resources</h1>
+
+      <p>
+        Retro Vault Resources collect the support materials behind Arcade Scores:
+        setup guides, download instructions, rulesets, score templates, controller configs,
+        setup packs, and other files needed to keep score submissions clean and repeatable.
+      </p>
+
+      <p>
+        This is the support layer for Emulators, ROMs / Game Files, scoreboards,
+        live score attempts, and future game pages.
+      </p>
+
+      <p class="signal-line">
+        Guides, rules, templates, configs, and setup support live here.
+      </p>
+
+      <div class="button-row">
+        <a class="button" href="index.html">Back To Retro Vault →</a>
+        <a class="button" href="emulators.html">Emulators →</a>
+        <a class="button" href="roms.html">ROMs / Game Files →</a>
+      </div>
+    </section>
+
+    <section class="two-column">
+
+      <div class="card">
+        <h2>Resource Structure</h2>
+
+        <p>
+          Resource files should be grouped by purpose so users can quickly find setup help,
+          submission tools, rules, and support files.
+        </p>
+
+        <ul class="simple-list">
+          <li><strong>Guides:</strong> downloads/resources/guides/</li>
+          <li><strong>Download Instructions:</strong> downloads/resources/download-instructions/</li>
+          <li><strong>Rulesets:</strong> downloads/resources/rulesets/</li>
+          <li><strong>Score Templates:</strong> downloads/resources/score-templates/</li>
+          <li><strong>Controller Configs:</strong> downloads/resources/controller-configs/</li>
+          <li><strong>Setup Packs:</strong> downloads/resources/setup-packs/</li>
+          <li><strong>Save Files, if allowed:</strong> downloads/resources/saves/</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Resource Entry Format</h2>
+
+        <ul class="simple-list">
+          <li><strong>Title:</strong> resource name.</li>
+          <li><strong>Category:</strong> guide, ruleset, template, config, save, or setup pack.</li>
+          <li><strong>Version:</strong> version or date.</li>
+          <li><strong>Related System:</strong> arcade, NES, SEGA, PC / DOS, etc.</li>
+          <li><strong>Related Game:</strong> if specific to one game.</li>
+          <li><strong>Download:</strong> file link once uploaded.</li>
+          <li><strong>Notes:</strong> setup or usage instructions.</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <section class="card">
+      <h2>Resource Categories</h2>
+
+      <div class="three-column">
+
+        <div class="resource-card">
+          <h3>Guides</h3>
+          <p>
+            Setup guides, system walkthroughs, score tracking instructions, and player onboarding documents.
+          </p>
+          <span class="status-pill">Planned</span>
+          <br>
+          <a class="resource-link" href="../downloads/resources/guides/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Download Instructions</h3>
+          <p>
+            Instructions for downloading, extracting, placing files, launching emulators, and joining score hunts.
+          </p>
+          <span class="status-pill">Priority</span>
+          <br>
+          <a class="resource-link" href="../downloads/resources/download-instructions/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Rulesets</h3>
+          <p>
+            Game-specific rules, category notes, proof requirements, settings, and platform/version requirements.
+          </p>
+          <span class="status-pill">Priority</span>
+          <br>
+          <a class="resource-link" href="../downloads/resources/rulesets/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Score Templates</h3>
+          <p>
+            Submission templates, leaderboard formats, score log sheets, and review checklists.
+          </p>
+          <span class="status-pill">Planned</span>
+          <br>
+          <a class="resource-link" href="../downloads/resources/score-templates/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Controller Configs</h3>
+          <p>
+            Controller layouts, emulator input profiles, arcade stick notes, and setup recommendations.
+          </p>
+          <span class="status-pill">Planned</span>
+          <br>
+          <a class="resource-link" href="../downloads/resources/controller-configs/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Setup Packs</h3>
+          <p>
+            Approved setup packs for events, score hunts, stream preparation, or Arcade Scores onboarding.
+          </p>
+          <span class="status-pill">Planned</span>
+          <br>
+          <a class="resource-link" href="../downloads/resources/setup-packs/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Save Files</h3>
+          <p>
+            Save files only when allowed and clearly marked. Useful for practice states, unlocks, or event setup.
+          </p>
+          <span class="status-pill">If Allowed</span>
+          <br>
+          <a class="resource-link" href="../downloads/resources/saves/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Event Packs</h3>
+          <p>
+            Event-specific packs for Arcade Roots, SEGA blocks, score hunts, or themed community challenges.
+          </p>
+          <span class="status-pill">Later</span>
+          <br>
+          <a class="resource-link" href="../downloads/resources/event-packs/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+        <div class="resource-card">
+          <h3>Readme Files</h3>
+          <p>
+            Plain-English readmes that explain what each downloadable ZIP contains and how it should be used.
+          </p>
+          <span class="status-pill">Required</span>
+          <br>
+          <a class="resource-link" href="../downloads/resources/readmes/" target="_blank" rel="noopener">Folder Path →</a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Current Resource Index</h2>
+
+      <div class="resource-table-wrap">
+        <table class="resource-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Version</th>
+              <th>Related System</th>
+              <th>Related Game</th>
+              <th>Status</th>
+              <th>Download</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Coming Soon</td>
+              <td>Guide / Ruleset / Template</td>
+              <td>TBD</td>
+              <td>TBD</td>
+              <td>TBD</td>
+              <td><span class="status-pill">Pending Upload</span></td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>ZIP Upload Plan</h2>
+
+      <p>
+        Resources can be uploaded as ZIP files, PDFs, text files, images, or plain HTML guides depending on what they need to do.
+      </p>
+
+      <ul class="simple-list">
+        <li><strong>Recommended filename:</strong> category_resource-name_version.zip</li>
+        <li><strong>Example:</strong> rulesets_donkey-kong_arcade-v1.zip</li>
+        <li><strong>Link style:</strong> ../downloads/resources/rulesets/rulesets_donkey-kong_arcade-v1.zip</li>
+        <li><strong>Readme rule:</strong> ZIP packs should include a readme whenever users need instructions.</li>
+        <li><strong>Update needed:</strong> add the resource to Current Resource Index and update the related category card.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+
+    <div class="social-row">
+      <a href="https://www.twitch.tv/zendigo_playz" target="_blank" rel="noopener">Twitch</a>
+      <a href="https://www.youtube.com/@zendigoplayz" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://discord.gg/vu9pVaEqH3" target="_blank" rel="noopener">Discord</a>
+      <a href="https://www.speedrun.com/users/ZendigoPlayz" target="_blank" rel="noopener">Speedrun</a>
+      <a href="https://steamcommunity.com/id/Zendigo" target="_blank" rel="noopener">Steam</a>
+      <a href="https://x.com/ZendigoPlayz" target="_blank" rel="noopener">X</a>
+      <a href="https://www.facebook.com/profile.php?id=61575062652351" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://bsky.app/profile/zendigoplayz.bsky.social" target="_blank" rel="noopener">Bluesky</a>
+    </div>
+
+    <small>
+      Retro Games • Speedruns • Community Events • Hidden Gems<br>
+      Contact: <a href="mailto:zendigoofficial@gmail.com">zendigoofficial@gmail.com</a>
+    </small>
+
+  </footer>
+
+</div>
+
 </body>
 </html>
