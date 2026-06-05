@@ -29,7 +29,9 @@ const CONFIG = {
 
   floorHeight: 46,
 
-  backgroundSpeed: 1.15
+  backgroundSpeed: 1.15,
+
+  musicVolume: 0.32
 };
 
 let gameState = "title";
@@ -53,6 +55,14 @@ pipeTopImage.src = "assets/pipe_top.png";
 
 const pipeBottomImage = new Image();
 pipeBottomImage.src = "assets/pipe_bottom.png";
+
+const music = new Audio("assets/flappy_face_theme.wav");
+music.loop = true;
+music.volume = CONFIG.musicVolume;
+music.preload = "auto";
+
+let musicStarted = false;
+let musicEnabled = true;
 
 let faceLoaded = false;
 let faceFailed = false;
@@ -96,6 +106,39 @@ pipeTopImage.onerror = () => {
 pipeBottomImage.onerror = () => {
   console.log("Bottom pipe failed to load:", pipeBottomImage.src);
 };
+
+music.onerror = () => {
+  console.log("Music failed to load:", music.src);
+};
+
+function startMusic(){
+  if(!musicEnabled || musicStarted){
+    return;
+  }
+
+  musicStarted = true;
+
+  music.play().catch(error => {
+    console.log("Music play blocked or failed:", error);
+    musicStarted = false;
+  });
+}
+
+function toggleMusic(){
+  musicEnabled = !musicEnabled;
+
+  if(!musicEnabled){
+    music.pause();
+    return;
+  }
+
+  if(gameState === "playing"){
+    music.play().catch(error => {
+      console.log("Music resume failed:", error);
+    });
+    musicStarted = true;
+  }
+}
 
 function resetGame(){
   frame = 0;
@@ -146,6 +189,8 @@ function spawnObstacle(x){
 }
 
 function flap(){
+  startMusic();
+
   if(gameState === "title"){
     resetGame();
     gameState = "playing";
@@ -551,6 +596,11 @@ function drawHud(){
   ctx.shadowColor = COLORS.magenta;
   ctx.fillText(`BEST BROADCAST: ${best}`, 26, 76);
 
+  ctx.font = "700 14px Orbitron, Arial";
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = musicEnabled ? COLORS.cyan : COLORS.muted;
+  ctx.fillText(musicEnabled ? "MUSIC: ON" : "MUSIC: OFF", WIDTH - 150, 42);
+
   ctx.restore();
 }
 
@@ -579,6 +629,7 @@ function drawTitleScreen(){
   ctx.font = "700 16px Orbitron, Arial";
   ctx.fillStyle = COLORS.muted;
   ctx.fillText("Avoid the signal gates. Protect the broadcast.", WIDTH / 2, HEIGHT / 2 + 54);
+  ctx.fillText("Press M to toggle music.", WIDTH / 2, HEIGHT / 2 + 80);
 
   ctx.restore();
 }
@@ -604,6 +655,10 @@ function drawGameOver(){
   ctx.fillStyle = COLORS.white;
   ctx.shadowBlur = 0;
   ctx.fillText("CLICK / TAP / SPACE TO REBOOT BROADCAST", WIDTH / 2, HEIGHT / 2 + 44);
+
+  ctx.font = "700 15px Orbitron, Arial";
+  ctx.fillStyle = COLORS.muted;
+  ctx.fillText("Press M to toggle music.", WIDTH / 2, HEIGHT / 2 + 76);
 
   ctx.restore();
 }
@@ -632,11 +687,26 @@ window.addEventListener("keydown", event => {
     resetGame();
     gameState = "title";
   }
+
+  if(event.code === "KeyM"){
+    event.preventDefault();
+    toggleMusic();
+  }
 });
 
 canvas.addEventListener("pointerdown", event => {
   event.preventDefault();
   flap();
+});
+
+document.addEventListener("visibilitychange", () => {
+  if(document.hidden){
+    music.pause();
+  }else if(musicEnabled && musicStarted){
+    music.play().catch(error => {
+      console.log("Music resume after visibility change failed:", error);
+    });
+  }
 });
 
 resetGame();
