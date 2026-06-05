@@ -25,6 +25,10 @@
   padding:0;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   font-family:Arial, Helvetica, sans-serif;
   background:#05070d;
@@ -88,7 +92,7 @@ body::after{
   align-items:center;
   gap:24px;
   flex-wrap:wrap;
-  margin-bottom:18px;
+  margin-bottom:14px;
   padding:13px 16px;
   background:rgba(10,10,18,.88);
   border:1px solid rgba(255,32,255,.35);
@@ -110,6 +114,42 @@ body::after{
   text-shadow:0 0 10px rgba(0,255,238,.75);
 }
 
+.arcade-subnav{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:0 0 18px;
+  padding:12px 14px;
+  border:1px solid rgba(0,255,238,.35);
+  border-radius:12px;
+  background:
+    linear-gradient(90deg,rgba(0,255,238,.06),rgba(255,32,255,.05)),
+    rgba(10,10,18,.82);
+  box-shadow:0 0 16px rgba(0,255,238,.08);
+}
+
+.arcade-subnav a{
+  color:var(--white);
+  text-decoration:none;
+  font-family:Orbitron, Arial, sans-serif;
+  font-weight:900;
+  font-size:.86rem;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  padding:8px 11px;
+  border:1px solid rgba(255,32,255,.25);
+  border-radius:999px;
+  background:rgba(0,0,0,.18);
+}
+
+.arcade-subnav a:hover{
+  color:var(--cyan);
+  border-color:rgba(0,255,238,.65);
+  box-shadow:0 0 14px rgba(0,255,238,.18);
+}
+
 .grid{
   display:grid;
   grid-template-columns:1fr;
@@ -122,6 +162,7 @@ body::after{
   border-radius:16px;
   padding:22px;
   box-shadow:0 0 18px rgba(255,32,255,.08);
+  scroll-margin-top:18px;
 }
 
 .card h2{
@@ -451,6 +492,16 @@ body::after{
     <a href="contact.html">CONTACT</a>
   </nav>
 
+  <nav class="arcade-subnav" aria-label="Arcade Scores section navigation">
+    <a href="#players">Players</a>
+    <a href="retro-vault/index.html">Vault</a>
+    <a href="#leaderboard">Leaderboard</a>
+    <a href="#mini-games">Mini-Games</a>
+    <a href="#submit-score">Submit Score</a>
+    <a href="#rules">Rules</a>
+    <a href="#discord">Discord</a>
+  </nav>
+
   <main class="grid">
 
     <section class="two-column">
@@ -492,31 +543,80 @@ body::after{
 
     </section>
 
-    <section class="card player-card">
-  <h2>Arcade Scores Hub</h2>
+    <section class="card player-card" id="players">
+      <h2>Arcade Scores Hub</h2>
 
-  <p>
-    Arcade Scores is becoming the root hub for player profiles, score submissions,
-    game suggestions, Retro Vault library tracking, live score grinds, and future leaderboard systems.
-  </p>
+      <p>
+        Arcade Scores is becoming the root hub for player profiles, score submissions,
+        game suggestions, Retro Vault library tracking, live score grinds, and future leaderboard systems.
+      </p>
 
-  <p>
-    Player profiles are starting as manually approved pages. Retro Vault is starting as the source catalog
-    for games, companies, platforms, events, score potential, and future game pages.
-  </p>
+      <p>
+        Player profiles are starting as manually approved pages. Retro Vault is starting as the source catalog
+        for games, companies, platforms, events, score potential, and future game pages.
+      </p>
 
-  <p class="signal-line">
-    Scoreboards, players, applications, and Retro Vault live under Arcade Scores.
-  </p>
+      <p class="signal-line">
+        Scoreboards, players, applications, and Retro Vault live under Arcade Scores.
+      </p>
 
-  <div class="button-row">
-    <a class="button" href="players/index.html">View Players →</a>
-    <a class="button" href="applications/player-application.html">Apply For Profile →</a>
-    <a class="button" href="retro-vault/index.html">View Retro Vault →</a>
-  </div>
-</section>
+      <div class="button-row">
+        <a class="button" href="players/index.html">View Players →</a>
+        <a class="button" href="applications/player-application.html">Apply For Profile →</a>
+        <a class="button" href="retro-vault/index.html">View Retro Vault →</a>
+      </div>
+    </section>
 
-    <section class="card discord-card">
+    <section class="card arcade-glow" id="mini-games">
+      <h2>Zendigo Mini-Games</h2>
+
+      <p>
+        Playable browser mini-games built as part of the Zendigo Arcade side projects.
+        These are small promo games, test builds, and future arcade experiments.
+      </p>
+
+      <p class="signal-line">
+        Small games first. Bigger chaos later.
+      </p>
+
+      <div class="three-column">
+
+        <article class="hunt-card">
+          <h3>Flappy Face</h3>
+          <p>
+            A quick meme arcade test. Keep the broadcast alive, dodge the signal gates,
+            and protect the face from total signal failure.
+          </p>
+
+          <div class="button-row">
+            <a class="button" href="games/flappy-face/">Play Flappy Face →</a>
+          </div>
+        </article>
+
+        <article class="hunt-card">
+          <h3>Zeta Saves The Human</h3>
+          <p>
+            Planned 9-level platformer starring Zeta. Empty bowl. Missing owner.
+            Rescue operation required.
+          </p>
+
+          <span class="status-pill pending">Planned</span>
+        </article>
+
+        <article class="hunt-card">
+          <h3>Retro RPG Project</h3>
+          <p>
+            Future retro-style RPG concept. Turn-based or small action-RPG direction
+            to explore after the first two mini-games.
+          </p>
+
+          <span class="status-pill pending">Future Concept</span>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="card discord-card" id="discord">
       <h2>Discord Arcade Scores Workflow</h2>
 
       <p>
@@ -610,7 +710,7 @@ body::after{
       </div>
     </section>
 
-    <section class="card">
+    <section class="card" id="leaderboard">
       <h2>Current Manual Leaderboard</h2>
 
       <div class="score-table-wrap">
@@ -662,7 +762,7 @@ body::after{
       </div>
     </section>
 
-    <section class="two-column">
+    <section class="two-column" id="submit-score">
 
       <div class="card">
         <h2>Submit A Score</h2>
@@ -748,7 +848,7 @@ body::after{
       </p>
     </section>
 
-    <section class="card">
+    <section class="card" id="rules">
       <h2>Verification Rules Preview</h2>
 
       <ul class="simple-list">
