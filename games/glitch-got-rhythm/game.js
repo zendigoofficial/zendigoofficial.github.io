@@ -146,6 +146,9 @@ let bestCombo = 0;
 let bestScore = Number(localStorage.getItem("glitchGotRhythmBestScore") || 0);
 
 let rotationMs = CONFIG.rotationMsStart;
+let speedMultiplier = 1.0;
+let successfulJumps = 0;
+
 let handAngle = -Math.PI / 2;
 let totalAngle = -Math.PI * 0.72;
 let nextTopAngle = 0;
@@ -186,7 +189,10 @@ function resetGame(){
   bestCombo = 0;
 
   rotationMs = CONFIG.rotationMsStart;
-  totalAngle = -Math.PI * 0.72;
+speedMultiplier = 1.0;
+successfulJumps = 0;
+
+totalAngle = -Math.PI * 0.72;
   nextTopAngle = 0;
   handAngle = -Math.PI / 2 + totalAngle;
   jumpedThisCycle = false;
@@ -232,6 +238,16 @@ function attemptJump(){
   const anglePerMs = (Math.PI * 2) / rotationMs;
   const diffMs = diffAngle / anglePerMs;
 
+  function updateSpeedFromJumps(){
+  const speedLevel = Math.floor(successfulJumps / CONFIG.speedStepEvery);
+  speedMultiplier = Math.min(
+    CONFIG.speedMax,
+    1 + speedLevel * CONFIG.speedStepAmount
+  );
+
+  rotationMs = CONFIG.rotationMsStart / speedMultiplier;
+}
+
   if(diffMs <= CONFIG.perfectWindowMs){
     registerJump("PERFECT JUMP", COLORS.gold, 125, "perfect");
   }else if(diffMs <= CONFIG.goodWindowMs){
@@ -252,8 +268,12 @@ function registerJump(label, color, points, fxType){
   jumpStartTime = performance.now();
 
   combo++;
-  bestCombo = Math.max(bestCombo, combo);
-  score += points + Math.min(combo * 5, 250);
+successfulJumps++;
+
+bestCombo = Math.max(bestCombo, combo);
+score += points + Math.min(combo * 5, 250);
+
+updateSpeedFromJumps();
 
   if(score > bestScore){
     bestScore = score;
@@ -264,8 +284,6 @@ function registerJump(label, color, points, fxType){
   feedbackColor = color;
   feedbackTimer = 34;
   hitFlash = 18;
-
-  rotationMs = Math.max(CONFIG.rotationMsMin, rotationMs - CONFIG.speedUpPerJump);
 
   spawnBurst(CONFIG.glitchBaseX, CONFIG.glitchBaseY, color, 18);
   spawnFx(fxType, CONFIG.glitchBaseX, CONFIG.glitchBaseY - 16);
@@ -785,7 +803,7 @@ function drawHud(){
   ctx.fillStyle = COLORS.white;
   ctx.shadowColor = COLORS.white;
   ctx.font = "900 15px Orbitron, Arial";
-  ctx.fillText(`SPEED: ${(CONFIG.rotationMsStart / rotationMs).toFixed(2)}x`, WIDTH - 190, 42);
+  ctx.fillText(`SPEED: ${speedMultiplier.toFixed(1)}x`, WIDTH - 190, 42);
 
   ctx.restore();
 }
