@@ -29,7 +29,7 @@ const CONFIG = {
   // Adjust these if the PNG itself has extra transparent padding.
   clockRingSize: 330,
   clockRingOffsetX: 0,
-  clockRingOffsetY: 0,
+  clockRingOffsetY: -20,
 
   // Clock hand visual sizing/pivot.
   clockHandW: 58,
