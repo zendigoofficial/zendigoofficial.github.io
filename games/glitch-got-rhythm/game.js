@@ -19,15 +19,24 @@ const COLORS = {
 };
 
 const CONFIG = {
+  // Gameplay clock center.
   centerX: WIDTH / 2,
-  centerY: HEIGHT / 2 + 62,
+  centerY: HEIGHT / 2 + 58,
 
   clockRadius: 150,
 
-  // Speed system:
-  // Starts at 1.0x.
-  // Increases by 0.1x every 10 successful jumps.
-  // Maxes at 1.7x.
+  // Visual clock-ring placement.
+  // Adjust these if the PNG itself has extra transparent padding.
+  clockRingSize: 330,
+  clockRingOffsetX: 0,
+  clockRingOffsetY: 0,
+
+  // Clock hand visual sizing/pivot.
+  clockHandW: 58,
+  clockHandH: 170,
+  clockHandPivotOffsetY: 18,
+
+  // Speed system.
   rotationMsStart: 1450,
   speedStepEvery: 10,
   speedStepAmount: 0.1,
@@ -37,6 +46,7 @@ const CONFIG = {
   goodWindowMs: 95,
   allowedWindowMs: 150,
 
+  // Glitch position.
   glitchBaseX: WIDTH / 2,
   glitchBaseY: HEIGHT / 2 - 112,
 
@@ -45,10 +55,6 @@ const CONFIG = {
 
   glitchW: 138,
   glitchH: 138,
-
-  clockRingSize: 355,
-  clockHandW: 58,
-  clockHandH: 170,
 
   fxSize: 120
 };
@@ -145,9 +151,9 @@ let combo = 0;
 let bestCombo = 0;
 let bestScore = Number(localStorage.getItem("glitchGotRhythmBestScore") || 0);
 
-let rotationMs = CONFIG.rotationMsStart;
-let speedMultiplier = 1.0;
 let successfulJumps = 0;
+let speedMultiplier = 1.0;
+let rotationMs = CONFIG.rotationMsStart;
 
 let handAngle = -Math.PI / 2;
 let totalAngle = -Math.PI * 0.72;
@@ -166,7 +172,6 @@ let hitFlash = 0;
 
 let particles = [];
 let bgLines = [];
-
 let fxPopups = [];
 
 function initBackground(){
@@ -188,11 +193,11 @@ function resetGame(){
   combo = 0;
   bestCombo = 0;
 
+  successfulJumps = 0;
+  speedMultiplier = 1.0;
   rotationMs = CONFIG.rotationMsStart;
-speedMultiplier = 1.0;
-successfulJumps = 0;
 
-totalAngle = -Math.PI * 0.72;
+  totalAngle = -Math.PI * 0.72;
   nextTopAngle = 0;
   handAngle = -Math.PI / 2 + totalAngle;
   jumpedThisCycle = false;
@@ -219,6 +224,17 @@ function restartToTitle(){
   gameState = "title";
 }
 
+function updateSpeedFromJumps(){
+  const speedLevel = Math.floor(successfulJumps / CONFIG.speedStepEvery);
+
+  speedMultiplier = Math.min(
+    CONFIG.speedMax,
+    1 + speedLevel * CONFIG.speedStepAmount
+  );
+
+  rotationMs = CONFIG.rotationMsStart / speedMultiplier;
+}
+
 function attemptJump(){
   if(gameState === "title"){
     startGame();
@@ -237,16 +253,6 @@ function attemptJump(){
   const diffAngle = Math.abs(totalAngle - nextTopAngle);
   const anglePerMs = (Math.PI * 2) / rotationMs;
   const diffMs = diffAngle / anglePerMs;
-
-  function updateSpeedFromJumps(){
-  const speedLevel = Math.floor(successfulJumps / CONFIG.speedStepEvery);
-  speedMultiplier = Math.min(
-    CONFIG.speedMax,
-    1 + speedLevel * CONFIG.speedStepAmount
-  );
-
-  rotationMs = CONFIG.rotationMsStart / speedMultiplier;
-}
 
   if(diffMs <= CONFIG.perfectWindowMs){
     registerJump("PERFECT JUMP", COLORS.gold, 125, "perfect");
@@ -268,12 +274,12 @@ function registerJump(label, color, points, fxType){
   jumpStartTime = performance.now();
 
   combo++;
-successfulJumps++;
+  successfulJumps++;
 
-bestCombo = Math.max(bestCombo, combo);
-score += points + Math.min(combo * 5, 250);
+  bestCombo = Math.max(bestCombo, combo);
+  score += points + Math.min(combo * 5, 250);
 
-updateSpeedFromJumps();
+  updateSpeedFromJumps();
 
   if(score > bestScore){
     bestScore = score;
@@ -510,8 +516,7 @@ function drawClockFace(){
 
   ctx.save();
 
-  // Fallback glow behind clock.
-  ctx.strokeStyle = "rgba(0,255,238,.22)";
+  ctx.strokeStyle = "rgba(0,255,238,.18)";
   ctx.lineWidth = 4;
   ctx.shadowColor = COLORS.cyan;
   ctx.shadowBlur = 16;
@@ -522,8 +527,8 @@ function drawClockFace(){
   if(assets.clock.ring && assets.clock.ring.complete){
     ctx.drawImage(
       assets.clock.ring,
-      cx - size / 2,
-      cy - size / 2,
+      cx - size / 2 + CONFIG.clockRingOffsetX,
+      cy - size / 2 + CONFIG.clockRingOffsetY,
       size,
       size
     );
@@ -579,9 +584,6 @@ function drawClockHand(){
 
   ctx.save();
   ctx.translate(cx, cy);
-
-  // Asset is assumed to point upward.
-  // The +Math.PI/2 correction keeps the visual hand aligned with the gameplay angle.
   ctx.rotate(handAngle + Math.PI / 2);
 
   if(assets.clock.hand && assets.clock.hand.complete){
@@ -591,7 +593,7 @@ function drawClockHand(){
     ctx.drawImage(
       assets.clock.hand,
       -CONFIG.clockHandW / 2,
-      -CONFIG.clockHandH + 18,
+      -CONFIG.clockHandH + CONFIG.clockHandPivotOffsetY,
       CONFIG.clockHandW,
       CONFIG.clockHandH
     );
@@ -804,6 +806,7 @@ function drawHud(){
   ctx.shadowColor = COLORS.white;
   ctx.font = "900 15px Orbitron, Arial";
   ctx.fillText(`SPEED: ${speedMultiplier.toFixed(1)}x`, WIDTH - 190, 42);
+  ctx.fillText(`JUMPS: ${successfulJumps}`, WIDTH - 190, 66);
 
   ctx.restore();
 }
@@ -832,7 +835,7 @@ function drawTitleScreen(){
 
   ctx.font = "700 16px Orbitron, Arial";
   ctx.fillStyle = COLORS.muted;
-  ctx.fillText("Miss the beat and the broadcast dies.", WIDTH / 2, HEIGHT / 2 + 204);
+  ctx.fillText("Speed increases by 0.1x every 10 jumps. Max speed: 1.7x.", WIDTH / 2, HEIGHT / 2 + 204);
 
   ctx.restore();
 }
