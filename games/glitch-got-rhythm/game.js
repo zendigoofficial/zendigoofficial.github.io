@@ -4,6 +4,8 @@ const ctx = canvas.getContext("2d");
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
 
+ctx.imageSmoothingEnabled = false;
+
 const COLORS = {
   cyan: "#00FFEE",
   magenta: "#FF20FF",
@@ -20,27 +22,116 @@ const CONFIG = {
   centerX: WIDTH / 2,
   centerY: HEIGHT / 2 + 48,
 
-  clockRadius: 145,
-  handLength: 138,
+  clockRadius: 150,
 
-  // One full rotation timing.
-  // Lower number = faster/harder.
   rotationMsStart: 1450,
   rotationMsMin: 820,
   speedUpPerJump: 10,
 
-  // Timing leeway around 12 o'clock.
   perfectWindowMs: 45,
   goodWindowMs: 95,
   allowedWindowMs: 145,
 
-  // Glitch position at 12 o'clock.
   glitchBaseX: WIDTH / 2,
   glitchBaseY: HEIGHT / 2 - 122,
 
   jumpHeight: 92,
-  jumpDurationMs: 330
+  jumpDurationMs: 330,
+
+  glitchW: 128,
+  glitchH: 128,
+
+  clockRingSize: 345,
+  clockHandW: 58,
+  clockHandH: 170,
+
+  fxSize: 120
 };
+
+const ASSET_PATHS = {
+  body: {
+    idle: [
+      "assets/sprites/body/idle_01.png",
+      "assets/sprites/body/idle_02.png"
+    ],
+    ready: [
+      "assets/sprites/body/ready_01.png",
+      "assets/sprites/body/ready_02.png"
+    ],
+    jump: [
+      "assets/sprites/body/jump_takeoff.png",
+      "assets/sprites/body/jump_01.png",
+      "assets/sprites/body/jump_02.png"
+    ],
+    land: [
+      "assets/sprites/body/land_01.png",
+      "assets/sprites/body/land_02.png"
+    ],
+    panic: [
+      "assets/sprites/body/panic_01.png",
+      "assets/sprites/body/panic_02.png"
+    ],
+    gameover: [
+      "assets/sprites/body/gameover_01.png",
+      "assets/sprites/body/gameover_02.png"
+    ]
+  },
+
+  clock: {
+    ring: "assets/clock/clock_ring.png",
+    hand: "assets/clock/clock_hand.png",
+    marker: "assets/clock/hit_marker_12.png"
+  },
+
+  fx: {
+    shadow: "assets/fx/character_shadow.png",
+    combo: "assets/fx/combo_sparkle.png",
+    miss: "assets/fx/miss_burst.png",
+    perfect: "assets/fx/perfect_hit_spark.png"
+  }
+};
+
+const assets = {
+  body: {},
+  clock: {},
+  fx: {}
+};
+
+let loadedCount = 0;
+let totalAssets = 0;
+
+function loadImage(src){
+  totalAssets++;
+
+  const img = new Image();
+  img.src = src;
+
+  img.onload = () => {
+    loadedCount++;
+  };
+
+  img.onerror = () => {
+    loadedCount++;
+    console.warn("Failed to load asset:", src);
+  };
+
+  return img;
+}
+
+function loadAssets(){
+  for(const [group, paths] of Object.entries(ASSET_PATHS.body)){
+    assets.body[group] = paths.map(path => loadImage(path));
+  }
+
+  assets.clock.ring = loadImage(ASSET_PATHS.clock.ring);
+  assets.clock.hand = loadImage(ASSET_PATHS.clock.hand);
+  assets.clock.marker = loadImage(ASSET_PATHS.clock.marker);
+
+  assets.fx.shadow = loadImage(ASSET_PATHS.fx.shadow);
+  assets.fx.combo = loadImage(ASSET_PATHS.fx.combo);
+  assets.fx.miss = loadImage(ASSET_PATHS.fx.miss);
+  assets.fx.perfect = loadImage(ASSET_PATHS.fx.perfect);
+}
 
 let gameState = "title";
 
@@ -67,6 +158,8 @@ let hitFlash = 0;
 
 let particles = [];
 let bgLines = [];
+
+let fxPopups = [];
 
 function initBackground(){
   bgLines = [];
@@ -100,7 +193,9 @@ function resetGame(){
   feedbackTimer = 0;
   missFlash = 0;
   hitFlash = 0;
+
   particles = [];
+  fxPopups = [];
 }
 
 function startGame(){
@@ -133,17 +228,17 @@ function attemptJump(){
   const diffMs = diffAngle / anglePerMs;
 
   if(diffMs <= CONFIG.perfectWindowMs){
-    registerJump("PERFECT JUMP", COLORS.gold, 125);
+    registerJump("PERFECT JUMP", COLORS.gold, 125, "perfect");
   }else if(diffMs <= CONFIG.goodWindowMs){
-    registerJump("GOOD JUMP", COLORS.green, 75);
+    registerJump("GOOD JUMP", COLORS.green, 75, "combo");
   }else if(diffMs <= CONFIG.allowedWindowMs){
-    registerJump("BARELY", COLORS.magenta, 35);
+    registerJump("BARELY", COLORS.magenta, 35, "combo");
   }else{
     registerMiss("BAD JUMP");
   }
 }
 
-function registerJump(label, color, points){
+function registerJump(label, color, points, fxType){
   if(jumpedThisCycle){
     return;
   }
@@ -168,6 +263,7 @@ function registerJump(label, color, points){
   rotationMs = Math.max(CONFIG.rotationMsMin, rotationMs - CONFIG.speedUpPerJump);
 
   spawnBurst(CONFIG.glitchBaseX, CONFIG.glitchBaseY, color, 18);
+  spawnFx(fxType, CONFIG.glitchBaseX, CONFIG.glitchBaseY - 16);
 }
 
 function registerMiss(label){
@@ -178,6 +274,8 @@ function registerMiss(label){
   missFlash = 32;
 
   spawnBurst(CONFIG.glitchBaseX, CONFIG.glitchBaseY, COLORS.red, 26);
+  spawnFx("miss", CONFIG.glitchBaseX, CONFIG.glitchBaseY - 10);
+
   endGame();
 }
 
@@ -190,6 +288,34 @@ function endGame(){
   }
 }
 
+function spawnFx(type, x, y){
+  let img = null;
+
+  if(type === "perfect"){
+    img = assets.fx.perfect;
+  }
+
+  if(type === "combo"){
+    img = assets.fx.combo;
+  }
+
+  if(type === "miss"){
+    img = assets.fx.miss;
+  }
+
+  if(!img){
+    return;
+  }
+
+  fxPopups.push({
+    img,
+    x,
+    y,
+    life: 32,
+    size: CONFIG.fxSize
+  });
+}
+
 function update(timestamp){
   const delta = timestamp - lastTimestamp;
   lastTimestamp = timestamp;
@@ -197,6 +323,7 @@ function update(timestamp){
 
   updateBackground();
   updateParticles();
+  updateFxPopups();
 
   if(feedbackTimer > 0){
     feedbackTimer--;
@@ -221,13 +348,11 @@ function update(timestamp){
 
   const toleranceAngle = anglePerMs * CONFIG.allowedWindowMs;
 
-  // If the hand passed 12 o'clock and the player did not jump in time, game over.
   if(totalAngle > nextTopAngle + toleranceAngle && !jumpedThisCycle){
     registerMiss("MISSED BEAT");
     return;
   }
 
-  // Once the timing window fully passes, move to the next 12 o'clock crossing.
   if(totalAngle > nextTopAngle + toleranceAngle && jumpedThisCycle){
     nextTopAngle += Math.PI * 2;
     jumpedThisCycle = false;
@@ -246,14 +371,24 @@ function updateBackground(){
 }
 
 function updateParticles(){
-  particles.forEach(p => {
-    p.x += p.vx;
-    p.y += p.vy;
-    p.life--;
-    p.size *= 0.985;
+  particles.forEach(particle => {
+    particle.x += particle.vx;
+    particle.y += particle.vy;
+    particle.life--;
+    particle.size *= 0.985;
   });
 
-  particles = particles.filter(p => p.life > 0);
+  particles = particles.filter(particle => particle.life > 0);
+}
+
+function updateFxPopups(){
+  fxPopups.forEach(fx => {
+    fx.life--;
+    fx.size += 2;
+    fx.y -= 0.6;
+  });
+
+  fxPopups = fxPopups.filter(fx => fx.life > 0);
 }
 
 function spawnBurst(x, y, color, count){
@@ -274,10 +409,13 @@ function spawnBurst(x, y, color, count){
 }
 
 function draw(){
+  ctx.imageSmoothingEnabled = false;
+
   drawBackground();
   drawClockFace();
   drawGlitch();
   drawParticles();
+  drawFxPopups();
   drawHud();
 
   if(gameState === "title"){
@@ -345,90 +483,31 @@ function drawBackground(){
 function drawClockFace(){
   const cx = CONFIG.centerX;
   const cy = CONFIG.centerY;
-  const r = CONFIG.clockRadius;
+  const size = CONFIG.clockRingSize;
 
   ctx.save();
 
-  // Clock outer glow
-  ctx.strokeStyle = "rgba(0,255,238,.32)";
-  ctx.lineWidth = 5;
+  // Fallback glow behind clock.
+  ctx.strokeStyle = "rgba(0,255,238,.22)";
+  ctx.lineWidth = 4;
   ctx.shadowColor = COLORS.cyan;
   ctx.shadowBlur = 16;
   ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.arc(cx, cy, CONFIG.clockRadius, 0, Math.PI * 2);
   ctx.stroke();
 
-  // Inner ring
-  ctx.strokeStyle = "rgba(255,32,255,.20)";
-  ctx.lineWidth = 2;
-  ctx.shadowColor = COLORS.magenta;
-  ctx.shadowBlur = 10;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r - 26, 0, Math.PI * 2);
-  ctx.stroke();
-
-  // Tick marks
-  for(let i = 0; i < 12; i++){
-    const a = (Math.PI * 2 / 12) * i - Math.PI / 2;
-    const isMain = i % 3 === 0;
-
-    const x1 = cx + Math.cos(a) * (r - (isMain ? 18 : 12));
-    const y1 = cy + Math.sin(a) * (r - (isMain ? 18 : 12));
-    const x2 = cx + Math.cos(a) * (r + (isMain ? 12 : 6));
-    const y2 = cy + Math.sin(a) * (r + (isMain ? 12 : 6));
-
-    ctx.strokeStyle = i === 0 ? COLORS.gold : isMain ? COLORS.magenta : COLORS.cyan;
-    ctx.lineWidth = i === 0 ? 6 : isMain ? 4 : 2;
-    ctx.shadowColor = ctx.strokeStyle;
-    ctx.shadowBlur = i === 0 ? 18 : 8;
-
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
+  if(assets.clock.ring && assets.clock.ring.complete){
+    ctx.drawImage(
+      assets.clock.ring,
+      cx - size / 2,
+      cy - size / 2,
+      size,
+      size
+    );
   }
 
-  // 12 o'clock danger/target zone
-  const topAngle = -Math.PI / 2;
-  const arc = 0.22;
-
-  ctx.strokeStyle = COLORS.gold;
-  ctx.lineWidth = 12;
-  ctx.shadowColor = COLORS.gold;
-  ctx.shadowBlur = 22;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r + 2, topAngle - arc, topAngle + arc);
-  ctx.stroke();
-
-  // Hand
-  const handX = cx + Math.cos(handAngle) * CONFIG.handLength;
-  const handY = cy + Math.sin(handAngle) * CONFIG.handLength;
-
-  ctx.strokeStyle = hitFlash > 0 ? feedbackColor : COLORS.white;
-  ctx.lineWidth = 7;
-  ctx.shadowColor = hitFlash > 0 ? feedbackColor : COLORS.cyan;
-  ctx.shadowBlur = 18;
-
-  ctx.beginPath();
-  ctx.moveTo(cx, cy);
-  ctx.lineTo(handX, handY);
-  ctx.stroke();
-
-  ctx.fillStyle = hitFlash > 0 ? feedbackColor : COLORS.cyan;
-  ctx.beginPath();
-  ctx.arc(handX, handY, 9, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Center hub
-  ctx.fillStyle = COLORS.black;
-  ctx.strokeStyle = COLORS.cyan;
-  ctx.lineWidth = 4;
-  ctx.shadowColor = COLORS.cyan;
-  ctx.shadowBlur = 12;
-  ctx.beginPath();
-  ctx.arc(cx, cy, 15, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
+  drawTwelveMarker();
+  drawClockHand();
 
   ctx.restore();
 
@@ -439,9 +518,115 @@ function drawClockFace(){
     ctx.fillStyle = feedbackColor;
     ctx.shadowColor = feedbackColor;
     ctx.shadowBlur = 18;
-    ctx.fillText(feedback, cx, cy - r - 52);
+    ctx.fillText(feedback, cx, cy - CONFIG.clockRadius - 52);
     ctx.restore();
   }
+}
+
+function drawTwelveMarker(){
+  const cx = CONFIG.centerX;
+  const cy = CONFIG.centerY;
+  const r = CONFIG.clockRadius;
+
+  const markerX = cx;
+  const markerY = cy - r - 18;
+
+  if(assets.clock.marker && assets.clock.marker.complete){
+    ctx.save();
+    ctx.shadowColor = COLORS.gold;
+    ctx.shadowBlur = 16;
+    ctx.drawImage(assets.clock.marker, markerX - 28, markerY - 28, 56, 56);
+    ctx.restore();
+    return;
+  }
+
+  ctx.save();
+  ctx.fillStyle = COLORS.gold;
+  ctx.shadowColor = COLORS.gold;
+  ctx.shadowBlur = 18;
+  ctx.beginPath();
+  ctx.arc(markerX, markerY, 12, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawClockHand(){
+  const cx = CONFIG.centerX;
+  const cy = CONFIG.centerY;
+
+  ctx.save();
+  ctx.translate(cx, cy);
+
+  // Asset is assumed to point upward.
+  // The +Math.PI/2 correction keeps the visual hand aligned with the gameplay angle.
+  ctx.rotate(handAngle + Math.PI / 2);
+
+  if(assets.clock.hand && assets.clock.hand.complete){
+    ctx.shadowColor = hitFlash > 0 ? feedbackColor : COLORS.cyan;
+    ctx.shadowBlur = 16;
+
+    ctx.drawImage(
+      assets.clock.hand,
+      -CONFIG.clockHandW / 2,
+      -CONFIG.clockHandH + 18,
+      CONFIG.clockHandW,
+      CONFIG.clockHandH
+    );
+  }else{
+    ctx.strokeStyle = hitFlash > 0 ? feedbackColor : COLORS.white;
+    ctx.lineWidth = 7;
+    ctx.shadowColor = hitFlash > 0 ? feedbackColor : COLORS.cyan;
+    ctx.shadowBlur = 18;
+
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -CONFIG.clockRadius + 8);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+function getGlitchFrame(){
+  const elapsedJump = currentTime - jumpStartTime;
+  const isJumping = elapsedJump >= 0 && elapsedJump <= CONFIG.jumpDurationMs;
+
+  if(gameState === "gameover"){
+    return getAnimatedFrame(assets.body.gameover, 14);
+  }
+
+  if(isJumping){
+    const t = elapsedJump / CONFIG.jumpDurationMs;
+
+    if(t < 0.25){
+      return assets.body.jump[0];
+    }
+
+    if(t < 0.65){
+      return assets.body.jump[1];
+    }
+
+    return assets.body.jump[2];
+  }
+
+  if(feedbackTimer > 0 && feedbackColor === COLORS.red){
+    return getAnimatedFrame(assets.body.panic, 10);
+  }
+
+  if(feedbackTimer > 0){
+    return getAnimatedFrame(assets.body.ready, 8);
+  }
+
+  return getAnimatedFrame(assets.body.idle, 18);
+}
+
+function getAnimatedFrame(list, speed){
+  if(!list || list.length === 0){
+    return null;
+  }
+
+  const index = Math.floor(performance.now() / (speed * 16)) % list.length;
+  return list[index];
 }
 
 function drawGlitch(){
@@ -458,17 +643,62 @@ function drawGlitch(){
 
   const x = baseX;
   const y = baseY - jumpOffset;
-  const mood = jumpOffset > 5 ? "jump" : gameState === "gameover" ? "dead" : "idle";
 
+  drawCharacterShadow(baseX, CONFIG.glitchBaseY + 62, jumpOffset);
+
+  const frame = getGlitchFrame();
+
+  if(frame && frame.complete){
+    ctx.save();
+    ctx.shadowColor = gameState === "gameover" ? COLORS.red : COLORS.cyan;
+    ctx.shadowBlur = gameState === "gameover" ? 8 : 12;
+
+    ctx.drawImage(
+      frame,
+      x - CONFIG.glitchW / 2,
+      y - CONFIG.glitchH / 2,
+      CONFIG.glitchW,
+      CONFIG.glitchH
+    );
+
+    ctx.restore();
+    return;
+  }
+
+  drawGlitchFallback(x, y);
+}
+
+function drawCharacterShadow(x, y, jumpOffset){
+  const scale = Math.max(0.45, 1 - jumpOffset / 170);
+
+  if(assets.fx.shadow && assets.fx.shadow.complete){
+    ctx.save();
+    ctx.globalAlpha = 0.55 * scale;
+    ctx.drawImage(
+      assets.fx.shadow,
+      x - 56 * scale,
+      y - 10 * scale,
+      112 * scale,
+      28 * scale
+    );
+    ctx.restore();
+    return;
+  }
+
+  ctx.save();
+  ctx.globalAlpha = 0.32 * scale;
+  ctx.fillStyle = "#000000";
+  ctx.beginPath();
+  ctx.ellipse(x, y, 46 * scale, 9 * scale, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawGlitchFallback(x, y){
   ctx.save();
   ctx.translate(x, y);
   ctx.imageSmoothingEnabled = false;
 
-  // Shadow on 12 o'clock platform
-  ctx.fillStyle = "rgba(0,0,0,.35)";
-  ctx.fillRect(-48, 63 + jumpOffset, 96, 10);
-
-  // Ears
   ctx.fillStyle = "#090912";
   ctx.fillRect(-58, -58, 24, 58);
   ctx.fillRect(34, -58, 24, 58);
@@ -477,12 +707,10 @@ function drawGlitch(){
   ctx.fillRect(-51, -47, 10, 36);
   ctx.fillRect(41, -47, 10, 36);
 
-  // Body/head
   ctx.fillStyle = "#07070d";
   ctx.fillRect(-45, -34, 90, 82);
   ctx.fillRect(-31, 38, 62, 38);
 
-  // Pixel accents
   ctx.fillStyle = COLORS.cyan;
   ctx.fillRect(-36, -42, 22, 7);
   ctx.fillRect(12, 54, 28, 7);
@@ -491,44 +719,14 @@ function drawGlitch(){
   ctx.fillRect(18, -42, 22, 7);
   ctx.fillRect(-42, 54, 22, 7);
 
-  ctx.fillStyle = COLORS.purple;
-  ctx.fillRect(-51, -10, 7, 22);
-  ctx.fillRect(44, 5, 7, 22);
+  ctx.fillStyle = COLORS.cyan;
+  ctx.fillRect(-24, -8, 17, 17);
 
-  // Eyes
-  if(mood === "dead"){
-    ctx.fillStyle = COLORS.red;
-    ctx.fillRect(-24, -6, 18, 6);
-    ctx.fillRect(8, -6, 18, 6);
-  }else{
-    ctx.fillStyle = COLORS.cyan;
-    ctx.fillRect(-24, -8, 17, 17);
+  ctx.fillStyle = COLORS.magenta;
+  ctx.fillRect(8, -8, 17, 17);
 
-    ctx.fillStyle = COLORS.magenta;
-    ctx.fillRect(8, -8, 17, 17);
-  }
-
-  // Mouth
   ctx.fillStyle = COLORS.white;
-
-  if(mood === "jump"){
-    ctx.fillRect(-18, 28, 36, 8);
-  }else if(mood === "dead"){
-    ctx.fillRect(-10, 26, 20, 20);
-  }else{
-    ctx.fillRect(-13, 30, 26, 6);
-  }
-
-  // Arms
-  ctx.fillStyle = "#090912";
-
-  if(mood === "jump"){
-    ctx.fillRect(-67, -4, 16, 38);
-    ctx.fillRect(51, -4, 16, 38);
-  }else{
-    ctx.fillRect(-68, 20, 24, 13);
-    ctx.fillRect(44, 20, 24, 13);
-  }
+  ctx.fillRect(-13, 30, 26, 6);
 
   ctx.restore();
 }
@@ -541,6 +739,25 @@ function drawParticles(){
   });
 
   ctx.globalAlpha = 1;
+}
+
+function drawFxPopups(){
+  fxPopups.forEach(fx => {
+    if(!fx.img || !fx.img.complete){
+      return;
+    }
+
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, fx.life / 32);
+    ctx.drawImage(
+      fx.img,
+      fx.x - fx.size / 2,
+      fx.y - fx.size / 2,
+      fx.size,
+      fx.size
+    );
+    ctx.restore();
+  });
 }
 
 function drawHud(){
@@ -656,6 +873,7 @@ canvas.addEventListener("pointerdown", event => {
   attemptJump();
 });
 
+loadAssets();
 initBackground();
 resetGame();
 requestAnimationFrame(loop);
