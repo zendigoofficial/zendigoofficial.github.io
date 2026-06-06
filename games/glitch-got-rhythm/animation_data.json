@@ -1,0 +1,58 @@
+{
+  "image_root": "assets/",
+  "body": {
+    "idle": [
+      "sprites/body/idle_01.png",
+      "sprites/body/idle_02.png"
+    ],
+    "ready": [
+      "sprites/body/ready_01.png",
+      "sprites/body/ready_02.png"
+    ],
+    "jump": [
+      "sprites/body/jump_takeoff.png",
+      "sprites/body/jump_01.png",
+      "sprites/body/jump_02.png"
+    ],
+    "land": [
+      "sprites/body/land_01.png",
+      "sprites/body/land_02.png"
+    ],
+    "panic": [
+      "sprites/body/panic_01.png",
+      "sprites/body/panic_02.png"
+    ],
+    "gameover": [
+      "sprites/body/gameover_01.png",
+      "sprites/body/gameover_02.png"
+    ]
+  },
+  "heads": {
+    "head_happy": "sprites/heads/head_happy.png",
+    "head_focused": "sprites/heads/head_focused.png",
+    "head_surprised": "sprites/heads/head_surprised.png",
+    "head_angry": "sprites/heads/head_angry.png",
+    "head_sad_oops": "sprites/heads/head_sad_oops.png",
+    "head_determined": "sprites/heads/head_determined.png"
+  },
+  "clock": {
+    "ring": "clock/clock_ring.png",
+    "hand": "clock/clock_hand.png",
+    "hit_marker_12": "clock/hit_marker_12.png"
+  },
+  "fx": {
+    "perfect_hit": "fx/perfect_hit_spark.png",
+    "miss_burst": "fx/miss_burst.png",
+    "combo_sparkle": "fx/combo_sparkle.png",
+    "shadow": "fx/character_shadow.png"
+  },
+  "ui": {
+    "score_panel": "ui/score_panel.png",
+    "combo_panel": "ui/combo_panel.png",
+    "best_score_panel": "ui/best_score_panel.png",
+    "button_primary": "ui/button_primary.png",
+    "button_hover": "ui/button_hover.png",
+    "button_pressed": "ui/button_pressed.png",
+    "title_badge": "ui/title_badge.png"
+  }
+}

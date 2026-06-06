@@ -1,26 +1,23 @@
-# Glitch Got Rhythm
+# Glitch Got Rhythm Asset Pack
 
-Glitch Got Rhythm is a retro pixel rhythm mini-game for the Zendigo Arcade.
+Drop the `assets` folder into:
 
-## Controls
+`games/glitch-got-rhythm/`
 
-- Space / Click / Tap: Hit Beat
-- R: Restart
-- M: Music placeholder toggle
+Recommended game paths:
 
-## Goal
+- `assets/sprites/body/*.png` for animation frames
+- `assets/sprites/heads/*.png` for expression icons
+- `assets/clock/*.png` for rhythm clock objects
+- `assets/fx/*.png` for hit/miss/landing effects
+- `assets/ui/*.png` for HUD/buttons/title
 
-Press on the beat to keep the broadcast signal synced.
+Also included:
 
-## Feedback
+- `assets/spritesheets/glitch_body_160_grid.png`
+- `assets/spritesheets/glitch_heads_128_grid.png`
+- `animation_data.json`
+- `manifest.json`
+- `source_approved_sheet.png`
 
-- PERFECT = best timing
-- GOOD = stable timing
-- EARLY = too soon
-- LATE = too slow
-- MISS / DESYNC = signal loss
-
-## GitHub Pages Path
-
-```text
-/games/glitch-got-rhythm/
+Note: these were extracted from the approved production sheet and converted to transparent PNGs for GitHub use.
