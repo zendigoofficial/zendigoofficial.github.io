@@ -20,28 +20,33 @@ const COLORS = {
 
 const CONFIG = {
   centerX: WIDTH / 2,
-  centerY: HEIGHT / 2 + 48,
+  centerY: HEIGHT / 2 + 62,
 
   clockRadius: 150,
 
+  // Speed system:
+  // Starts at 1.0x.
+  // Increases by 0.1x every 10 successful jumps.
+  // Maxes at 1.7x.
   rotationMsStart: 1450,
-  rotationMsMin: 820,
-  speedUpPerJump: 10,
+  speedStepEvery: 10,
+  speedStepAmount: 0.1,
+  speedMax: 1.7,
 
   perfectWindowMs: 45,
   goodWindowMs: 95,
-  allowedWindowMs: 145,
+  allowedWindowMs: 150,
 
   glitchBaseX: WIDTH / 2,
-  glitchBaseY: HEIGHT / 2 - 122,
+  glitchBaseY: HEIGHT / 2 - 112,
 
-  jumpHeight: 92,
+  jumpHeight: 96,
   jumpDurationMs: 330,
 
-  glitchW: 128,
-  glitchH: 128,
+  glitchW: 138,
+  glitchH: 138,
 
-  clockRingSize: 345,
+  clockRingSize: 355,
   clockHandW: 58,
   clockHandH: 170,
 
