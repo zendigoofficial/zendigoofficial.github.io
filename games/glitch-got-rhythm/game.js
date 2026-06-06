@@ -19,21 +19,19 @@ const COLORS = {
 };
 
 const CONFIG = {
-  // Gameplay clock center.
   centerX: WIDTH / 2,
   centerY: HEIGHT / 2 + 68,
 
   clockRadius: 145,
 
-  // Clock hand visual sizing/pivot.
-  clockHandW: 52,
-  clockHandH: 160,
-  clockHandPivotOffsetY: 18,
+  clockRingSize: 300,
+  clockRingOffsetX: 0,
+  clockRingOffsetY: 0,
 
-  // Speed system.
-  // Starts at 1.0x.
-  // Increases by 0.1x every 10 successful jumps.
-  // No speed cap.
+  clockHandLength: 154,
+  clockHandPivotXRatio: 0.5,
+  clockHandPivotYRatio: 0.92,
+
   rotationMsStart: 1450,
   speedStepEvery: 10,
   speedStepAmount: 0.1,
@@ -42,7 +40,6 @@ const CONFIG = {
   goodWindowMs: 95,
   allowedWindowMs: 150,
 
-  // Glitch position.
   glitchBaseX: WIDTH / 2,
   glitchBaseY: HEIGHT / 2 - 104,
 
@@ -85,6 +82,7 @@ const ASSET_PATHS = {
   },
 
   clock: {
+    ring: "assets/clock/clock_ring.png",
     hand: "assets/clock/clock_hand.png",
     marker: "assets/clock/hit_marker_12.png"
   },
@@ -129,6 +127,7 @@ function loadAssets(){
     assets.body[group] = paths.map(path => loadImage(path));
   }
 
+  assets.clock.ring = loadImage(ASSET_PATHS.clock.ring);
   assets.clock.hand = loadImage(ASSET_PATHS.clock.hand);
   assets.clock.marker = loadImage(ASSET_PATHS.clock.marker);
 
@@ -143,7 +142,9 @@ let gameState = "title";
 let score = 0;
 let combo = 0;
 let bestCombo = 0;
-let bestScore = Number(localStorage.getItem("glitchGotRhythmBestScore") || 0);
+let bestScore = Number(
+  localStorage.getItem("glitchGotRhythmBestScore") || 0
+);
 
 let successfulJumps = 0;
 let speedMultiplier = 1.0;
@@ -219,9 +220,15 @@ function restartToTitle(){
 }
 
 function updateSpeedFromJumps(){
-  const speedLevel = Math.floor(successfulJumps / CONFIG.speedStepEvery);
-  speedMultiplier = 1 + speedLevel * CONFIG.speedStepAmount;
-  rotationMs = CONFIG.rotationMsStart / speedMultiplier;
+  const speedLevel = Math.floor(
+    successfulJumps / CONFIG.speedStepEvery
+  );
+
+  speedMultiplier =
+    1 + speedLevel * CONFIG.speedStepAmount;
+
+  rotationMs =
+    CONFIG.rotationMsStart / speedMultiplier;
 }
 
 function attemptJump(){
@@ -239,16 +246,36 @@ function attemptJump(){
     return;
   }
 
-  const diffAngle = Math.abs(totalAngle - nextTopAngle);
-  const anglePerMs = (Math.PI * 2) / rotationMs;
-  const diffMs = diffAngle / anglePerMs;
+  const diffAngle =
+    Math.abs(totalAngle - nextTopAngle);
+
+  const anglePerMs =
+    (Math.PI * 2) / rotationMs;
+
+  const diffMs =
+    diffAngle / anglePerMs;
 
   if(diffMs <= CONFIG.perfectWindowMs){
-    registerJump("PERFECT JUMP", COLORS.gold, 125, "perfect");
+    registerJump(
+      "PERFECT JUMP",
+      COLORS.gold,
+      125,
+      "perfect"
+    );
   }else if(diffMs <= CONFIG.goodWindowMs){
-    registerJump("GOOD JUMP", COLORS.green, 75, "combo");
+    registerJump(
+      "GOOD JUMP",
+      COLORS.green,
+      75,
+      "combo"
+    );
   }else if(diffMs <= CONFIG.allowedWindowMs){
-    registerJump("BARELY", COLORS.magenta, 35, "combo");
+    registerJump(
+      "BARELY",
+      COLORS.magenta,
+      35,
+      "combo"
+    );
   }else{
     registerMiss("BAD JUMP");
   }
@@ -266,13 +293,20 @@ function registerJump(label, color, points, fxType){
   successfulJumps++;
 
   bestCombo = Math.max(bestCombo, combo);
-  score += points + Math.min(combo * 5, 250);
+
+  score +=
+    points +
+    Math.min(combo * 5, 250);
 
   updateSpeedFromJumps();
 
   if(score > bestScore){
     bestScore = score;
-    localStorage.setItem("glitchGotRhythmBestScore", String(bestScore));
+
+    localStorage.setItem(
+      "glitchGotRhythmBestScore",
+      String(bestScore)
+    );
   }
 
   feedback = label;
@@ -280,19 +314,40 @@ function registerJump(label, color, points, fxType){
   feedbackTimer = 34;
   hitFlash = 18;
 
-  spawnBurst(CONFIG.glitchBaseX, CONFIG.glitchBaseY, color, 18);
-  spawnFx(fxType, CONFIG.glitchBaseX, CONFIG.glitchBaseY - 16);
+  spawnBurst(
+    CONFIG.glitchBaseX,
+    CONFIG.glitchBaseY,
+    color,
+    18
+  );
+
+  spawnFx(
+    fxType,
+    CONFIG.glitchBaseX,
+    CONFIG.glitchBaseY - 16
+  );
 }
 
 function registerMiss(label){
   combo = 0;
+
   feedback = label;
   feedbackColor = COLORS.red;
   feedbackTimer = 45;
   missFlash = 32;
 
-  spawnBurst(CONFIG.glitchBaseX, CONFIG.glitchBaseY, COLORS.red, 26);
-  spawnFx("miss", CONFIG.glitchBaseX, CONFIG.glitchBaseY - 10);
+  spawnBurst(
+    CONFIG.glitchBaseX,
+    CONFIG.glitchBaseY,
+    COLORS.red,
+    26
+  );
+
+  spawnFx(
+    "miss",
+    CONFIG.glitchBaseX,
+    CONFIG.glitchBaseY - 10
+  );
 
   endGame();
 }
@@ -302,7 +357,11 @@ function endGame(){
 
   if(score > bestScore){
     bestScore = score;
-    localStorage.setItem("glitchGotRhythmBestScore", String(bestScore));
+
+    localStorage.setItem(
+      "glitchGotRhythmBestScore",
+      String(bestScore)
+    );
   }
 }
 
@@ -336,6 +395,7 @@ function spawnFx(type, x, y){
 
 function update(timestamp){
   const delta = timestamp - lastTimestamp;
+
   lastTimestamp = timestamp;
   currentTime = timestamp;
 
@@ -359,19 +419,29 @@ function update(timestamp){
     return;
   }
 
-  const anglePerMs = (Math.PI * 2) / rotationMs;
+  const anglePerMs =
+    (Math.PI * 2) / rotationMs;
 
   totalAngle += anglePerMs * delta;
-  handAngle = -Math.PI / 2 + totalAngle;
 
-  const toleranceAngle = anglePerMs * CONFIG.allowedWindowMs;
+  handAngle =
+    -Math.PI / 2 + totalAngle;
 
-  if(totalAngle > nextTopAngle + toleranceAngle && !jumpedThisCycle){
+  const toleranceAngle =
+    anglePerMs * CONFIG.allowedWindowMs;
+
+  if(
+    totalAngle > nextTopAngle + toleranceAngle &&
+    !jumpedThisCycle
+  ){
     registerMiss("MISSED BEAT");
     return;
   }
 
-  if(totalAngle > nextTopAngle + toleranceAngle && jumpedThisCycle){
+  if(
+    totalAngle > nextTopAngle + toleranceAngle &&
+    jumpedThisCycle
+  ){
     nextTopAngle += Math.PI * 2;
     jumpedThisCycle = false;
   }
@@ -382,8 +452,11 @@ function updateBackground(){
     line.x -= line.speed;
 
     if(line.x + line.length < 0){
-      line.x = WIDTH + Math.random() * 100;
-      line.y = Math.random() * HEIGHT;
+      line.x =
+        WIDTH + Math.random() * 100;
+
+      line.y =
+        Math.random() * HEIGHT;
     }
   });
 }
@@ -396,7 +469,9 @@ function updateParticles(){
     particle.size *= 0.985;
   });
 
-  particles = particles.filter(particle => particle.life > 0);
+  particles = particles.filter(
+    particle => particle.life > 0
+  );
 }
 
 function updateFxPopups(){
@@ -406,13 +481,18 @@ function updateFxPopups(){
     fx.y -= 0.6;
   });
 
-  fxPopups = fxPopups.filter(fx => fx.life > 0);
+  fxPopups = fxPopups.filter(
+    fx => fx.life > 0
+  );
 }
 
 function spawnBurst(x, y, color, count){
   for(let i = 0; i < count; i++){
-    const angle = Math.random() * Math.PI * 2;
-    const speed = Math.random() * 4 + 1;
+    const angle =
+      Math.random() * Math.PI * 2;
+
+    const speed =
+      Math.random() * 4 + 1;
 
     particles.push({
       x,
@@ -457,13 +537,36 @@ function loop(timestamp){
 }
 
 function drawBackground(){
-  const gradient = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
-  gradient.addColorStop(0, "#05070d");
-  gradient.addColorStop(0.45, "#0d1024");
-  gradient.addColorStop(1, "#05070d");
+  const gradient =
+    ctx.createLinearGradient(
+      0,
+      0,
+      WIDTH,
+      HEIGHT
+    );
+
+  gradient.addColorStop(
+    0,
+    "#05070d"
+  );
+
+  gradient.addColorStop(
+    0.45,
+    "#0d1024"
+  );
+
+  gradient.addColorStop(
+    1,
+    "#05070d"
+  );
 
   ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  ctx.fillRect(
+    0,
+    0,
+    WIDTH,
+    HEIGHT
+  );
 
   ctx.save();
 
@@ -471,9 +574,18 @@ function drawBackground(){
     ctx.globalAlpha = line.alpha;
     ctx.strokeStyle = COLORS.cyan;
     ctx.lineWidth = 1;
+
     ctx.beginPath();
-    ctx.moveTo(line.x, line.y);
-    ctx.lineTo(line.x + line.length, line.y);
+    ctx.moveTo(
+      line.x,
+      line.y
+    );
+
+    ctx.lineTo(
+      line.x + line.length,
+      line.y
+    );
+
     ctx.stroke();
   });
 
@@ -491,9 +603,20 @@ function drawBackground(){
 
   if(missFlash > 0){
     ctx.save();
-    ctx.globalAlpha = missFlash / 80;
-    ctx.fillStyle = COLORS.red;
-    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    ctx.globalAlpha =
+      missFlash / 80;
+
+    ctx.fillStyle =
+      COLORS.red;
+
+    ctx.fillRect(
+      0,
+      0,
+      WIDTH,
+      HEIGHT
+    );
+
     ctx.restore();
   }
 }
@@ -501,98 +624,137 @@ function drawBackground(){
 function drawClockFace(){
   const cx = CONFIG.centerX;
   const cy = CONFIG.centerY;
+  const size = CONFIG.clockRingSize;
+  const ring = assets.clock.ring;
 
-  drawGeneratedClockRing(cx, cy);
+  ctx.save();
+
+  if(
+    ring &&
+    ring.complete &&
+    ring.naturalWidth > 0 &&
+    ring.naturalHeight > 0
+  ){
+    ctx.drawImage(
+      ring,
+      cx - size / 2 +
+        CONFIG.clockRingOffsetX,
+      cy - size / 2 +
+        CONFIG.clockRingOffsetY,
+      size,
+      size
+    );
+  }else{
+    drawClockFallback(cx, cy);
+  }
+
   drawTwelveMarker();
   drawClockHand();
 
+  ctx.restore();
+
   if(feedbackTimer > 0){
     ctx.save();
+
     ctx.textAlign = "center";
-    ctx.font = "900 38px Orbitron, Arial";
-    ctx.fillStyle = feedbackColor;
-    ctx.shadowColor = feedbackColor;
+
+    ctx.font =
+      "900 38px Orbitron, Arial";
+
+    ctx.fillStyle =
+      feedbackColor;
+
+    ctx.shadowColor =
+      feedbackColor;
+
     ctx.shadowBlur = 18;
-    ctx.fillText(feedback, cx, cy - CONFIG.clockRadius - 52);
+
+    ctx.fillText(
+      feedback,
+      cx,
+      cy -
+        CONFIG.clockRadius -
+        52
+    );
+
     ctx.restore();
   }
 }
 
-function drawGeneratedClockRing(cx, cy){
+function drawClockFallback(cx, cy){
   const r = CONFIG.clockRadius;
 
   ctx.save();
 
-  const faceGradient = ctx.createRadialGradient(cx, cy, 20, cx, cy, r);
-  faceGradient.addColorStop(0, "rgba(5,7,13,.10)");
-  faceGradient.addColorStop(0.72, "rgba(5,7,13,.28)");
-  faceGradient.addColorStop(1, "rgba(0,255,238,.07)");
+  ctx.strokeStyle =
+    COLORS.cyan;
 
-  ctx.fillStyle = faceGradient;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r - 6, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.strokeStyle = "rgba(0,255,238,.52)";
   ctx.lineWidth = 5;
-  ctx.shadowColor = COLORS.cyan;
-  ctx.shadowBlur = 18;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.stroke();
 
-  ctx.strokeStyle = "rgba(255,32,255,.35)";
-  ctx.lineWidth = 3;
-  ctx.shadowColor = COLORS.magenta;
-  ctx.shadowBlur = 12;
+  ctx.shadowColor =
+    COLORS.cyan;
+
+  ctx.shadowBlur = 16;
+
   ctx.beginPath();
-  ctx.arc(cx, cy, r - 24, 0, Math.PI * 2);
+  ctx.arc(
+    cx,
+    cy,
+    r,
+    0,
+    Math.PI * 2
+  );
   ctx.stroke();
 
   for(let i = 0; i < 12; i++){
-    const angle = (Math.PI * 2 / 12) * i - Math.PI / 2;
-    const isMajor = i % 3 === 0;
-    const isTop = i === 0;
+    const angle =
+      -Math.PI / 2 +
+      i * Math.PI * 2 / 12;
 
-    const inner = r - (isMajor ? 28 : 18);
-    const outer = r + (isTop ? 10 : isMajor ? 4 : 0);
+    const innerX =
+      cx +
+      Math.cos(angle) *
+      (r - 18);
 
-    const x1 = cx + Math.cos(angle) * inner;
-    const y1 = cy + Math.sin(angle) * inner;
-    const x2 = cx + Math.cos(angle) * outer;
-    const y2 = cy + Math.sin(angle) * outer;
+    const innerY =
+      cy +
+      Math.sin(angle) *
+      (r - 18);
 
-    ctx.strokeStyle = isTop ? COLORS.gold : isMajor ? COLORS.magenta : COLORS.cyan;
-    ctx.lineWidth = isTop ? 7 : isMajor ? 5 : 3;
-    ctx.shadowColor = ctx.strokeStyle;
-    ctx.shadowBlur = isTop ? 18 : 10;
+    const outerX =
+      cx +
+      Math.cos(angle) *
+      r;
+
+    const outerY =
+      cy +
+      Math.sin(angle) *
+      r;
+
+    ctx.strokeStyle =
+      i === 0
+        ? COLORS.gold
+        : i % 3 === 0
+          ? COLORS.magenta
+          : COLORS.cyan;
+
+    ctx.lineWidth =
+      i === 0 ? 6 : 3;
 
     ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
+
+    ctx.moveTo(
+      innerX,
+      innerY
+    );
+
+    ctx.lineTo(
+      outerX,
+      outerY
+    );
+
     ctx.stroke();
   }
-
-  const topAngle = -Math.PI / 2;
-  const arc = 0.25;
-
-  ctx.strokeStyle = COLORS.gold;
-  ctx.lineWidth = 13;
-  ctx.shadowColor = COLORS.gold;
-  ctx.shadowBlur = 22;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r + 3, topAngle - arc, topAngle + arc);
-  ctx.stroke();
-
-  ctx.fillStyle = COLORS.black;
-  ctx.strokeStyle = COLORS.cyan;
-  ctx.lineWidth = 4;
-  ctx.shadowColor = COLORS.cyan;
-  ctx.shadowBlur = 12;
-  ctx.beginPath();
-  ctx.arc(cx, cy, 15, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
 
   ctx.restore();
 }
@@ -603,23 +765,53 @@ function drawTwelveMarker(){
   const r = CONFIG.clockRadius;
 
   const markerX = cx;
-  const markerY = cy - r - 20;
+  const markerY =
+    cy - r - 20;
 
-  if(assets.clock.marker && assets.clock.marker.complete){
+  if(
+    assets.clock.marker &&
+    assets.clock.marker.complete &&
+    assets.clock.marker.naturalWidth > 0
+  ){
     ctx.save();
-    ctx.shadowColor = COLORS.gold;
+
+    ctx.shadowColor =
+      COLORS.gold;
+
     ctx.shadowBlur = 16;
-    ctx.drawImage(assets.clock.marker, markerX - 28, markerY - 28, 56, 56);
+
+    ctx.drawImage(
+      assets.clock.marker,
+      markerX - 28,
+      markerY - 28,
+      56,
+      56
+    );
+
     ctx.restore();
     return;
   }
 
   ctx.save();
-  ctx.fillStyle = COLORS.gold;
-  ctx.shadowColor = COLORS.gold;
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.shadowColor =
+    COLORS.gold;
+
   ctx.shadowBlur = 18;
+
   ctx.beginPath();
-  ctx.arc(markerX, markerY, 12, 0, Math.PI * 2);
+
+  ctx.arc(
+    markerX,
+    markerY,
+    12,
+    0,
+    Math.PI * 2
+  );
+
   ctx.fill();
   ctx.restore();
 }
@@ -627,31 +819,86 @@ function drawTwelveMarker(){
 function drawClockHand(){
   const cx = CONFIG.centerX;
   const cy = CONFIG.centerY;
+  const hand = assets.clock.hand;
 
   ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(handAngle + Math.PI / 2);
 
-  if(assets.clock.hand && assets.clock.hand.complete){
-    ctx.shadowColor = hitFlash > 0 ? feedbackColor : COLORS.cyan;
+  ctx.translate(
+    cx,
+    cy
+  );
+
+  ctx.rotate(
+    handAngle + Math.PI / 2
+  );
+
+  if(
+    hand &&
+    hand.complete &&
+    hand.naturalWidth > 0 &&
+    hand.naturalHeight > 0
+  ){
+    const scale =
+      CONFIG.clockHandLength /
+      hand.naturalHeight;
+
+    const drawWidth =
+      hand.naturalWidth *
+      scale;
+
+    const drawHeight =
+      hand.naturalHeight *
+      scale;
+
+    const pivotX =
+      drawWidth *
+      CONFIG.clockHandPivotXRatio;
+
+    const pivotY =
+      drawHeight *
+      CONFIG.clockHandPivotYRatio;
+
+    ctx.shadowColor =
+      hitFlash > 0
+        ? feedbackColor
+        : COLORS.cyan;
+
     ctx.shadowBlur = 16;
 
     ctx.drawImage(
-      assets.clock.hand,
-      -CONFIG.clockHandW / 2,
-      -CONFIG.clockHandH + CONFIG.clockHandPivotOffsetY,
-      CONFIG.clockHandW,
-      CONFIG.clockHandH
+      hand,
+      -pivotX,
+      -pivotY,
+      drawWidth,
+      drawHeight
     );
   }else{
-    ctx.strokeStyle = hitFlash > 0 ? feedbackColor : COLORS.white;
+    ctx.strokeStyle =
+      hitFlash > 0
+        ? feedbackColor
+        : COLORS.white;
+
     ctx.lineWidth = 7;
-    ctx.shadowColor = hitFlash > 0 ? feedbackColor : COLORS.cyan;
+
+    ctx.shadowColor =
+      hitFlash > 0
+        ? feedbackColor
+        : COLORS.cyan;
+
     ctx.shadowBlur = 18;
 
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, -CONFIG.clockRadius + 8);
+
+    ctx.moveTo(
+      0,
+      0
+    );
+
+    ctx.lineTo(
+      0,
+      -CONFIG.clockHandLength
+    );
+
     ctx.stroke();
   }
 
@@ -659,15 +906,24 @@ function drawClockHand(){
 }
 
 function getGlitchFrame(){
-  const elapsedJump = currentTime - jumpStartTime;
-  const isJumping = elapsedJump >= 0 && elapsedJump <= CONFIG.jumpDurationMs;
+  const elapsedJump =
+    currentTime - jumpStartTime;
+
+  const isJumping =
+    elapsedJump >= 0 &&
+    elapsedJump <= CONFIG.jumpDurationMs;
 
   if(gameState === "gameover"){
-    return getAnimatedFrame(assets.body.gameover, 14);
+    return getAnimatedFrame(
+      assets.body.gameover,
+      14
+    );
   }
 
   if(isJumping){
-    const t = elapsedJump / CONFIG.jumpDurationMs;
+    const t =
+      elapsedJump /
+      CONFIG.jumpDurationMs;
 
     if(t < 0.25){
       return assets.body.jump[0];
@@ -680,15 +936,27 @@ function getGlitchFrame(){
     return assets.body.jump[2];
   }
 
-  if(feedbackTimer > 0 && feedbackColor === COLORS.red){
-    return getAnimatedFrame(assets.body.panic, 10);
+  if(
+    feedbackTimer > 0 &&
+    feedbackColor === COLORS.red
+  ){
+    return getAnimatedFrame(
+      assets.body.panic,
+      10
+    );
   }
 
   if(feedbackTimer > 0){
-    return getAnimatedFrame(assets.body.ready, 8);
+    return getAnimatedFrame(
+      assets.body.ready,
+      8
+    );
   }
 
-  return getAnimatedFrame(assets.body.idle, 18);
+  return getAnimatedFrame(
+    assets.body.idle,
+    18
+  );
 }
 
 function getAnimatedFrame(list, speed){
@@ -696,33 +964,69 @@ function getAnimatedFrame(list, speed){
     return null;
   }
 
-  const index = Math.floor(performance.now() / (speed * 16)) % list.length;
+  const index =
+    Math.floor(
+      performance.now() /
+      (speed * 16)
+    ) % list.length;
+
   return list[index];
 }
 
 function drawGlitch(){
-  const baseX = CONFIG.glitchBaseX;
-  const baseY = CONFIG.glitchBaseY;
+  const baseX =
+    CONFIG.glitchBaseX;
 
-  const elapsedJump = currentTime - jumpStartTime;
+  const baseY =
+    CONFIG.glitchBaseY;
+
+  const elapsedJump =
+    currentTime - jumpStartTime;
+
   let jumpOffset = 0;
 
-  if(elapsedJump >= 0 && elapsedJump <= CONFIG.jumpDurationMs){
-    const t = elapsedJump / CONFIG.jumpDurationMs;
-    jumpOffset = Math.sin(t * Math.PI) * CONFIG.jumpHeight;
+  if(
+    elapsedJump >= 0 &&
+    elapsedJump <= CONFIG.jumpDurationMs
+  ){
+    const t =
+      elapsedJump /
+      CONFIG.jumpDurationMs;
+
+    jumpOffset =
+      Math.sin(t * Math.PI) *
+      CONFIG.jumpHeight;
   }
 
   const x = baseX;
-  const y = baseY - jumpOffset;
+  const y =
+    baseY - jumpOffset;
 
-  drawCharacterShadow(baseX, CONFIG.glitchBaseY + 62, jumpOffset);
+  drawCharacterShadow(
+    baseX,
+    CONFIG.glitchBaseY + 62,
+    jumpOffset
+  );
 
-  const frame = getGlitchFrame();
+  const frame =
+    getGlitchFrame();
 
-  if(frame && frame.complete){
+  if(
+    frame &&
+    frame.complete &&
+    frame.naturalWidth > 0
+  ){
     ctx.save();
-    ctx.shadowColor = gameState === "gameover" ? COLORS.red : COLORS.cyan;
-    ctx.shadowBlur = gameState === "gameover" ? 8 : 12;
+
+    ctx.shadowColor =
+      gameState === "gameover"
+        ? COLORS.red
+        : COLORS.cyan;
+
+    ctx.shadowBlur =
+      gameState === "gameover"
+        ? 8
+        : 12;
 
     ctx.drawImage(
       frame,
@@ -739,12 +1043,27 @@ function drawGlitch(){
   drawGlitchFallback(x, y);
 }
 
-function drawCharacterShadow(x, y, jumpOffset){
-  const scale = Math.max(0.45, 1 - jumpOffset / 170);
+function drawCharacterShadow(
+  x,
+  y,
+  jumpOffset
+){
+  const scale =
+    Math.max(
+      0.45,
+      1 - jumpOffset / 170
+    );
 
-  if(assets.fx.shadow && assets.fx.shadow.complete){
+  if(
+    assets.fx.shadow &&
+    assets.fx.shadow.complete &&
+    assets.fx.shadow.naturalWidth > 0
+  ){
     ctx.save();
-    ctx.globalAlpha = 0.55 * scale;
+
+    ctx.globalAlpha =
+      0.55 * scale;
+
     ctx.drawImage(
       assets.fx.shadow,
       x - 56 * scale,
@@ -752,61 +1071,169 @@ function drawCharacterShadow(x, y, jumpOffset){
       112 * scale,
       28 * scale
     );
+
     ctx.restore();
     return;
   }
 
   ctx.save();
-  ctx.globalAlpha = 0.32 * scale;
-  ctx.fillStyle = "#000000";
+
+  ctx.globalAlpha =
+    0.32 * scale;
+
+  ctx.fillStyle =
+    "#000000";
+
   ctx.beginPath();
-  ctx.ellipse(x, y, 46 * scale, 9 * scale, 0, 0, Math.PI * 2);
+
+  ctx.ellipse(
+    x,
+    y,
+    46 * scale,
+    9 * scale,
+    0,
+    0,
+    Math.PI * 2
+  );
+
   ctx.fill();
   ctx.restore();
 }
 
 function drawGlitchFallback(x, y){
   ctx.save();
-  ctx.translate(x, y);
+
+  ctx.translate(
+    x,
+    y
+  );
+
   ctx.imageSmoothingEnabled = false;
 
   ctx.fillStyle = "#090912";
-  ctx.fillRect(-58, -58, 24, 58);
-  ctx.fillRect(34, -58, 24, 58);
+
+  ctx.fillRect(
+    -58,
+    -58,
+    24,
+    58
+  );
+
+  ctx.fillRect(
+    34,
+    -58,
+    24,
+    58
+  );
 
   ctx.fillStyle = "#241531";
-  ctx.fillRect(-51, -47, 10, 36);
-  ctx.fillRect(41, -47, 10, 36);
+
+  ctx.fillRect(
+    -51,
+    -47,
+    10,
+    36
+  );
+
+  ctx.fillRect(
+    41,
+    -47,
+    10,
+    36
+  );
 
   ctx.fillStyle = "#07070d";
-  ctx.fillRect(-45, -34, 90, 82);
-  ctx.fillRect(-31, 38, 62, 38);
+
+  ctx.fillRect(
+    -45,
+    -34,
+    90,
+    82
+  );
+
+  ctx.fillRect(
+    -31,
+    38,
+    62,
+    38
+  );
 
   ctx.fillStyle = COLORS.cyan;
-  ctx.fillRect(-36, -42, 22, 7);
-  ctx.fillRect(12, 54, 28, 7);
+
+  ctx.fillRect(
+    -36,
+    -42,
+    22,
+    7
+  );
+
+  ctx.fillRect(
+    12,
+    54,
+    28,
+    7
+  );
 
   ctx.fillStyle = COLORS.magenta;
-  ctx.fillRect(18, -42, 22, 7);
-  ctx.fillRect(-42, 54, 22, 7);
+
+  ctx.fillRect(
+    18,
+    -42,
+    22,
+    7
+  );
+
+  ctx.fillRect(
+    -42,
+    54,
+    22,
+    7
+  );
 
   ctx.fillStyle = COLORS.cyan;
-  ctx.fillRect(-24, -8, 17, 17);
+
+  ctx.fillRect(
+    -24,
+    -8,
+    17,
+    17
+  );
 
   ctx.fillStyle = COLORS.magenta;
-  ctx.fillRect(8, -8, 17, 17);
+
+  ctx.fillRect(
+    8,
+    -8,
+    17,
+    17
+  );
 
   ctx.fillStyle = COLORS.white;
-  ctx.fillRect(-13, 30, 26, 6);
+
+  ctx.fillRect(
+    -13,
+    30,
+    26,
+    6
+  );
 
   ctx.restore();
 }
 
 function drawParticles(){
-  particles.forEach(p => {
-    ctx.globalAlpha = p.life / 34;
-    ctx.fillStyle = p.color;
-    ctx.fillRect(p.x, p.y, p.size, p.size);
+  particles.forEach(particle => {
+    ctx.globalAlpha =
+      particle.life / 34;
+
+    ctx.fillStyle =
+      particle.color;
+
+    ctx.fillRect(
+      particle.x,
+      particle.y,
+      particle.size,
+      particle.size
+    );
   });
 
   ctx.globalAlpha = 1;
@@ -814,12 +1241,22 @@ function drawParticles(){
 
 function drawFxPopups(){
   fxPopups.forEach(fx => {
-    if(!fx.img || !fx.img.complete){
+    if(
+      !fx.img ||
+      !fx.img.complete ||
+      fx.img.naturalWidth <= 0
+    ){
       return;
     }
 
     ctx.save();
-    ctx.globalAlpha = Math.max(0, fx.life / 32);
+
+    ctx.globalAlpha =
+      Math.max(
+        0,
+        fx.life / 32
+      );
+
     ctx.drawImage(
       fx.img,
       fx.x - fx.size / 2,
@@ -827,6 +1264,7 @@ function drawFxPopups(){
       fx.size,
       fx.size
     );
+
     ctx.restore();
   });
 }
@@ -834,25 +1272,67 @@ function drawFxPopups(){
 function drawHud(){
   ctx.save();
 
-  ctx.font = "900 24px Orbitron, Arial";
-  ctx.fillStyle = COLORS.cyan;
-  ctx.shadowColor = COLORS.cyan;
+  ctx.font =
+    "900 24px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.cyan;
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
   ctx.shadowBlur = 10;
-  ctx.fillText(`SCORE: ${score}`, 28, 42);
 
-  ctx.fillStyle = COLORS.magenta;
-  ctx.shadowColor = COLORS.magenta;
-  ctx.fillText(`COMBO: ${combo}`, 28, 74);
+  ctx.fillText(
+    `SCORE: ${score}`,
+    28,
+    42
+  );
 
-  ctx.fillStyle = COLORS.gold;
-  ctx.shadowColor = COLORS.gold;
-  ctx.fillText(`BEST: ${bestScore}`, 28, 106);
+  ctx.fillStyle =
+    COLORS.magenta;
 
-  ctx.fillStyle = COLORS.white;
-  ctx.shadowColor = COLORS.white;
-  ctx.font = "900 15px Orbitron, Arial";
-  ctx.fillText(`SPEED: ${speedMultiplier.toFixed(1)}x`, WIDTH - 190, 42);
-  ctx.fillText(`JUMPS: ${successfulJumps}`, WIDTH - 190, 66);
+  ctx.shadowColor =
+    COLORS.magenta;
+
+  ctx.fillText(
+    `COMBO: ${combo}`,
+    28,
+    74
+  );
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.shadowColor =
+    COLORS.gold;
+
+  ctx.fillText(
+    `BEST: ${bestScore}`,
+    28,
+    106
+  );
+
+  ctx.fillStyle =
+    COLORS.white;
+
+  ctx.shadowColor =
+    COLORS.white;
+
+  ctx.font =
+    "900 15px Orbitron, Arial";
+
+  ctx.fillText(
+    `SPEED: ${speedMultiplier.toFixed(1)}x`,
+    WIDTH - 190,
+    42
+  );
+
+  ctx.fillText(
+    `JUMPS: ${successfulJumps}`,
+    WIDTH - 190,
+    66
+  );
 
   ctx.restore();
 }
@@ -861,27 +1341,66 @@ function drawTitleScreen(){
   drawOverlay();
 
   ctx.save();
+
   ctx.textAlign = "center";
 
-  ctx.font = "900 56px Orbitron, Arial";
-  ctx.fillStyle = COLORS.cyan;
-  ctx.shadowColor = COLORS.cyan;
+  ctx.font =
+    "900 56px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.cyan;
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
   ctx.shadowBlur = 18;
-  ctx.fillText("GLITCH GOT RHYTHM", WIDTH / 2, HEIGHT / 2 - 170);
 
-  ctx.font = "900 22px Orbitron, Arial";
-  ctx.fillStyle = COLORS.magenta;
-  ctx.shadowColor = COLORS.magenta;
-  ctx.fillText("JUMP THE CLOCK HAND AT 12 O'CLOCK", WIDTH / 2, HEIGHT / 2 - 132);
+  ctx.fillText(
+    "GLITCH GOT RHYTHM",
+    WIDTH / 2,
+    HEIGHT / 2 - 170
+  );
 
-  ctx.font = "900 24px Orbitron, Arial";
-  ctx.fillStyle = COLORS.white;
+  ctx.font =
+    "900 22px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.magenta;
+
+  ctx.shadowColor =
+    COLORS.magenta;
+
+  ctx.fillText(
+    "JUMP THE CLOCK HAND AT 12 O'CLOCK",
+    WIDTH / 2,
+    HEIGHT / 2 - 132
+  );
+
+  ctx.font =
+    "900 24px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.white;
+
   ctx.shadowBlur = 0;
-  ctx.fillText("CLICK / TAP / SPACE TO START", WIDTH / 2, HEIGHT / 2 + 174);
 
-  ctx.font = "700 16px Orbitron, Arial";
-  ctx.fillStyle = COLORS.muted;
-  ctx.fillText("Speed increases by 0.1x every 10 jumps. No speed cap.", WIDTH / 2, HEIGHT / 2 + 204);
+  ctx.fillText(
+    "CLICK / TAP / SPACE TO START",
+    WIDTH / 2,
+    HEIGHT / 2 + 174
+  );
+
+  ctx.font =
+    "700 16px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.muted;
+
+  ctx.fillText(
+    "Speed increases by 0.1x every 10 jumps. No speed cap.",
+    WIDTH / 2,
+    HEIGHT / 2 + 204
+  );
 
   ctx.restore();
 }
@@ -890,27 +1409,66 @@ function drawGameOver(){
   drawOverlay();
 
   ctx.save();
+
   ctx.textAlign = "center";
 
-  ctx.font = "900 58px Orbitron, Arial";
-  ctx.fillStyle = COLORS.magenta;
-  ctx.shadowColor = COLORS.magenta;
+  ctx.font =
+    "900 58px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.magenta;
+
+  ctx.shadowColor =
+    COLORS.magenta;
+
   ctx.shadowBlur = 18;
-  ctx.fillText("BROADCAST LOST", WIDTH / 2, HEIGHT / 2 - 118);
 
-  ctx.font = "900 24px Orbitron, Arial";
-  ctx.fillStyle = COLORS.cyan;
-  ctx.shadowColor = COLORS.cyan;
-  ctx.fillText(`FINAL SCORE: ${score}`, WIDTH / 2, HEIGHT / 2 - 66);
+  ctx.fillText(
+    "BROADCAST LOST",
+    WIDTH / 2,
+    HEIGHT / 2 - 118
+  );
 
-  ctx.fillStyle = COLORS.gold;
-  ctx.shadowColor = COLORS.gold;
-  ctx.fillText(`BEST COMBO: ${bestCombo}`, WIDTH / 2, HEIGHT / 2 - 32);
+  ctx.font =
+    "900 24px Orbitron, Arial";
 
-  ctx.font = "900 22px Orbitron, Arial";
-  ctx.fillStyle = COLORS.white;
+  ctx.fillStyle =
+    COLORS.cyan;
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
+  ctx.fillText(
+    `FINAL SCORE: ${score}`,
+    WIDTH / 2,
+    HEIGHT / 2 - 66
+  );
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.shadowColor =
+    COLORS.gold;
+
+  ctx.fillText(
+    `BEST COMBO: ${bestCombo}`,
+    WIDTH / 2,
+    HEIGHT / 2 - 32
+  );
+
+  ctx.font =
+    "900 22px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.white;
+
   ctx.shadowBlur = 0;
-  ctx.fillText("CLICK / TAP / SPACE TO REBOOT RHYTHM", WIDTH / 2, HEIGHT / 2 + 180);
+
+  ctx.fillText(
+    "CLICK / TAP / SPACE TO REBOOT RHYTHM",
+    WIDTH / 2,
+    HEIGHT / 2 + 180
+  );
 
   ctx.restore();
 }
@@ -918,32 +1476,57 @@ function drawGameOver(){
 function drawOverlay(){
   ctx.save();
 
-  ctx.fillStyle = "rgba(5,7,13,.72)";
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  ctx.fillStyle =
+    "rgba(5,7,13,.72)";
 
-  ctx.strokeStyle = "rgba(0,255,238,.28)";
+  ctx.fillRect(
+    0,
+    0,
+    WIDTH,
+    HEIGHT
+  );
+
+  ctx.strokeStyle =
+    "rgba(0,255,238,.28)";
+
   ctx.lineWidth = 3;
-  ctx.strokeRect(24, 24, WIDTH - 48, HEIGHT - 48);
+
+  ctx.strokeRect(
+    24,
+    24,
+    WIDTH - 48,
+    HEIGHT - 48
+  );
 
   ctx.restore();
 }
 
-window.addEventListener("keydown", event => {
-  if(event.code === "Space" || event.code === "ArrowUp" || event.code === "KeyW"){
+window.addEventListener(
+  "keydown",
+  event => {
+    if(
+      event.code === "Space" ||
+      event.code === "ArrowUp" ||
+      event.code === "KeyW"
+    ){
+      event.preventDefault();
+      attemptJump();
+    }
+
+    if(event.code === "KeyR"){
+      event.preventDefault();
+      restartToTitle();
+    }
+  }
+);
+
+canvas.addEventListener(
+  "pointerdown",
+  event => {
     event.preventDefault();
     attemptJump();
   }
-
-  if(event.code === "KeyR"){
-    event.preventDefault();
-    restartToTitle();
-  }
-});
-
-canvas.addEventListener("pointerdown", event => {
-  event.preventDefault();
-  attemptJump();
-});
+);
 
 loadAssets();
 initBackground();
