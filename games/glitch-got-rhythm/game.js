@@ -21,26 +21,22 @@ const COLORS = {
 const CONFIG = {
   // Gameplay clock center.
   centerX: WIDTH / 2,
-  centerY: HEIGHT / 2 + 58,
+  centerY: HEIGHT / 2 + 68,
 
-  clockRadius: 150,
-
-  // Visual clock-ring placement.
-  // Adjust these if the PNG itself has extra transparent padding.
-  clockRingSize: 275,
-  clockRingOffsetX: -50,
-  clockRingOffsetY: -40,
+  clockRadius: 145,
 
   // Clock hand visual sizing/pivot.
-  clockHandW: 58,
-  clockHandH: 170,
+  clockHandW: 52,
+  clockHandH: 160,
   clockHandPivotOffsetY: 18,
 
   // Speed system.
+  // Starts at 1.0x.
+  // Increases by 0.1x every 10 successful jumps.
+  // No speed cap.
   rotationMsStart: 1450,
   speedStepEvery: 10,
   speedStepAmount: 0.1,
-  speedMax: 1.7,
 
   perfectWindowMs: 45,
   goodWindowMs: 95,
@@ -48,13 +44,13 @@ const CONFIG = {
 
   // Glitch position.
   glitchBaseX: WIDTH / 2,
-  glitchBaseY: HEIGHT / 2 - 112,
+  glitchBaseY: HEIGHT / 2 - 104,
 
   jumpHeight: 96,
   jumpDurationMs: 330,
 
-  glitchW: 138,
-  glitchH: 138,
+  glitchW: 132,
+  glitchH: 132,
 
   fxSize: 120
 };
@@ -89,7 +85,6 @@ const ASSET_PATHS = {
   },
 
   clock: {
-    ring: "assets/clock/clock_ring.png",
     hand: "assets/clock/clock_hand.png",
     marker: "assets/clock/hit_marker_12.png"
   },
@@ -134,7 +129,6 @@ function loadAssets(){
     assets.body[group] = paths.map(path => loadImage(path));
   }
 
-  assets.clock.ring = loadImage(ASSET_PATHS.clock.ring);
   assets.clock.hand = loadImage(ASSET_PATHS.clock.hand);
   assets.clock.marker = loadImage(ASSET_PATHS.clock.marker);
 
@@ -226,12 +220,7 @@ function restartToTitle(){
 
 function updateSpeedFromJumps(){
   const speedLevel = Math.floor(successfulJumps / CONFIG.speedStepEvery);
-
-  speedMultiplier = Math.min(
-    CONFIG.speedMax,
-    1 + speedLevel * CONFIG.speedStepAmount
-  );
-
+  speedMultiplier = 1 + speedLevel * CONFIG.speedStepAmount;
   rotationMs = CONFIG.rotationMsStart / speedMultiplier;
 }
 
@@ -512,32 +501,10 @@ function drawBackground(){
 function drawClockFace(){
   const cx = CONFIG.centerX;
   const cy = CONFIG.centerY;
-  const size = CONFIG.clockRingSize;
 
-  ctx.save();
-
-  ctx.strokeStyle = "rgba(0,255,238,.18)";
-  ctx.lineWidth = 4;
-  ctx.shadowColor = COLORS.cyan;
-  ctx.shadowBlur = 16;
-  ctx.beginPath();
-  ctx.arc(cx, cy, CONFIG.clockRadius, 0, Math.PI * 2);
-  ctx.stroke();
-
-  if(assets.clock.ring && assets.clock.ring.complete){
-    ctx.drawImage(
-      assets.clock.ring,
-      cx - size / 2 + CONFIG.clockRingOffsetX,
-      cy - size / 2 + CONFIG.clockRingOffsetY,
-      size,
-      size
-    );
-  }
-
+  drawGeneratedClockRing(cx, cy);
   drawTwelveMarker();
   drawClockHand();
-
-  ctx.restore();
 
   if(feedbackTimer > 0){
     ctx.save();
@@ -551,13 +518,92 @@ function drawClockFace(){
   }
 }
 
+function drawGeneratedClockRing(cx, cy){
+  const r = CONFIG.clockRadius;
+
+  ctx.save();
+
+  const faceGradient = ctx.createRadialGradient(cx, cy, 20, cx, cy, r);
+  faceGradient.addColorStop(0, "rgba(5,7,13,.10)");
+  faceGradient.addColorStop(0.72, "rgba(5,7,13,.28)");
+  faceGradient.addColorStop(1, "rgba(0,255,238,.07)");
+
+  ctx.fillStyle = faceGradient;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 6, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = "rgba(0,255,238,.52)";
+  ctx.lineWidth = 5;
+  ctx.shadowColor = COLORS.cyan;
+  ctx.shadowBlur = 18;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(255,32,255,.35)";
+  ctx.lineWidth = 3;
+  ctx.shadowColor = COLORS.magenta;
+  ctx.shadowBlur = 12;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 24, 0, Math.PI * 2);
+  ctx.stroke();
+
+  for(let i = 0; i < 12; i++){
+    const angle = (Math.PI * 2 / 12) * i - Math.PI / 2;
+    const isMajor = i % 3 === 0;
+    const isTop = i === 0;
+
+    const inner = r - (isMajor ? 28 : 18);
+    const outer = r + (isTop ? 10 : isMajor ? 4 : 0);
+
+    const x1 = cx + Math.cos(angle) * inner;
+    const y1 = cy + Math.sin(angle) * inner;
+    const x2 = cx + Math.cos(angle) * outer;
+    const y2 = cy + Math.sin(angle) * outer;
+
+    ctx.strokeStyle = isTop ? COLORS.gold : isMajor ? COLORS.magenta : COLORS.cyan;
+    ctx.lineWidth = isTop ? 7 : isMajor ? 5 : 3;
+    ctx.shadowColor = ctx.strokeStyle;
+    ctx.shadowBlur = isTop ? 18 : 10;
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+
+  const topAngle = -Math.PI / 2;
+  const arc = 0.25;
+
+  ctx.strokeStyle = COLORS.gold;
+  ctx.lineWidth = 13;
+  ctx.shadowColor = COLORS.gold;
+  ctx.shadowBlur = 22;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r + 3, topAngle - arc, topAngle + arc);
+  ctx.stroke();
+
+  ctx.fillStyle = COLORS.black;
+  ctx.strokeStyle = COLORS.cyan;
+  ctx.lineWidth = 4;
+  ctx.shadowColor = COLORS.cyan;
+  ctx.shadowBlur = 12;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 15, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.restore();
+}
+
 function drawTwelveMarker(){
   const cx = CONFIG.centerX;
   const cy = CONFIG.centerY;
   const r = CONFIG.clockRadius;
 
   const markerX = cx;
-  const markerY = cy - r - 18;
+  const markerY = cy - r - 20;
 
   if(assets.clock.marker && assets.clock.marker.complete){
     ctx.save();
@@ -835,7 +881,7 @@ function drawTitleScreen(){
 
   ctx.font = "700 16px Orbitron, Arial";
   ctx.fillStyle = COLORS.muted;
-  ctx.fillText("Speed increases by 0.1x every 10 jumps. Max speed: 1.7x.", WIDTH / 2, HEIGHT / 2 + 204);
+  ctx.fillText("Speed increases by 0.1x every 10 jumps. No speed cap.", WIDTH / 2, HEIGHT / 2 + 204);
 
   ctx.restore();
 }
