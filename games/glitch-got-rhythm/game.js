@@ -17,62 +17,67 @@ const COLORS = {
 };
 
 const CONFIG = {
-  bpm: 90,
-  songLengthSeconds: 60,
+  centerX: WIDTH / 2,
+  centerY: HEIGHT / 2 + 48,
 
-  perfectWindow: 55,
-  goodWindow: 115,
-  okayWindow: 185,
+  clockRadius: 145,
+  handLength: 138,
 
-  signalStart: 100,
-  signalMissLoss: 16,
-  signalOkayLoss: 5,
-  signalPerfectGain: 2,
+  // One full rotation timing.
+  // Lower number = faster/harder.
+  rotationMsStart: 1450,
+  rotationMsMin: 820,
+  speedUpPerJump: 10,
 
-  targetX: WIDTH / 2,
-  targetY: HEIGHT - 120,
+  // Timing leeway around 12 o'clock.
+  perfectWindowMs: 45,
+  goodWindowMs: 95,
+  allowedWindowMs: 145,
 
-  glitchX: WIDTH / 2,
-  glitchY: 225
+  // Glitch position at 12 o'clock.
+  glitchBaseX: WIDTH / 2,
+  glitchBaseY: HEIGHT / 2 - 122,
+
+  jumpHeight: 92,
+  jumpDurationMs: 330
 };
 
 let gameState = "title";
-let startedAt = 0;
-let lastTimestamp = 0;
-let currentTime = 0;
-let beatInterval = 60000 / CONFIG.bpm;
-let nextBeatTime = 0;
-let beatIndex = 0;
 
 let score = 0;
 let combo = 0;
 let bestCombo = 0;
-let signal = CONFIG.signalStart;
+let bestScore = Number(localStorage.getItem("glitchGotRhythmBestScore") || 0);
+
+let rotationMs = CONFIG.rotationMsStart;
+let handAngle = -Math.PI / 2;
+let totalAngle = -Math.PI * 0.72;
+let nextTopAngle = 0;
+let jumpedThisCycle = false;
+
+let lastTimestamp = 0;
+let jumpStartTime = -9999;
+let currentTime = 0;
+
 let feedback = "";
 let feedbackColor = COLORS.cyan;
 let feedbackTimer = 0;
-let hitFlash = 0;
 let missFlash = 0;
-let musicEnabled = true;
+let hitFlash = 0;
 
 let particles = [];
 let bgLines = [];
-let glitchMood = "idle";
-let glitchMoodTimer = 0;
-
-const savedBestScore = Number(localStorage.getItem("glitchGotRhythmBestScore") || 0);
-let bestScore = savedBestScore;
 
 function initBackground(){
   bgLines = [];
 
-  for(let i = 0; i < 70; i++){
+  for(let i = 0; i < 80; i++){
     bgLines.push({
       x: Math.random() * WIDTH,
       y: Math.random() * HEIGHT,
       speed: Math.random() * 0.45 + 0.12,
       length: Math.random() * 80 + 35,
-      alpha: Math.random() * 0.4 + 0.1
+      alpha: Math.random() * 0.35 + 0.08
     });
   }
 }
@@ -81,19 +86,21 @@ function resetGame(){
   score = 0;
   combo = 0;
   bestCombo = 0;
-  signal = CONFIG.signalStart;
+
+  rotationMs = CONFIG.rotationMsStart;
+  totalAngle = -Math.PI * 0.72;
+  nextTopAngle = 0;
+  handAngle = -Math.PI / 2 + totalAngle;
+  jumpedThisCycle = false;
+
+  jumpStartTime = -9999;
+  currentTime = performance.now();
+
   feedback = "";
   feedbackTimer = 0;
-  hitFlash = 0;
   missFlash = 0;
+  hitFlash = 0;
   particles = [];
-  glitchMood = "idle";
-  glitchMoodTimer = 0;
-  beatIndex = 0;
-  currentTime = 0;
-  nextBeatTime = beatInterval;
-  startedAt = performance.now();
-  lastTimestamp = startedAt;
 }
 
 function startGame(){
@@ -106,7 +113,7 @@ function restartToTitle(){
   gameState = "title";
 }
 
-function hitBeat(){
+function attemptJump(){
   if(gameState === "title"){
     startGame();
     return;
@@ -121,86 +128,61 @@ function hitBeat(){
     return;
   }
 
-  const distanceToBeat = currentTime - nextBeatTime;
-  const absDistance = Math.abs(distanceToBeat);
+  const diffAngle = Math.abs(totalAngle - nextTopAngle);
+  const anglePerMs = (Math.PI * 2) / rotationMs;
+  const diffMs = diffAngle / anglePerMs;
 
-  if(absDistance <= CONFIG.perfectWindow){
-    registerHit("PERFECT", COLORS.gold, 100, 1.0);
-  }else if(absDistance <= CONFIG.goodWindow){
-    registerHit("GOOD", COLORS.green, 60, 0.7);
-  }else if(absDistance <= CONFIG.okayWindow){
-    if(distanceToBeat < 0){
-      registerOkay("EARLY", COLORS.magenta);
-    }else{
-      registerOkay("LATE", COLORS.purple);
-    }
+  if(diffMs <= CONFIG.perfectWindowMs){
+    registerJump("PERFECT JUMP", COLORS.gold, 125);
+  }else if(diffMs <= CONFIG.goodWindowMs){
+    registerJump("GOOD JUMP", COLORS.green, 75);
+  }else if(diffMs <= CONFIG.allowedWindowMs){
+    registerJump("BARELY", COLORS.magenta, 35);
   }else{
-    registerMiss("DESYNC", COLORS.red);
+    registerMiss("BAD JUMP");
   }
 }
 
-function registerHit(label, color, points, pulsePower){
+function registerJump(label, color, points){
+  if(jumpedThisCycle){
+    return;
+  }
+
+  jumpedThisCycle = true;
+  jumpStartTime = performance.now();
+
   combo++;
   bestCombo = Math.max(bestCombo, combo);
+  score += points + Math.min(combo * 5, 250);
 
-  const comboBonus = Math.min(combo * 3, 150);
-  score += points + comboBonus;
-
-  signal = Math.min(100, signal + CONFIG.signalPerfectGain);
-
-  feedback = label;
-  feedbackColor = color;
-  feedbackTimer = 36;
-  hitFlash = 22;
-
-  glitchMood = "hit";
-  glitchMoodTimer = 24;
-
-  addPulseParticles(CONFIG.targetX, CONFIG.targetY, color, Math.floor(12 * pulsePower));
-}
-
-function registerOkay(label, color){
-  combo = 0;
-  score += 25;
-  signal = Math.max(0, signal - CONFIG.signalOkayLoss);
+  if(score > bestScore){
+    bestScore = score;
+    localStorage.setItem("glitchGotRhythmBestScore", String(bestScore));
+  }
 
   feedback = label;
   feedbackColor = color;
   feedbackTimer = 34;
-  hitFlash = 10;
+  hitFlash = 18;
 
-  glitchMood = "okay";
-  glitchMoodTimer = 18;
+  rotationMs = Math.max(CONFIG.rotationMsMin, rotationMs - CONFIG.speedUpPerJump);
 
-  addPulseParticles(CONFIG.targetX, CONFIG.targetY, color, 6);
-
-  if(signal <= 0){
-    endGame();
-  }
+  spawnBurst(CONFIG.glitchBaseX, CONFIG.glitchBaseY, color, 18);
 }
 
-function registerMiss(label, color){
+function registerMiss(label){
   combo = 0;
-  signal = Math.max(0, signal - CONFIG.signalMissLoss);
-
   feedback = label;
-  feedbackColor = color;
-  feedbackTimer = 42;
-  missFlash = 28;
+  feedbackColor = COLORS.red;
+  feedbackTimer = 45;
+  missFlash = 32;
 
-  glitchMood = "miss";
-  glitchMoodTimer = 28;
-
-  addPulseParticles(CONFIG.targetX, CONFIG.targetY, color, 12);
-
-  if(signal <= 0){
-    endGame();
-  }
+  spawnBurst(CONFIG.glitchBaseX, CONFIG.glitchBaseY, COLORS.red, 26);
+  endGame();
 }
 
 function endGame(){
   gameState = "gameover";
-  glitchMood = "gameover";
 
   if(score > bestScore){
     bestScore = score;
@@ -211,6 +193,7 @@ function endGame(){
 function update(timestamp){
   const delta = timestamp - lastTimestamp;
   lastTimestamp = timestamp;
+  currentTime = timestamp;
 
   updateBackground();
   updateParticles();
@@ -227,30 +210,27 @@ function update(timestamp){
     missFlash--;
   }
 
-  if(glitchMoodTimer > 0){
-    glitchMoodTimer--;
-  }else if(gameState === "playing"){
-    glitchMood = "idle";
-  }
-
   if(gameState !== "playing"){
     return;
   }
 
-  currentTime = timestamp - startedAt;
+  const anglePerMs = (Math.PI * 2) / rotationMs;
 
-  while(currentTime > nextBeatTime + CONFIG.okayWindow){
-    registerMiss("MISS", COLORS.red);
-    beatIndex++;
-    nextBeatTime += beatInterval;
+  totalAngle += anglePerMs * delta;
+  handAngle = -Math.PI / 2 + totalAngle;
 
-    if(gameState !== "playing"){
-      break;
-    }
+  const toleranceAngle = anglePerMs * CONFIG.allowedWindowMs;
+
+  // If the hand passed 12 o'clock and the player did not jump in time, game over.
+  if(totalAngle > nextTopAngle + toleranceAngle && !jumpedThisCycle){
+    registerMiss("MISSED BEAT");
+    return;
   }
 
-  if(currentTime >= CONFIG.songLengthSeconds * 1000){
-    endGame();
+  // Once the timing window fully passes, move to the next 12 o'clock crossing.
+  if(totalAngle > nextTopAngle + toleranceAngle && jumpedThisCycle){
+    nextTopAngle += Math.PI * 2;
+    jumpedThisCycle = false;
   }
 }
 
@@ -276,7 +256,7 @@ function updateParticles(){
   particles = particles.filter(p => p.life > 0);
 }
 
-function addPulseParticles(x, y, color, count){
+function spawnBurst(x, y, color, count){
   for(let i = 0; i < count; i++){
     const angle = Math.random() * Math.PI * 2;
     const speed = Math.random() * 4 + 1;
@@ -286,7 +266,7 @@ function addPulseParticles(x, y, color, count){
       y,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
-      life: Math.random() * 20 + 18,
+      life: Math.random() * 18 + 16,
       size: Math.random() * 5 + 2,
       color
     });
@@ -295,7 +275,7 @@ function addPulseParticles(x, y, color, count){
 
 function draw(){
   drawBackground();
-  drawRhythmStage();
+  drawClockFace();
   drawGlitch();
   drawParticles();
   drawHud();
@@ -341,13 +321,13 @@ function drawBackground(){
     ctx.stroke();
   });
 
-  ctx.globalAlpha = 0.18;
+  ctx.globalAlpha = 0.13;
   ctx.strokeStyle = COLORS.magenta;
 
-  for(let y = 40; y < HEIGHT; y += 60){
+  for(let y = 40; y < HEIGHT; y += 58){
     ctx.beginPath();
-    ctx.moveTo(0, y + Math.sin((performance.now() / 500) + y) * 3);
-    ctx.lineTo(WIDTH, y + Math.sin((performance.now() / 500) + y) * 3);
+    ctx.moveTo(0, y);
+    ctx.lineTo(WIDTH, y);
     ctx.stroke();
   }
 
@@ -362,146 +342,192 @@ function drawBackground(){
   }
 }
 
-function drawRhythmStage(){
-  const targetX = CONFIG.targetX;
-  const targetY = CONFIG.targetY;
-
-  let beatProgress = 0;
-
-  if(gameState === "playing"){
-    beatProgress = 1 - Math.min(1, Math.abs(nextBeatTime - currentTime) / beatInterval);
-  }
-
-  const ringRadius = 160 - beatProgress * 105;
-  const ringAlpha = gameState === "playing" ? 0.35 + beatProgress * 0.55 : 0.35;
+function drawClockFace(){
+  const cx = CONFIG.centerX;
+  const cy = CONFIG.centerY;
+  const r = CONFIG.clockRadius;
 
   ctx.save();
 
-  ctx.strokeStyle = "rgba(255,255,255,.10)";
-  ctx.lineWidth = 2;
+  // Clock outer glow
+  ctx.strokeStyle = "rgba(0,255,238,.32)";
+  ctx.lineWidth = 5;
+  ctx.shadowColor = COLORS.cyan;
+  ctx.shadowBlur = 16;
   ctx.beginPath();
-  ctx.arc(targetX, targetY, 68, 0, Math.PI * 2);
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.stroke();
 
+  // Inner ring
+  ctx.strokeStyle = "rgba(255,32,255,.20)";
+  ctx.lineWidth = 2;
+  ctx.shadowColor = COLORS.magenta;
+  ctx.shadowBlur = 10;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 26, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Tick marks
+  for(let i = 0; i < 12; i++){
+    const a = (Math.PI * 2 / 12) * i - Math.PI / 2;
+    const isMain = i % 3 === 0;
+
+    const x1 = cx + Math.cos(a) * (r - (isMain ? 18 : 12));
+    const y1 = cy + Math.sin(a) * (r - (isMain ? 18 : 12));
+    const x2 = cx + Math.cos(a) * (r + (isMain ? 12 : 6));
+    const y2 = cy + Math.sin(a) * (r + (isMain ? 12 : 6));
+
+    ctx.strokeStyle = i === 0 ? COLORS.gold : isMain ? COLORS.magenta : COLORS.cyan;
+    ctx.lineWidth = i === 0 ? 6 : isMain ? 4 : 2;
+    ctx.shadowColor = ctx.strokeStyle;
+    ctx.shadowBlur = i === 0 ? 18 : 8;
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+
+  // 12 o'clock danger/target zone
+  const topAngle = -Math.PI / 2;
+  const arc = 0.22;
+
+  ctx.strokeStyle = COLORS.gold;
+  ctx.lineWidth = 12;
+  ctx.shadowColor = COLORS.gold;
+  ctx.shadowBlur = 22;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r + 2, topAngle - arc, topAngle + arc);
+  ctx.stroke();
+
+  // Hand
+  const handX = cx + Math.cos(handAngle) * CONFIG.handLength;
+  const handY = cy + Math.sin(handAngle) * CONFIG.handLength;
+
+  ctx.strokeStyle = hitFlash > 0 ? feedbackColor : COLORS.white;
+  ctx.lineWidth = 7;
+  ctx.shadowColor = hitFlash > 0 ? feedbackColor : COLORS.cyan;
+  ctx.shadowBlur = 18;
+
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(handX, handY);
+  ctx.stroke();
+
+  ctx.fillStyle = hitFlash > 0 ? feedbackColor : COLORS.cyan;
+  ctx.beginPath();
+  ctx.arc(handX, handY, 9, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Center hub
+  ctx.fillStyle = COLORS.black;
   ctx.strokeStyle = COLORS.cyan;
   ctx.lineWidth = 4;
   ctx.shadowColor = COLORS.cyan;
   ctx.shadowBlur = 12;
   ctx.beginPath();
-  ctx.arc(targetX, targetY, 48, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 15, 0, Math.PI * 2);
+  ctx.fill();
   ctx.stroke();
-
-  if(gameState === "playing"){
-    ctx.globalAlpha = ringAlpha;
-    ctx.strokeStyle = feedbackTimer > 0 ? feedbackColor : COLORS.magenta;
-    ctx.shadowColor = feedbackTimer > 0 ? feedbackColor : COLORS.magenta;
-    ctx.shadowBlur = 18;
-    ctx.lineWidth = 5;
-    ctx.beginPath();
-    ctx.arc(targetX, targetY, ringRadius, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-
-  if(hitFlash > 0){
-    ctx.globalAlpha = hitFlash / 22;
-    ctx.fillStyle = feedbackColor;
-    ctx.beginPath();
-    ctx.arc(targetX, targetY, 58 + (22 - hitFlash) * 3, 0, Math.PI * 2);
-    ctx.fill();
-  }
 
   ctx.restore();
 
   if(feedbackTimer > 0){
     ctx.save();
     ctx.textAlign = "center";
-    ctx.font = "900 42px Orbitron, Arial";
+    ctx.font = "900 38px Orbitron, Arial";
     ctx.fillStyle = feedbackColor;
     ctx.shadowColor = feedbackColor;
     ctx.shadowBlur = 18;
-    ctx.fillText(feedback, targetX, targetY - 90);
+    ctx.fillText(feedback, cx, cy - r - 52);
     ctx.restore();
   }
 }
 
 function drawGlitch(){
-  const x = CONFIG.glitchX;
-  const y = CONFIG.glitchY;
+  const baseX = CONFIG.glitchBaseX;
+  const baseY = CONFIG.glitchBaseY;
 
-  const bop = Math.sin(performance.now() / 120) * 5;
-  const moodOffset = glitchMood === "hit" ? -14 : glitchMood === "miss" ? 10 : 0;
-  const scale = glitchMood === "hit" ? 1.12 : glitchMood === "miss" ? 0.95 : 1;
-  const bodyY = y + bop + moodOffset;
+  const elapsedJump = currentTime - jumpStartTime;
+  let jumpOffset = 0;
+
+  if(elapsedJump >= 0 && elapsedJump <= CONFIG.jumpDurationMs){
+    const t = elapsedJump / CONFIG.jumpDurationMs;
+    jumpOffset = Math.sin(t * Math.PI) * CONFIG.jumpHeight;
+  }
+
+  const x = baseX;
+  const y = baseY - jumpOffset;
+  const mood = jumpOffset > 5 ? "jump" : gameState === "gameover" ? "dead" : "idle";
 
   ctx.save();
-  ctx.translate(x, bodyY);
-  ctx.scale(scale, scale);
-
+  ctx.translate(x, y);
   ctx.imageSmoothingEnabled = false;
 
-  // Pixel Glitch shadow
+  // Shadow on 12 o'clock platform
   ctx.fillStyle = "rgba(0,0,0,.35)";
-  ctx.fillRect(-54, 72, 108, 14);
+  ctx.fillRect(-48, 63 + jumpOffset, 96, 10);
 
   // Ears
-  ctx.fillStyle = "#101018";
-  ctx.fillRect(-70, -58, 34, 72);
-  ctx.fillRect(36, -58, 34, 72);
+  ctx.fillStyle = "#090912";
+  ctx.fillRect(-58, -58, 24, 58);
+  ctx.fillRect(34, -58, 24, 58);
 
-  ctx.fillStyle = "#251833";
-  ctx.fillRect(-60, -45, 16, 44);
-  ctx.fillRect(44, -45, 16, 44);
+  ctx.fillStyle = "#241531";
+  ctx.fillRect(-51, -47, 10, 36);
+  ctx.fillRect(41, -47, 10, 36);
 
-  // Head/body
-  ctx.fillStyle = "#08080d";
-  ctx.fillRect(-52, -38, 104, 96);
-  ctx.fillRect(-38, 50, 76, 54);
+  // Body/head
+  ctx.fillStyle = "#07070d";
+  ctx.fillRect(-45, -34, 90, 82);
+  ctx.fillRect(-31, 38, 62, 38);
 
-  // Glitch edge pixels
-  ctx.fillStyle = COLORS.purple;
-  ctx.fillRect(-58, -18, 8, 24);
-  ctx.fillRect(50, 12, 8, 24);
-
+  // Pixel accents
   ctx.fillStyle = COLORS.cyan;
-  ctx.fillRect(-44, -44, 24, 8);
-  ctx.fillRect(20, 64, 28, 8);
+  ctx.fillRect(-36, -42, 22, 7);
+  ctx.fillRect(12, 54, 28, 7);
 
   ctx.fillStyle = COLORS.magenta;
-  ctx.fillRect(28, -44, 20, 8);
-  ctx.fillRect(-48, 72, 24, 8);
+  ctx.fillRect(18, -42, 22, 7);
+  ctx.fillRect(-42, 54, 22, 7);
+
+  ctx.fillStyle = COLORS.purple;
+  ctx.fillRect(-51, -10, 7, 22);
+  ctx.fillRect(44, 5, 7, 22);
 
   // Eyes
-  ctx.fillStyle = COLORS.cyan;
-  ctx.fillRect(-26, -8, 18, 18);
-
-  ctx.fillStyle = COLORS.magenta;
-  ctx.fillRect(10, -8, 18, 18);
-
-  if(glitchMood === "miss" || glitchMood === "gameover"){
+  if(mood === "dead"){
     ctx.fillStyle = COLORS.red;
-    ctx.fillRect(-26, -8, 18, 6);
-    ctx.fillRect(10, -8, 18, 6);
+    ctx.fillRect(-24, -6, 18, 6);
+    ctx.fillRect(8, -6, 18, 6);
+  }else{
+    ctx.fillStyle = COLORS.cyan;
+    ctx.fillRect(-24, -8, 17, 17);
+
+    ctx.fillStyle = COLORS.magenta;
+    ctx.fillRect(8, -8, 17, 17);
   }
 
   // Mouth
   ctx.fillStyle = COLORS.white;
 
-  if(glitchMood === "miss"){
-    ctx.fillRect(-10, 30, 20, 20);
-  }else if(glitchMood === "hit"){
-    ctx.fillRect(-20, 30, 40, 8);
+  if(mood === "jump"){
+    ctx.fillRect(-18, 28, 36, 8);
+  }else if(mood === "dead"){
+    ctx.fillRect(-10, 26, 20, 20);
   }else{
-    ctx.fillRect(-14, 32, 28, 6);
+    ctx.fillRect(-13, 30, 26, 6);
   }
 
   // Arms
   ctx.fillStyle = "#090912";
-  ctx.fillRect(-76, 24, 28, 14);
-  ctx.fillRect(48, 24, 28, 14);
 
-  if(glitchMood === "hit"){
-    ctx.fillRect(-86, 4, 14, 34);
-    ctx.fillRect(72, 4, 14, 34);
+  if(mood === "jump"){
+    ctx.fillRect(-67, -4, 16, 38);
+    ctx.fillRect(51, -4, 16, 38);
+  }else{
+    ctx.fillRect(-68, 20, 24, 13);
+    ctx.fillRect(44, 20, 24, 13);
   }
 
   ctx.restore();
@@ -509,7 +535,7 @@ function drawGlitch(){
 
 function drawParticles(){
   particles.forEach(p => {
-    ctx.globalAlpha = p.life / 38;
+    ctx.globalAlpha = p.life / 34;
     ctx.fillStyle = p.color;
     ctx.fillRect(p.x, p.y, p.size, p.size);
   });
@@ -524,52 +550,20 @@ function drawHud(){
   ctx.fillStyle = COLORS.cyan;
   ctx.shadowColor = COLORS.cyan;
   ctx.shadowBlur = 10;
-  ctx.fillText(`SCORE: ${score}`, 26, 42);
+  ctx.fillText(`SCORE: ${score}`, 28, 42);
 
   ctx.fillStyle = COLORS.magenta;
   ctx.shadowColor = COLORS.magenta;
-  ctx.fillText(`COMBO: ${combo}`, 26, 74);
+  ctx.fillText(`COMBO: ${combo}`, 28, 74);
 
   ctx.fillStyle = COLORS.gold;
   ctx.shadowColor = COLORS.gold;
-  ctx.fillText(`BEST: ${bestScore}`, 26, 106);
+  ctx.fillText(`BEST: ${bestScore}`, 28, 106);
 
-  drawSignalMeter();
-
-  ctx.restore();
-}
-
-function drawSignalMeter(){
-  const x = WIDTH - 250;
-  const y = 34;
-  const w = 210;
-  const h = 22;
-
-  ctx.save();
-
-  ctx.font = "900 14px Orbitron, Arial";
   ctx.fillStyle = COLORS.white;
-  ctx.shadowBlur = 0;
-  ctx.fillText("SIGNAL", x, y - 8);
-
-  ctx.strokeStyle = COLORS.cyan;
-  ctx.lineWidth = 2;
-  ctx.strokeRect(x, y, w, h);
-
-  const fillW = Math.max(0, (signal / 100) * w);
-
-  let fillColor = COLORS.green;
-  if(signal < 55){
-    fillColor = COLORS.gold;
-  }
-  if(signal < 28){
-    fillColor = COLORS.red;
-  }
-
-  ctx.fillStyle = fillColor;
-  ctx.shadowColor = fillColor;
-  ctx.shadowBlur = 12;
-  ctx.fillRect(x, y, fillW, h);
+  ctx.shadowColor = COLORS.white;
+  ctx.font = "900 15px Orbitron, Arial";
+  ctx.fillText(`SPEED: ${(CONFIG.rotationMsStart / rotationMs).toFixed(2)}x`, WIDTH - 190, 42);
 
   ctx.restore();
 }
@@ -580,26 +574,25 @@ function drawTitleScreen(){
   ctx.save();
   ctx.textAlign = "center";
 
-  ctx.font = "900 62px Orbitron, Arial";
+  ctx.font = "900 56px Orbitron, Arial";
   ctx.fillStyle = COLORS.cyan;
   ctx.shadowColor = COLORS.cyan;
   ctx.shadowBlur = 18;
-  ctx.fillText("GLITCH GOT RHYTHM", WIDTH / 2, HEIGHT / 2 - 98);
+  ctx.fillText("GLITCH GOT RHYTHM", WIDTH / 2, HEIGHT / 2 - 170);
 
   ctx.font = "900 22px Orbitron, Arial";
   ctx.fillStyle = COLORS.magenta;
   ctx.shadowColor = COLORS.magenta;
-  ctx.fillText("KEEP THE SIGNAL SYNCED", WIDTH / 2, HEIGHT / 2 - 48);
+  ctx.fillText("JUMP THE CLOCK HAND AT 12 O'CLOCK", WIDTH / 2, HEIGHT / 2 - 132);
 
   ctx.font = "900 24px Orbitron, Arial";
   ctx.fillStyle = COLORS.white;
   ctx.shadowBlur = 0;
-  ctx.fillText("CLICK / TAP / SPACE ON THE BEAT", WIDTH / 2, HEIGHT / 2 + 18);
+  ctx.fillText("CLICK / TAP / SPACE TO START", WIDTH / 2, HEIGHT / 2 + 174);
 
   ctx.font = "700 16px Orbitron, Arial";
   ctx.fillStyle = COLORS.muted;
-  ctx.fillText("Perfect timing builds combo. Misses break the broadcast.", WIDTH / 2, HEIGHT / 2 + 54);
-  ctx.fillText("R = Restart | M = Music Placeholder", WIDTH / 2, HEIGHT / 2 + 82);
+  ctx.fillText("Miss the beat and the broadcast dies.", WIDTH / 2, HEIGHT / 2 + 204);
 
   ctx.restore();
 }
@@ -614,21 +607,21 @@ function drawGameOver(){
   ctx.fillStyle = COLORS.magenta;
   ctx.shadowColor = COLORS.magenta;
   ctx.shadowBlur = 18;
-  ctx.fillText("BROADCAST LOST", WIDTH / 2, HEIGHT / 2 - 78);
+  ctx.fillText("BROADCAST LOST", WIDTH / 2, HEIGHT / 2 - 118);
 
   ctx.font = "900 24px Orbitron, Arial";
   ctx.fillStyle = COLORS.cyan;
   ctx.shadowColor = COLORS.cyan;
-  ctx.fillText(`FINAL SCORE: ${score}`, WIDTH / 2, HEIGHT / 2 - 28);
+  ctx.fillText(`FINAL SCORE: ${score}`, WIDTH / 2, HEIGHT / 2 - 66);
 
   ctx.fillStyle = COLORS.gold;
   ctx.shadowColor = COLORS.gold;
-  ctx.fillText(`BEST COMBO: ${bestCombo}`, WIDTH / 2, HEIGHT / 2 + 4);
+  ctx.fillText(`BEST COMBO: ${bestCombo}`, WIDTH / 2, HEIGHT / 2 - 32);
 
   ctx.font = "900 22px Orbitron, Arial";
   ctx.fillStyle = COLORS.white;
   ctx.shadowBlur = 0;
-  ctx.fillText("CLICK / TAP / SPACE TO REBOOT RHYTHM", WIDTH / 2, HEIGHT / 2 + 58);
+  ctx.fillText("CLICK / TAP / SPACE TO REBOOT RHYTHM", WIDTH / 2, HEIGHT / 2 + 180);
 
   ctx.restore();
 }
@@ -636,7 +629,7 @@ function drawGameOver(){
 function drawOverlay(){
   ctx.save();
 
-  ctx.fillStyle = "rgba(5,7,13,.74)";
+  ctx.fillStyle = "rgba(5,7,13,.72)";
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
   ctx.strokeStyle = "rgba(0,255,238,.28)";
@@ -649,23 +642,18 @@ function drawOverlay(){
 window.addEventListener("keydown", event => {
   if(event.code === "Space" || event.code === "ArrowUp" || event.code === "KeyW"){
     event.preventDefault();
-    hitBeat();
+    attemptJump();
   }
 
   if(event.code === "KeyR"){
     event.preventDefault();
     restartToTitle();
   }
-
-  if(event.code === "KeyM"){
-    event.preventDefault();
-    musicEnabled = !musicEnabled;
-  }
 });
 
 canvas.addEventListener("pointerdown", event => {
   event.preventDefault();
-  hitBeat();
+  attemptJump();
 });
 
 initBackground();
