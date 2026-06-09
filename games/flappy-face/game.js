@@ -38,30 +38,13 @@ const CONFIG = {
   defaultMusicLevel: 2,
   defaultSfxLevel: 8,
 
-  // Music level 10 is half of the old browser maximum.
-  musicMaxVolume: 0.5,
-
-  // SFX level 5 equals the old maximum.
-  // SFX level 10 is amplified to 2x.
-  sfxMaxGain: 2.0,
-
   tacoEveryNGates: 5,
   tacoBonusPoints: 5,
   tacoWidth: 82,
   tacoHeight: 54,
   tacoCollisionRadius: 25,
   tacoBobAmount: 7,
-  tacoBobSpeed: 0.075,
-
-  billboardUnlockTacos: 10,
-  billboardEveryGates: 10,
-  billboardWidth: 250,
-  billboardHeight: 200,
-  billboardY: 205,
-  billboardParallax: 0.62,
-
-  // Bottom area of bg_neon_city.png containing the railing.
-  railingSourceStartRatio: 0.77
+  tacoBobSpeed: 0.075
 };
 
 let gameState = "title";
@@ -78,19 +61,14 @@ let bestTacos = Number(
 );
 
 let gateSequence = 0;
-let totalGatesPassed = 0;
-let gatesSinceBillboardUnlock = 0;
 
-let billboardUnlocked = false;
-let billboardInstances = [];
+let player;
+let obstacles;
+let particles;
+let stars;
 
 let tacoMessage = "";
 let tacoMessageTimer = 0;
-
-let player;
-let obstacles = [];
-let particles = [];
-let stars = [];
 
 let musicStarted = false;
 let soundPanelOpen = false;
@@ -102,27 +80,20 @@ function clampSoundLevel(value){
 
   return Math.max(
     0,
-    Math.min(
-      10,
-      Math.round(value)
-    )
+    Math.min(10, Math.round(value))
   );
 }
 
 let musicLevel = clampSoundLevel(
   Number(
-    localStorage.getItem(
-      "flappyFaceMusicLevel"
-    ) ??
+    localStorage.getItem("flappyFaceMusicLevel") ??
     CONFIG.defaultMusicLevel
   )
 );
 
 let sfxLevel = clampSoundLevel(
   Number(
-    localStorage.getItem(
-      "flappyFaceSfxLevel"
-    ) ??
+    localStorage.getItem("flappyFaceSfxLevel") ??
     CONFIG.defaultSfxLevel
   )
 );
@@ -134,126 +105,20 @@ let previousMusicLevel =
 
 /* -------------------- ASSETS -------------------- */
 
-function loadImage(
-  src,
-  onLoad,
-  onError
-){
-  const image = new Image();
+const faceImage = new Image();
+faceImage.src = "assets/player_face.png";
 
-  image.onload = onLoad;
-  image.onerror = onError;
-  image.src = src;
+const bgImage = new Image();
+bgImage.src = "assets/bg_neon_city.png";
 
-  return image;
-}
+const pipeTopImage = new Image();
+pipeTopImage.src = "assets/pipe_top.png";
 
-let faceLoaded = false;
-let faceFailed = false;
+const pipeBottomImage = new Image();
+pipeBottomImage.src = "assets/pipe_bottom.png";
 
-let bgLoaded = false;
-let bgFailed = false;
-
-let pipeTopLoaded = false;
-let pipeBottomLoaded = false;
-
-let tacoLoaded = false;
-let tacoFailed = false;
-
-let billboardLoaded = false;
-let billboardFailed = false;
-
-const faceImage = loadImage(
-  "assets/player_face.png",
-
-  () => {
-    faceLoaded = true;
-  },
-
-  () => {
-    faceFailed = true;
-
-    console.warn(
-      "Face failed to load."
-    );
-  }
-);
-
-const bgImage = loadImage(
-  "assets/bg_neon_city.png",
-
-  () => {
-    bgLoaded = true;
-  },
-
-  () => {
-    bgFailed = true;
-
-    console.warn(
-      "Background failed to load."
-    );
-  }
-);
-
-const pipeTopImage = loadImage(
-  "assets/pipe_top.png",
-
-  () => {
-    pipeTopLoaded = true;
-  },
-
-  () => {
-    console.warn(
-      "Top pipe failed to load."
-    );
-  }
-);
-
-const pipeBottomImage = loadImage(
-  "assets/pipe_bottom.png",
-
-  () => {
-    pipeBottomLoaded = true;
-  },
-
-  () => {
-    console.warn(
-      "Bottom pipe failed to load."
-    );
-  }
-);
-
-const tacoImage = loadImage(
-  "assets/taco_collectible.png",
-
-  () => {
-    tacoLoaded = true;
-  },
-
-  () => {
-    tacoFailed = true;
-
-    console.warn(
-      "Taco failed to load."
-    );
-  }
-);
-
-const billboardImage = loadImage(
-  "assets/sheetz_billboard.png",
-
-  () => {
-    billboardLoaded = true;
-  },
-
-  () => {
-    billboardFailed = true;
-
-    console.warn(
-      "Billboard failed to load."
-    );
-  }
-);
+const tacoImage = new Image();
+tacoImage.src = "assets/taco_collectible.png";
 
 const music = new Audio(
   "assets/flappy_face_theme.wav"
@@ -268,92 +133,95 @@ const tacoCrunch = new Audio(
 
 tacoCrunch.preload = "auto";
 
+let faceLoaded = false;
+let faceFailed = false;
+
+let bgLoaded = false;
+let bgFailed = false;
+
+let pipeTopLoaded = false;
+let pipeBottomLoaded = false;
+
+let tacoLoaded = false;
+let tacoFailed = false;
+
+faceImage.onload = () => {
+  faceLoaded = true;
+};
+
+faceImage.onerror = () => {
+  faceFailed = true;
+  console.log(
+    "Face failed to load:",
+    faceImage.src
+  );
+};
+
+bgImage.onload = () => {
+  bgLoaded = true;
+};
+
+bgImage.onerror = () => {
+  bgFailed = true;
+  console.log(
+    "Background failed to load:",
+    bgImage.src
+  );
+};
+
+pipeTopImage.onload = () => {
+  pipeTopLoaded = true;
+};
+
+pipeTopImage.onerror = () => {
+  console.log(
+    "Top pipe failed to load:",
+    pipeTopImage.src
+  );
+};
+
+pipeBottomImage.onload = () => {
+  pipeBottomLoaded = true;
+};
+
+pipeBottomImage.onerror = () => {
+  console.log(
+    "Bottom pipe failed to load:",
+    pipeBottomImage.src
+  );
+};
+
+tacoImage.onload = () => {
+  tacoLoaded = true;
+};
+
+tacoImage.onerror = () => {
+  tacoFailed = true;
+  console.log(
+    "Taco failed to load:",
+    tacoImage.src
+  );
+};
+
 music.onerror = () => {
-  console.warn(
-    "Music failed to load."
+  console.log(
+    "Music failed to load:",
+    music.src
   );
 };
 
 tacoCrunch.onerror = () => {
-  console.warn(
-    "Taco crunch failed to load."
+  console.log(
+    "Taco crunch failed to load:",
+    tacoCrunch.src
   );
 };
 
 /* -------------------- SOUND -------------------- */
 
-let sfxAudioContext = null;
-let tacoCrunchSource = null;
-let tacoCrunchGain = null;
-
-function initializeSfxAudio(){
-  if(sfxAudioContext){
-    return;
-  }
-
-  const AudioContextClass =
-    window.AudioContext ||
-    window.webkitAudioContext;
-
-  if(!AudioContextClass){
-    console.warn(
-      "Web Audio is not supported; using normal SFX volume."
-    );
-
-    return;
-  }
-
-  sfxAudioContext =
-    new AudioContextClass();
-
-  tacoCrunchSource =
-    sfxAudioContext.createMediaElementSource(
-      tacoCrunch
-    );
-
-  tacoCrunchGain =
-    sfxAudioContext.createGain();
-
-  tacoCrunchSource.connect(
-    tacoCrunchGain
-  );
-
-  tacoCrunchGain.connect(
-    sfxAudioContext.destination
-  );
-
-  updateSfxGain();
-}
-
-function updateSfxGain(){
-  const gain =
-    (
-      sfxLevel /
-      10
-    ) *
-    CONFIG.sfxMaxGain;
-
-  if(tacoCrunchGain){
-    tacoCrunchGain.gain.value =
-      gain;
-  }else{
-    tacoCrunch.volume =
-      Math.min(
-        1,
-        gain
-      );
-  }
-}
-
 function applySoundLevels(){
-  music.volume =
-    (
-      musicLevel /
-      10
-    ) *
-    CONFIG.musicMaxVolume;
-
-  updateSfxGain();
+  music.volume = musicLevel / 10;
+  tacoCrunch.volume = sfxLevel / 10;
 }
 
 function saveSoundLevels(){
@@ -369,14 +237,12 @@ function saveSoundLevels(){
 }
 
 function setMusicLevel(value){
-  musicLevel =
-    clampSoundLevel(
-      Number(value)
-    );
+  musicLevel = clampSoundLevel(
+    Number(value)
+  );
 
   if(musicLevel > 0){
-    previousMusicLevel =
-      musicLevel;
+    previousMusicLevel = musicLevel;
   }
 
   applySoundLevels();
@@ -391,24 +257,21 @@ function setMusicLevel(value){
   if(gameState === "playing"){
     musicStarted = true;
 
-    music.play().catch(
-      error => {
-        console.warn(
-          "Music resume failed:",
-          error
-        );
+    music.play().catch(error => {
+      console.log(
+        "Music resume failed:",
+        error
+      );
 
-        musicStarted = false;
-      }
-    );
+      musicStarted = false;
+    });
   }
 }
 
 function setSfxLevel(value){
-  sfxLevel =
-    clampSoundLevel(
-      Number(value)
-    );
+  sfxLevel = clampSoundLevel(
+    Number(value)
+  );
 
   applySoundLevels();
   saveSoundLevels();
@@ -425,30 +288,27 @@ function startMusic(){
 
   musicStarted = true;
 
-  music.play().catch(
-    error => {
-      console.warn(
-        "Music play failed:",
-        error
-      );
+  music.play().catch(error => {
+    console.log(
+      "Music play blocked or failed:",
+      error
+    );
 
-      musicStarted = false;
-    }
-  );
+    musicStarted = false;
+  });
 }
 
 function toggleMusic(){
   if(musicLevel > 0){
-    previousMusicLevel =
-      musicLevel;
-
+    previousMusicLevel = musicLevel;
     setMusicLevel(0);
-  }else{
-    setMusicLevel(
-      previousMusicLevel ||
-      CONFIG.defaultMusicLevel
-    );
+    return;
   }
+
+  setMusicLevel(
+    previousMusicLevel ||
+    CONFIG.defaultMusicLevel
+  );
 }
 
 function playTacoCrunch(){
@@ -456,46 +316,22 @@ function playTacoCrunch(){
     return;
   }
 
-  initializeSfxAudio();
-  updateSfxGain();
-
-  if(
-    sfxAudioContext &&
-    sfxAudioContext.state ===
-      "suspended"
-  ){
-    sfxAudioContext
-      .resume()
-      .catch(
-        error => {
-          console.warn(
-            "Audio context resume failed:",
-            error
-          );
-        }
-      );
-  }
-
   tacoCrunch.pause();
   tacoCrunch.currentTime = 0;
+  tacoCrunch.volume = sfxLevel / 10;
 
-  tacoCrunch.play().catch(
-    error => {
-      console.warn(
-        "Taco crunch play failed:",
-        error
-      );
-    }
-  );
+  tacoCrunch.play().catch(error => {
+    console.log(
+      "Taco crunch play failed:",
+      error
+    );
+  });
 }
 
 /* -------------------- SOUND PANEL -------------------- */
 
 function createSoundSettings(){
-  const style =
-    document.createElement(
-      "style"
-    );
+  const style = document.createElement("style");
 
   style.textContent = `
     .ff-sound-button{
@@ -517,6 +353,7 @@ function createSoundSettings(){
     .ff-sound-button:hover{
       color:#FF20FF;
       border-color:#FF20FF;
+      box-shadow:0 0 16px rgba(255,32,255,.32);
     }
 
     .ff-sound-panel{
@@ -530,7 +367,9 @@ function createSoundSettings(){
       border-radius:14px;
       background:rgba(5,7,13,.98);
       color:#EEEEEE;
-      box-shadow:0 0 24px rgba(255,32,255,.28);
+      box-shadow:
+        0 0 24px rgba(255,32,255,.28),
+        0 0 20px rgba(0,255,238,.12);
       font-family:Orbitron,Arial,sans-serif;
       display:none;
     }
@@ -544,6 +383,7 @@ function createSoundSettings(){
       color:#00FFEE;
       font-size:18px;
       text-align:center;
+      letter-spacing:.8px;
     }
 
     .ff-sound-row{
@@ -553,7 +393,9 @@ function createSoundSettings(){
     .ff-sound-label{
       display:flex;
       justify-content:space-between;
+      gap:12px;
       margin-bottom:8px;
+      color:#EEEEEE;
       font-size:13px;
       font-weight:900;
     }
@@ -586,56 +428,51 @@ function createSoundSettings(){
       font:900 12px Orbitron,Arial,sans-serif;
       cursor:pointer;
     }
+
+    .ff-sound-close:hover{
+      color:#00FFEE;
+      border-color:#00FFEE;
+    }
   `;
 
-  document.head.appendChild(
-    style
-  );
+  document.head.appendChild(style);
 
-  const button =
-    document.createElement(
-      "button"
-    );
+  const soundButton =
+    document.createElement("button");
 
-  button.id =
+  soundButton.id =
     "ffSoundButton";
 
-  button.type =
+  soundButton.type =
     "button";
 
-  button.className =
+  soundButton.className =
     "ff-sound-button";
 
-  button.textContent =
+  soundButton.textContent =
     "SOUND";
 
-  const panel =
-    document.createElement(
-      "section"
-    );
+  const soundPanel =
+    document.createElement("section");
 
-  panel.id =
+  soundPanel.id =
     "ffSoundPanel";
 
-  panel.className =
+  soundPanel.className =
     "ff-sound-panel";
 
-  panel.setAttribute(
+  soundPanel.setAttribute(
     "aria-hidden",
     "true"
   );
 
-  panel.innerHTML = `
+  soundPanel.innerHTML = `
     <h2>SOUND SETTINGS</h2>
 
     <div class="ff-sound-row">
       <div class="ff-sound-label">
         <span>MUSIC</span>
-
-        <span
-          id="ffMusicValue"
-          class="ff-sound-value"
-        >
+        <span id="ffMusicValue" class="ff-sound-value">
           ${musicLevel}
         </span>
       </div>
@@ -659,11 +496,7 @@ function createSoundSettings(){
     <div class="ff-sound-row">
       <div class="ff-sound-label">
         <span>SFX</span>
-
-        <span
-          id="ffSfxValue"
-          class="ff-sound-value"
-        >
+        <span id="ffSfxValue" class="ff-sound-value">
           ${sfxLevel}
         </span>
       </div>
@@ -693,12 +526,15 @@ function createSoundSettings(){
     </button>
   `;
 
-  document.body.append(
-    button,
-    panel
+  document.body.appendChild(
+    soundButton
   );
 
-  button.addEventListener(
+  document.body.appendChild(
+    soundPanel
+  );
+
+  soundButton.addEventListener(
     "click",
     event => {
       event.stopPropagation();
@@ -706,7 +542,7 @@ function createSoundSettings(){
     }
   );
 
-  panel.addEventListener(
+  soundPanel.addEventListener(
     "pointerdown",
     event => {
       event.stopPropagation();
@@ -714,9 +550,7 @@ function createSoundSettings(){
   );
 
   document
-    .getElementById(
-      "ffSoundClose"
-    )
+    .getElementById("ffSoundClose")
     .addEventListener(
       "click",
       event => {
@@ -726,9 +560,7 @@ function createSoundSettings(){
     );
 
   document
-    .getElementById(
-      "ffMusicSlider"
-    )
+    .getElementById("ffMusicSlider")
     .addEventListener(
       "input",
       event => {
@@ -739,9 +571,7 @@ function createSoundSettings(){
     );
 
   document
-    .getElementById(
-      "ffSfxSlider"
-    )
+    .getElementById("ffSfxSlider")
     .addEventListener(
       "input",
       event => {
@@ -753,8 +583,7 @@ function createSoundSettings(){
 }
 
 function toggleSoundPanel(){
-  soundPanelOpen =
-    !soundPanelOpen;
+  soundPanelOpen = !soundPanelOpen;
 
   const panel =
     document.getElementById(
@@ -788,9 +617,7 @@ function closeSoundPanel(){
     return;
   }
 
-  panel.classList.remove(
-    "open"
-  );
+  panel.classList.remove("open");
 
   panel.setAttribute(
     "aria-hidden",
@@ -840,18 +667,13 @@ function updateSoundSettingsDisplay(){
   }
 }
 
-/* -------------------- GAME -------------------- */
+/* -------------------- GAME RESET -------------------- */
 
 function resetGame(){
   frame = 0;
   score = 0;
   tacosCollected = 0;
   gateSequence = 0;
-
-  totalGatesPassed = 0;
-  gatesSinceBillboardUnlock = 0;
-  billboardUnlocked = false;
-  billboardInstances = [];
 
   tacoMessage = "";
   tacoMessageTimer = 0;
@@ -873,12 +695,10 @@ function resetGame(){
 }
 
 function makeStars(){
-  return Array.from(
-    {
-      length: 65
-    },
+  const list = [];
 
-    () => ({
+  for(let i = 0; i < 65; i++){
+    list.push({
       x:
         Math.random() *
         WIDTH,
@@ -904,8 +724,10 @@ function makeStars(){
         Math.random() *
         0.45 +
         0.18
-    })
-  );
+    });
+  }
+
+  return list;
 }
 
 function spawnObstacle(x){
@@ -927,6 +749,11 @@ function spawnObstacle(x){
 
   gateSequence++;
 
+  const hasTaco =
+    gateSequence %
+    CONFIG.tacoEveryNGates ===
+    0;
+
   obstacles.push({
     x,
     gapY,
@@ -942,10 +769,7 @@ function spawnObstacle(x){
     gateNumber:
       gateSequence,
 
-    hasTaco:
-      gateSequence %
-      CONFIG.tacoEveryNGates ===
-      0,
+    hasTaco,
 
     tacoCollected: false,
 
@@ -956,14 +780,12 @@ function spawnObstacle(x){
   });
 }
 
+/* -------------------- INPUT -------------------- */
+
 function flap(){
-  initializeSfxAudio();
   startMusic();
 
-  if(
-    gameState === "title" ||
-    gameState === "gameover"
-  ){
+  if(gameState === "title"){
     resetGame();
     gameState = "playing";
   }
@@ -979,7 +801,14 @@ function flap(){
       8
     );
   }
+
+  if(gameState === "gameover"){
+    resetGame();
+    gameState = "playing";
+  }
 }
+
+/* -------------------- PARTICLES -------------------- */
 
 function burst(
   x,
@@ -987,11 +816,7 @@ function burst(
   color,
   amount
 ){
-  for(
-    let i = 0;
-    i < amount;
-    i++
-  ){
+  for(let i = 0; i < amount; i++){
     particles.push({
       x,
       y,
@@ -1031,11 +856,7 @@ function tacoBurst(x, y){
     COLORS.white
   ];
 
-  for(
-    let i = 0;
-    i < 24;
-    i++
-  ){
+  for(let i = 0; i < 24; i++){
     particles.push({
       x,
       y,
@@ -1075,17 +896,20 @@ function tacoBurst(x, y){
   }
 }
 
+/* -------------------- UPDATE -------------------- */
+
 function update(){
   frame++;
 
   updateStars();
   updateParticles();
 
-  if(
-    tacoMessageTimer > 0 &&
-    --tacoMessageTimer <= 0
-  ){
-    tacoMessage = "";
+  if(tacoMessageTimer > 0){
+    tacoMessageTimer--;
+
+    if(tacoMessageTimer <= 0){
+      tacoMessage = "";
+    }
   }
 
   if(gameState !== "playing"){
@@ -1101,7 +925,6 @@ function update(){
   player.rotation =
     Math.max(
       -0.38,
-
       Math.min(
         0.62,
         player.vy / 13
@@ -1114,59 +937,41 @@ function update(){
       CONFIG.obstacleSpeed
     );
 
-  if(
-    frame %
-    spawnRate ===
-    0
-  ){
+  if(frame % spawnRate === 0){
     spawnObstacle(
       WIDTH + 80
     );
   }
 
-  for(
-    const obstacle
-    of obstacles
-  ){
-    obstacle.x -=
-      CONFIG.obstacleSpeed;
+  obstacles.forEach(
+    obstacle => {
+      obstacle.x -=
+        CONFIG.obstacleSpeed;
 
-    checkTacoCollection(
-      obstacle
-    );
-
-    if(
-      !obstacle.passed &&
-      obstacle.x +
-      obstacle.width <
-      player.x
-    ){
-      obstacle.passed = true;
-      score++;
-      totalGatesPassed++;
-
-      if(billboardUnlocked){
-        gatesSinceBillboardUnlock++;
-
-        if(
-          gatesSinceBillboardUnlock %
-          CONFIG.billboardEveryGates ===
-          0
-        ){
-          spawnBillboard();
-        }
-      }
-
-      burst(
-        player.x,
-        player.y,
-        COLORS.magenta,
-        10
+      checkTacoCollection(
+        obstacle
       );
 
-      updateBestScore();
+      if(
+        !obstacle.passed &&
+        obstacle.x +
+        obstacle.width <
+        player.x
+      ){
+        obstacle.passed = true;
+        score++;
+
+        burst(
+          player.x,
+          player.y,
+          COLORS.magenta,
+          10
+        );
+
+        updateBestScore();
+      }
     }
-  }
+  );
 
   obstacles =
     obstacles.filter(
@@ -1175,8 +980,6 @@ function update(){
         obstacle.width >
         -120
     );
-
-  updateBillboards();
 
   if(
     player.y -
@@ -1208,12 +1011,8 @@ function update(){
 }
 
 function updateStars(){
-  for(
-    const star
-    of stars
-  ){
-    star.x -=
-      star.speed;
+  stars.forEach(star => {
+    star.x -= star.speed;
 
     if(star.x < -4){
       star.x =
@@ -1228,25 +1027,24 @@ function updateStars(){
           CONFIG.floorHeight
         );
     }
-  }
+  });
 }
 
 function updateParticles(){
-  for(
-    const particle
-    of particles
-  ){
-    particle.x +=
-      particle.vx;
+  particles.forEach(
+    particle => {
+      particle.x +=
+        particle.vx;
 
-    particle.y +=
-      particle.vy;
+      particle.y +=
+        particle.vy;
 
-    particle.vy +=
-      0.045;
+      particle.vy +=
+        0.045;
 
-    particle.life--;
-  }
+      particle.life--;
+    }
+  );
 
   particles =
     particles.filter(
@@ -1303,13 +1101,16 @@ function checkTacoCollection(
     player.y -
     position.y;
 
+  const distanceSquared =
+    dx * dx +
+    dy * dy;
+
   const combinedRadius =
     CONFIG.playerRadius +
     CONFIG.tacoCollisionRadius;
 
   if(
-    dx * dx +
-    dy * dy <=
+    distanceSquared <=
     combinedRadius *
     combinedRadius
   ){
@@ -1330,15 +1131,6 @@ function collectTaco(
     true;
 
   tacosCollected++;
-
-  if(
-    !billboardUnlocked &&
-    tacosCollected >=
-    CONFIG.billboardUnlockTacos
-  ){
-    billboardUnlocked = true;
-    gatesSinceBillboardUnlock = 0;
-  }
 
   score +=
     CONFIG.tacoBonusPoints;
@@ -1378,65 +1170,6 @@ function updateBestScore(){
     "flappyFaceBest",
     String(best)
   );
-}
-
-/* -------------------- BILLBOARD -------------------- */
-
-function spawnBillboard(){
-  if(!billboardUnlocked){
-    return;
-  }
-
-  billboardInstances.push({
-    x: WIDTH + 120,
-    y: CONFIG.billboardY,
-    width: CONFIG.billboardWidth,
-    height: CONFIG.billboardHeight
-  });
-}
-
-function updateBillboards(){
-  const speed =
-    CONFIG.obstacleSpeed *
-    CONFIG.billboardParallax;
-
-  for(
-    const billboard
-    of billboardInstances
-  ){
-    billboard.x -=
-      speed;
-  }
-
-  billboardInstances =
-    billboardInstances.filter(
-      billboard =>
-        billboard.x +
-        billboard.width >
-        -80
-    );
-}
-
-function drawBillboards(){
-  if(
-    !billboardLoaded ||
-    billboardFailed
-  ){
-    return;
-  }
-
-  for(
-    const billboard
-    of billboardInstances
-  ){
-    ctx.drawImage(
-      billboardImage,
-      billboard.x,
-      billboard.y,
-      billboard.width,
-      billboard.height
-    );
-  }
 }
 
 /* -------------------- COLLISION -------------------- */
@@ -1486,12 +1219,10 @@ function endGame(){
   );
 }
 
-/* -------------------- DRAW -------------------- */
+/* -------------------- DRAW LOOP -------------------- */
 
 function draw(){
   drawBackground();
-  drawBillboards();
-  drawForegroundRailings();
   drawStars();
   drawObstacles();
   drawTacos();
@@ -1518,6 +1249,8 @@ function loop(){
   update();
   draw();
 }
+
+/* -------------------- BACKGROUND -------------------- */
 
 function drawBackground(){
   const gradient =
@@ -1589,6 +1322,8 @@ function drawBackground(){
       );
     }
 
+    ctx.save();
+
     ctx.fillStyle =
       "rgba(5,7,13,.18)";
 
@@ -1598,73 +1333,12 @@ function drawBackground(){
       WIDTH,
       bgDrawHeight
     );
-  }else if(bgFailed){
+
+    ctx.restore();
+  }
+
+  if(bgFailed){
     drawFallbackGrid();
-  }
-}
-
-function drawForegroundRailings(){
-  if(!bgLoaded){
-    return;
-  }
-
-  const bgDrawHeight =
-    HEIGHT -
-    CONFIG.floorHeight;
-
-  const scale =
-    bgDrawHeight /
-    bgImage.height;
-
-  const bgDrawWidth =
-    bgImage.width *
-    scale;
-
-  const offset =
-    (
-      frame *
-      CONFIG.backgroundSpeed
-    ) %
-    bgDrawWidth;
-
-  const sourceY =
-    Math.floor(
-      bgImage.height *
-      CONFIG.railingSourceStartRatio
-    );
-
-  const sourceHeight =
-    bgImage.height -
-    sourceY;
-
-  const destinationY =
-    sourceY *
-    scale;
-
-  const destinationHeight =
-    sourceHeight *
-    scale;
-
-  for(
-    let x = -offset;
-    x <
-    WIDTH +
-    bgDrawWidth;
-    x += bgDrawWidth
-  ){
-    ctx.drawImage(
-      bgImage,
-
-      0,
-      sourceY,
-      bgImage.width,
-      sourceHeight,
-
-      x,
-      destinationY,
-      bgDrawWidth,
-      destinationHeight
-    );
   }
 }
 
@@ -1681,8 +1355,7 @@ function drawFallbackGrid(){
 
   for(
     let x = -80;
-    x <
-    WIDTH + 80;
+    x < WIDTH + 80;
     x += 80
   ){
     ctx.beginPath();
@@ -1746,10 +1419,7 @@ function drawStars(){
     return;
   }
 
-  for(
-    const star
-    of stars
-  ){
+  stars.forEach(star => {
     ctx.globalAlpha =
       star.alpha;
 
@@ -1762,39 +1432,40 @@ function drawStars(){
       star.size,
       star.size
     );
-  }
+  });
 
   ctx.globalAlpha = 1;
 }
 
+/* -------------------- OBSTACLES -------------------- */
+
 function drawObstacles(){
-  for(
-    const obstacle
-    of obstacles
-  ){
-    drawPipeTop(
-      obstacle.x,
-      0,
-      obstacle.width,
-      obstacle.gapY
-    );
+  obstacles.forEach(
+    obstacle => {
+      drawPipeTop(
+        obstacle.x,
+        0,
+        obstacle.width,
+        obstacle.gapY
+      );
 
-    drawPipeBottom(
-      obstacle.x,
+      drawPipeBottom(
+        obstacle.x,
 
-      obstacle.gapY +
-      obstacle.gap,
-
-      obstacle.width,
-
-      HEIGHT -
-      CONFIG.floorHeight -
-      (
         obstacle.gapY +
-        obstacle.gap
-      )
-    );
-  }
+        obstacle.gap,
+
+        obstacle.width,
+
+        HEIGHT -
+        CONFIG.floorHeight -
+        (
+          obstacle.gapY +
+          obstacle.gap
+        )
+      );
+    }
+  );
 }
 
 function drawPipeTop(
@@ -1849,3 +1520,903 @@ function drawPipeBottom(
       x,
       y,
       width,
+      height,
+      false
+    );
+  }
+}
+
+function drawGate(
+  x,
+  y,
+  width,
+  height,
+  top
+){
+  if(height <= 0){
+    return;
+  }
+
+  const gradient =
+    ctx.createLinearGradient(
+      x,
+      y,
+      x + width,
+      y
+    );
+
+  gradient.addColorStop(
+    0,
+    "rgba(0,255,238,.95)"
+  );
+
+  gradient.addColorStop(
+    0.5,
+    "rgba(162,48,240,.92)"
+  );
+
+  gradient.addColorStop(
+    1,
+    "rgba(255,32,255,.95)"
+  );
+
+  ctx.save();
+
+  ctx.shadowColor =
+    COLORS.magenta;
+
+  ctx.shadowBlur = 18;
+
+  ctx.fillStyle =
+    gradient;
+
+  ctx.fillRect(
+    x,
+    y,
+    width,
+    height
+  );
+
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle =
+    "rgba(5,7,13,.68)";
+
+  ctx.fillRect(
+    x + 10,
+    y + 10,
+    width - 20,
+    Math.max(
+      0,
+      height - 20
+    )
+  );
+
+  ctx.strokeStyle =
+    COLORS.cyan;
+
+  ctx.lineWidth = 3;
+
+  ctx.strokeRect(
+    x + 4,
+    y + 4,
+    width - 8,
+    height - 8
+  );
+
+  ctx.fillStyle =
+    "rgba(255,255,255,.08)";
+
+  for(
+    let i = 0;
+    i < height;
+    i += 28
+  ){
+    ctx.fillRect(
+      x + 12,
+      y + i,
+      width - 24,
+      3
+    );
+  }
+
+  ctx.fillStyle =
+    top
+      ? COLORS.magenta
+      : COLORS.cyan;
+
+  if(top){
+    ctx.fillRect(
+      x - 8,
+      y +
+      height -
+      20,
+      width + 16,
+      20
+    );
+  }else{
+    ctx.fillRect(
+      x - 8,
+      y,
+      width + 16,
+      20
+    );
+  }
+
+  ctx.restore();
+}
+
+/* -------------------- TACO DRAWING -------------------- */
+
+function drawTacos(){
+  obstacles.forEach(
+    obstacle => {
+      if(
+        !obstacle.hasTaco ||
+        obstacle.tacoCollected
+      ){
+        return;
+      }
+
+      const position =
+        getTacoPosition(
+          obstacle
+        );
+
+      ctx.save();
+
+      ctx.translate(
+        position.x,
+        position.y
+      );
+
+      const rotation =
+        Math.sin(
+          frame *
+          0.045 +
+          obstacle.tacoPhase
+        ) *
+        0.08;
+
+      ctx.rotate(rotation);
+
+      const pulse =
+        1 +
+        Math.sin(
+          frame *
+          0.085 +
+          obstacle.tacoPhase
+        ) *
+        0.055;
+
+      const width =
+        CONFIG.tacoWidth *
+        pulse;
+
+      const height =
+        CONFIG.tacoHeight *
+        pulse;
+
+      ctx.shadowColor =
+        COLORS.gold;
+
+      ctx.shadowBlur = 20;
+
+      if(tacoLoaded){
+        ctx.drawImage(
+          tacoImage,
+          -width / 2,
+          -height / 2,
+          width,
+          height
+        );
+      }else{
+        drawFallbackTaco(
+          width,
+          height
+        );
+      }
+
+      ctx.restore();
+    }
+  );
+}
+
+function drawFallbackTaco(
+  width,
+  height
+){
+  ctx.save();
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.strokeStyle =
+    COLORS.black;
+
+  ctx.lineWidth = 4;
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    0,
+    4,
+    width / 2,
+    height / 2,
+    0,
+    Math.PI,
+    Math.PI * 2
+  );
+
+  ctx.lineTo(
+    width / 2,
+    6
+  );
+
+  ctx.quadraticCurveTo(
+    0,
+    height / 2,
+    -width / 2,
+    6
+  );
+
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle =
+    "#61D836";
+
+  ctx.fillRect(
+    -width * 0.28,
+    -2,
+    width * 0.56,
+    8
+  );
+
+  ctx.fillStyle =
+    COLORS.red;
+
+  ctx.fillRect(
+    -width * 0.18,
+    -7,
+    width * 0.36,
+    7
+  );
+
+  ctx.restore();
+}
+
+/* -------------------- FLOOR -------------------- */
+
+function drawFloor(){
+  ctx.save();
+
+  ctx.fillStyle =
+    "rgba(10,10,18,.95)";
+
+  ctx.fillRect(
+    0,
+    HEIGHT -
+    CONFIG.floorHeight,
+    WIDTH,
+    CONFIG.floorHeight
+  );
+
+  ctx.strokeStyle =
+    COLORS.cyan;
+
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    0,
+    HEIGHT -
+    CONFIG.floorHeight
+  );
+
+  ctx.lineTo(
+    WIDTH,
+    HEIGHT -
+    CONFIG.floorHeight
+  );
+
+  ctx.stroke();
+
+  ctx.globalAlpha =
+    0.4;
+
+  ctx.fillStyle =
+    COLORS.magenta;
+
+  for(
+    let x = -40;
+    x < WIDTH + 40;
+    x += 55
+  ){
+    ctx.fillRect(
+      x -
+      (
+        frame *
+        2 %
+        55
+      ),
+      HEIGHT - 22,
+      28,
+      3
+    );
+  }
+
+  ctx.restore();
+}
+
+/* -------------------- PLAYER -------------------- */
+
+function drawPlayer(){
+  ctx.save();
+
+  ctx.translate(
+    player.x,
+    player.y
+  );
+
+  ctx.rotate(
+    player.rotation
+  );
+
+  ctx.save();
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
+  ctx.shadowBlur = 18;
+
+  if(faceLoaded){
+    ctx.drawImage(
+      faceImage,
+      -CONFIG.playerSpriteW / 2,
+      -CONFIG.playerSpriteH / 2,
+      CONFIG.playerSpriteW,
+      CONFIG.playerSpriteH
+    );
+  }else{
+    drawPlaceholderFace();
+  }
+
+  ctx.restore();
+
+  if(faceFailed){
+    ctx.save();
+
+    ctx.fillStyle =
+      COLORS.magenta;
+
+    ctx.font =
+      "700 9px Orbitron, Arial";
+
+    ctx.textAlign =
+      "center";
+
+    ctx.fillText(
+      "NO FACE",
+      0,
+      46
+    );
+
+    ctx.restore();
+  }
+
+  ctx.restore();
+}
+
+function drawPlaceholderFace(){
+  const gradient =
+    ctx.createRadialGradient(
+      -8,
+      -8,
+      5,
+      0,
+      0,
+      CONFIG.playerRadius
+    );
+
+  gradient.addColorStop(
+    0,
+    "#ffffff"
+  );
+
+  gradient.addColorStop(
+    0.4,
+    COLORS.cyan
+  );
+
+  gradient.addColorStop(
+    1,
+    COLORS.purple
+  );
+
+  ctx.fillStyle =
+    gradient;
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    0,
+    CONFIG.playerRadius,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+  ctx.fillStyle =
+    COLORS.black;
+
+  ctx.beginPath();
+
+  ctx.arc(
+    -9,
+    -5,
+    4,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.arc(
+    9,
+    -5,
+    4,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+  ctx.strokeStyle =
+    COLORS.black;
+
+  ctx.lineWidth = 3;
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    5,
+    9,
+    0.1,
+    Math.PI - 0.1
+  );
+
+  ctx.stroke();
+}
+
+/* -------------------- PARTICLES -------------------- */
+
+function drawParticles(){
+  particles.forEach(
+    particle => {
+      ctx.globalAlpha =
+        Math.max(
+          0,
+          particle.life / 24
+        );
+
+      ctx.fillStyle =
+        particle.color;
+
+      const size =
+        particle.size || 4;
+
+      ctx.fillRect(
+        particle.x,
+        particle.y,
+        size,
+        size
+      );
+    }
+  );
+
+  ctx.globalAlpha = 1;
+}
+
+/* -------------------- HUD -------------------- */
+
+function drawHud(){
+  ctx.save();
+
+  ctx.font =
+    "900 26px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.cyan;
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
+  ctx.shadowBlur = 12;
+
+  ctx.fillText(
+    `SIGNAL SCORE: ${score}`,
+    26,
+    42
+  );
+
+  ctx.fillStyle =
+    COLORS.magenta;
+
+  ctx.shadowColor =
+    COLORS.magenta;
+
+  ctx.fillText(
+    `BEST BROADCAST: ${best}`,
+    26,
+    76
+  );
+
+  ctx.font =
+    "900 19px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.shadowColor =
+    COLORS.gold;
+
+  ctx.fillText(
+    `TACOS: ${tacosCollected}`,
+    26,
+    108
+  );
+
+  ctx.font =
+    "700 14px Orbitron, Arial";
+
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle =
+    musicLevel > 0
+      ? COLORS.cyan
+      : COLORS.muted;
+
+  ctx.fillText(
+    `MUSIC: ${musicLevel}/10`,
+    WIDTH - 170,
+    42
+  );
+
+  ctx.fillStyle =
+    sfxLevel > 0
+      ? COLORS.gold
+      : COLORS.muted;
+
+  ctx.fillText(
+    `SFX: ${sfxLevel}/10`,
+    WIDTH - 170,
+    65
+  );
+
+  ctx.restore();
+}
+
+function drawTacoMessage(){
+  if(
+    tacoMessageTimer <= 0 ||
+    !tacoMessage
+  ){
+    return;
+  }
+
+  const alpha =
+    Math.min(
+      1,
+      tacoMessageTimer / 18
+    );
+
+  const lift =
+    (
+      72 -
+      tacoMessageTimer
+    ) *
+    0.35;
+
+  ctx.save();
+
+  ctx.globalAlpha =
+    alpha;
+
+  ctx.textAlign =
+    "center";
+
+  ctx.font =
+    "900 28px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.shadowColor =
+    COLORS.orange;
+
+  ctx.shadowBlur = 18;
+
+  ctx.fillText(
+    tacoMessage,
+    WIDTH / 2,
+    HEIGHT / 2 -
+    120 -
+    lift
+  );
+
+  ctx.restore();
+}
+
+/* -------------------- SCREENS -------------------- */
+
+function drawTitleScreen(){
+  drawOverlay();
+
+  ctx.save();
+  ctx.textAlign = "center";
+
+  ctx.font =
+    "900 64px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.cyan;
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
+  ctx.shadowBlur = 18;
+
+  ctx.fillText(
+    "FLAPPY FACE",
+    WIDTH / 2,
+    HEIGHT / 2 - 112
+  );
+
+  ctx.font =
+    "900 22px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.magenta;
+
+  ctx.shadowColor =
+    COLORS.magenta;
+
+  ctx.fillText(
+    "UNAUTHORIZED BROADCAST MINI-GAME",
+    WIDTH / 2,
+    HEIGHT / 2 - 66
+  );
+
+  ctx.font =
+    "900 24px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.white;
+
+  ctx.shadowBlur = 0;
+
+  ctx.fillText(
+    "CLICK / TAP / SPACE TO GO LIVE",
+    WIDTH / 2,
+    HEIGHT / 2 + 6
+  );
+
+  ctx.font =
+    "700 16px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.muted;
+
+  ctx.fillText(
+    "Avoid the signal gates. Protect the broadcast.",
+    WIDTH / 2,
+    HEIGHT / 2 + 44
+  );
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.fillText(
+    "Crunch the taco in every fifth gate for +5 points.",
+    WIDTH / 2,
+    HEIGHT / 2 + 72
+  );
+
+  ctx.fillStyle =
+    COLORS.muted;
+
+  ctx.fillText(
+    "Press M for quick music mute. Use SOUND for volume.",
+    WIDTH / 2,
+    HEIGHT / 2 + 100
+  );
+
+  ctx.restore();
+}
+
+function drawGameOver(){
+  drawOverlay();
+
+  ctx.save();
+  ctx.textAlign = "center";
+
+  ctx.font =
+    "900 58px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.magenta;
+
+  ctx.shadowColor =
+    COLORS.magenta;
+
+  ctx.shadowBlur = 18;
+
+  ctx.fillText(
+    "SIGNAL LOST",
+    WIDTH / 2,
+    HEIGHT / 2 - 94
+  );
+
+  ctx.font =
+    "900 24px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.cyan;
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
+  ctx.fillText(
+    `FINAL SIGNAL SCORE: ${score}`,
+    WIDTH / 2,
+    HEIGHT / 2 - 42
+  );
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.shadowColor =
+    COLORS.gold;
+
+  ctx.fillText(
+    `TACOS CRUNCHED: ${tacosCollected}`,
+    WIDTH / 2,
+    HEIGHT / 2 - 6
+  );
+
+  ctx.font =
+    "900 22px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.white;
+
+  ctx.shadowBlur = 0;
+
+  ctx.fillText(
+    "CLICK / TAP / SPACE TO REBOOT BROADCAST",
+    WIDTH / 2,
+    HEIGHT / 2 + 58
+  );
+
+  ctx.font =
+    "700 15px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.muted;
+
+  ctx.fillText(
+    "Press M for quick music mute. Use SOUND for volume.",
+    WIDTH / 2,
+    HEIGHT / 2 + 90
+  );
+
+  ctx.restore();
+}
+
+function drawOverlay(){
+  ctx.save();
+
+  ctx.fillStyle =
+    "rgba(5,7,13,.72)";
+
+  ctx.fillRect(
+    0,
+    0,
+    WIDTH,
+    HEIGHT
+  );
+
+  ctx.strokeStyle =
+    "rgba(0,255,238,.28)";
+
+  ctx.lineWidth = 3;
+
+  ctx.strokeRect(
+    24,
+    24,
+    WIDTH - 48,
+    HEIGHT - 48
+  );
+
+  ctx.restore();
+}
+
+/* -------------------- EVENTS -------------------- */
+
+window.addEventListener(
+  "keydown",
+  event => {
+    if(
+      event.code === "Space" ||
+      event.code === "ArrowUp" ||
+      event.code === "KeyW"
+    ){
+      event.preventDefault();
+
+      if(!soundPanelOpen){
+        flap();
+      }
+    }
+
+    if(event.code === "KeyR"){
+      event.preventDefault();
+      closeSoundPanel();
+      resetGame();
+      gameState = "title";
+    }
+
+    if(event.code === "KeyM"){
+      event.preventDefault();
+      toggleMusic();
+    }
+
+    if(event.code === "Escape"){
+      closeSoundPanel();
+    }
+  }
+);
+
+canvas.addEventListener(
+  "pointerdown",
+  event => {
+    event.preventDefault();
+
+    if(!soundPanelOpen){
+      flap();
+    }
+  }
+);
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+    if(document.hidden){
+      music.pause();
+      tacoCrunch.pause();
+      return;
+    }
+
+    if(
+      musicLevel > 0 &&
+      musicStarted
+    ){
+      music.play().catch(error => {
+        console.log(
+          "Music resume after visibility change failed:",
+          error
+        );
+      });
+    }
+  }
+);
+
+/* -------------------- START -------------------- */
+
+applySoundLevels();
+createSoundSettings();
+resetGame();
+loop();
