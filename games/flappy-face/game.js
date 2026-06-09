@@ -37,6 +37,8 @@ const CONFIG = {
 
   defaultMusicLevel: 2,
   defaultSfxLevel: 8,
+  musicMaxVolume: 0.5,
+  sfxMaxGain: 2.0,
 
   tacoEveryNGates: 5,
   tacoBonusPoints: 5,
@@ -44,64 +46,52 @@ const CONFIG = {
   tacoHeight: 54,
   tacoCollisionRadius: 25,
   tacoBobAmount: 7,
-  tacoBobSpeed: 0.075
+  tacoBobSpeed: 0.075,
+
+  billboardUnlockTacos: 10,
+  billboardEveryGates: 10,
+  billboardWidth: 250,
+  billboardHeight: 200,
+  billboardY: 205,
+  billboardParallax: 0.62,
+
+  railingSourceStartRatio: 0.77
 };
 
 let gameState = "title";
 let frame = 0;
-
 let score = 0;
-let best = Number(
-  localStorage.getItem("flappyFaceBest") || 0
-);
-
+let best = Number(localStorage.getItem("flappyFaceBest") || 0);
 let tacosCollected = 0;
-let bestTacos = Number(
-  localStorage.getItem("flappyFaceBestTacos") || 0
-);
-
+let bestTacos = Number(localStorage.getItem("flappyFaceBestTacos") || 0);
 let gateSequence = 0;
-
-let player;
-let obstacles;
-let particles;
-let stars;
-
+let totalGatesPassed = 0;
+let gatesSinceBillboardUnlock = 0;
+let billboardUnlocked = false;
+let billboardInstances = [];
 let tacoMessage = "";
 let tacoMessageTimer = 0;
-
+let player;
+let obstacles = [];
+let particles = [];
+let stars = [];
 let musicStarted = false;
 let soundPanelOpen = false;
 
 function clampSoundLevel(value){
-  if(!Number.isFinite(value)){
-    return 0;
-  }
-
-  return Math.max(
-    0,
-    Math.min(10, Math.round(value))
-  );
+  if(!Number.isFinite(value)) return 0;
+  return Math.max(0, Math.min(10, Math.round(value)));
 }
 
 let musicLevel = clampSoundLevel(
-  Number(
-    localStorage.getItem("flappyFaceMusicLevel") ??
-    CONFIG.defaultMusicLevel
-  )
+  Number(localStorage.getItem("flappyFaceMusicLevel") ?? CONFIG.defaultMusicLevel)
 );
 
 let sfxLevel = clampSoundLevel(
-  Number(
-    localStorage.getItem("flappyFaceSfxLevel") ??
-    CONFIG.defaultSfxLevel
-  )
+  Number(localStorage.getItem("flappyFaceSfxLevel") ?? CONFIG.defaultSfxLevel)
 );
 
-let previousMusicLevel =
-  musicLevel > 0
-    ? musicLevel
-    : CONFIG.defaultMusicLevel;
+let previousMusicLevel = musicLevel > 0 ? musicLevel : CONFIG.defaultMusicLevel;
 
 /* -------------------- ASSETS -------------------- */
 
@@ -120,30 +110,26 @@ pipeBottomImage.src = "assets/pipe_bottom.png";
 const tacoImage = new Image();
 tacoImage.src = "assets/taco_collectible.png";
 
-const music = new Audio(
-  "assets/flappy_face_theme.wav"
-);
+const billboardImage = new Image();
+billboardImage.src = "assets/sheetz_billboard.png";
 
+const music = new Audio("assets/flappy_face_theme.wav");
 music.loop = true;
 music.preload = "auto";
 
-const tacoCrunch = new Audio(
-  "assets/audio/taco_crunch.wav"
-);
-
+const tacoCrunch = new Audio("assets/audio/taco_crunch.wav");
 tacoCrunch.preload = "auto";
 
 let faceLoaded = false;
 let faceFailed = false;
-
 let bgLoaded = false;
 let bgFailed = false;
-
 let pipeTopLoaded = false;
 let pipeBottomLoaded = false;
-
 let tacoLoaded = false;
 let tacoFailed = false;
+let billboardLoaded = false;
+let billboardFailed = false;
 
 faceImage.onload = () => {
   faceLoaded = true;
@@ -151,10 +137,7 @@ faceImage.onload = () => {
 
 faceImage.onerror = () => {
   faceFailed = true;
-  console.log(
-    "Face failed to load:",
-    faceImage.src
-  );
+  console.warn("Face failed to load:", faceImage.src);
 };
 
 bgImage.onload = () => {
@@ -163,10 +146,7 @@ bgImage.onload = () => {
 
 bgImage.onerror = () => {
   bgFailed = true;
-  console.log(
-    "Background failed to load:",
-    bgImage.src
-  );
+  console.warn("Background failed to load:", bgImage.src);
 };
 
 pipeTopImage.onload = () => {
@@ -174,10 +154,7 @@ pipeTopImage.onload = () => {
 };
 
 pipeTopImage.onerror = () => {
-  console.log(
-    "Top pipe failed to load:",
-    pipeTopImage.src
-  );
+  console.warn("Top pipe failed to load:", pipeTopImage.src);
 };
 
 pipeBottomImage.onload = () => {
@@ -185,10 +162,7 @@ pipeBottomImage.onload = () => {
 };
 
 pipeBottomImage.onerror = () => {
-  console.log(
-    "Bottom pipe failed to load:",
-    pipeBottomImage.src
-  );
+  console.warn("Bottom pipe failed to load:", pipeBottomImage.src);
 };
 
 tacoImage.onload = () => {
@@ -197,31 +171,84 @@ tacoImage.onload = () => {
 
 tacoImage.onerror = () => {
   tacoFailed = true;
-  console.log(
-    "Taco failed to load:",
-    tacoImage.src
-  );
+  console.warn("Taco failed to load:", tacoImage.src);
+};
+
+billboardImage.onload = () => {
+  billboardLoaded = true;
+};
+
+billboardImage.onerror = () => {
+  billboardFailed = true;
+  console.warn("Billboard failed to load:", billboardImage.src);
 };
 
 music.onerror = () => {
-  console.log(
-    "Music failed to load:",
-    music.src
-  );
+  console.warn("Music failed to load:", music.src);
 };
 
 tacoCrunch.onerror = () => {
-  console.log(
-    "Taco crunch failed to load:",
-    tacoCrunch.src
-  );
+  console.warn("Taco crunch failed to load:", tacoCrunch.src);
 };
 
 /* -------------------- SOUND -------------------- */
 
+let sfxAudioContext = null;
+let tacoCrunchSource = null;
+let tacoCrunchGain = null;
+
+function initializeSfxAudio(){
+  if(sfxAudioContext) return;
+
+  const AudioContextClass =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+  if(!AudioContextClass){
+    console.warn("Web Audio is not supported. Using normal SFX volume.");
+    return;
+  }
+
+  sfxAudioContext = new AudioContextClass();
+
+  tacoCrunchSource =
+    sfxAudioContext.createMediaElementSource(
+      tacoCrunch
+    );
+
+  tacoCrunchGain =
+    sfxAudioContext.createGain();
+
+  tacoCrunchSource.connect(
+    tacoCrunchGain
+  );
+
+  tacoCrunchGain.connect(
+    sfxAudioContext.destination
+  );
+
+  updateSfxGain();
+}
+
+function updateSfxGain(){
+  const gain =
+    (sfxLevel / 10) *
+    CONFIG.sfxMaxGain;
+
+  if(tacoCrunchGain){
+    tacoCrunchGain.gain.value = gain;
+  }else{
+    tacoCrunch.volume =
+      Math.min(1, gain);
+  }
+}
+
 function applySoundLevels(){
-  music.volume = musicLevel / 10;
-  tacoCrunch.volume = sfxLevel / 10;
+  music.volume =
+    (musicLevel / 10) *
+    CONFIG.musicMaxVolume;
+
+  updateSfxGain();
 }
 
 function saveSoundLevels(){
@@ -237,12 +264,14 @@ function saveSoundLevels(){
 }
 
 function setMusicLevel(value){
-  musicLevel = clampSoundLevel(
-    Number(value)
-  );
+  musicLevel =
+    clampSoundLevel(
+      Number(value)
+    );
 
   if(musicLevel > 0){
-    previousMusicLevel = musicLevel;
+    previousMusicLevel =
+      musicLevel;
   }
 
   applySoundLevels();
@@ -258,7 +287,7 @@ function setMusicLevel(value){
     musicStarted = true;
 
     music.play().catch(error => {
-      console.log(
+      console.warn(
         "Music resume failed:",
         error
       );
@@ -269,9 +298,10 @@ function setMusicLevel(value){
 }
 
 function setSfxLevel(value){
-  sfxLevel = clampSoundLevel(
-    Number(value)
-  );
+  sfxLevel =
+    clampSoundLevel(
+      Number(value)
+    );
 
   applySoundLevels();
   saveSoundLevels();
@@ -289,7 +319,7 @@ function startMusic(){
   musicStarted = true;
 
   music.play().catch(error => {
-    console.log(
+    console.warn(
       "Music play blocked or failed:",
       error
     );
@@ -300,15 +330,16 @@ function startMusic(){
 
 function toggleMusic(){
   if(musicLevel > 0){
-    previousMusicLevel = musicLevel;
-    setMusicLevel(0);
-    return;
-  }
+    previousMusicLevel =
+      musicLevel;
 
-  setMusicLevel(
-    previousMusicLevel ||
-    CONFIG.defaultMusicLevel
-  );
+    setMusicLevel(0);
+  }else{
+    setMusicLevel(
+      previousMusicLevel ||
+      CONFIG.defaultMusicLevel
+    );
+  }
 }
 
 function playTacoCrunch(){
@@ -316,12 +347,28 @@ function playTacoCrunch(){
     return;
   }
 
+  initializeSfxAudio();
+  updateSfxGain();
+
+  if(
+    sfxAudioContext &&
+    sfxAudioContext.state === "suspended"
+  ){
+    sfxAudioContext
+      .resume()
+      .catch(error => {
+        console.warn(
+          "Audio context resume failed:",
+          error
+        );
+      });
+  }
+
   tacoCrunch.pause();
   tacoCrunch.currentTime = 0;
-  tacoCrunch.volume = sfxLevel / 10;
 
   tacoCrunch.play().catch(error => {
-    console.log(
+    console.warn(
       "Taco crunch play failed:",
       error
     );
@@ -331,7 +378,10 @@ function playTacoCrunch(){
 /* -------------------- SOUND PANEL -------------------- */
 
 function createSoundSettings(){
-  const style = document.createElement("style");
+  const style =
+    document.createElement(
+      "style"
+    );
 
   style.textContent = `
     .ff-sound-button{
@@ -353,7 +403,6 @@ function createSoundSettings(){
     .ff-sound-button:hover{
       color:#FF20FF;
       border-color:#FF20FF;
-      box-shadow:0 0 16px rgba(255,32,255,.32);
     }
 
     .ff-sound-panel{
@@ -367,9 +416,7 @@ function createSoundSettings(){
       border-radius:14px;
       background:rgba(5,7,13,.98);
       color:#EEEEEE;
-      box-shadow:
-        0 0 24px rgba(255,32,255,.28),
-        0 0 20px rgba(0,255,238,.12);
+      box-shadow:0 0 24px rgba(255,32,255,.28);
       font-family:Orbitron,Arial,sans-serif;
       display:none;
     }
@@ -383,7 +430,6 @@ function createSoundSettings(){
       color:#00FFEE;
       font-size:18px;
       text-align:center;
-      letter-spacing:.8px;
     }
 
     .ff-sound-row{
@@ -393,9 +439,7 @@ function createSoundSettings(){
     .ff-sound-label{
       display:flex;
       justify-content:space-between;
-      gap:12px;
       margin-bottom:8px;
-      color:#EEEEEE;
       font-size:13px;
       font-weight:900;
     }
@@ -428,45 +472,46 @@ function createSoundSettings(){
       font:900 12px Orbitron,Arial,sans-serif;
       cursor:pointer;
     }
-
-    .ff-sound-close:hover{
-      color:#00FFEE;
-      border-color:#00FFEE;
-    }
   `;
 
-  document.head.appendChild(style);
+  document.head.appendChild(
+    style
+  );
 
-  const soundButton =
-    document.createElement("button");
+  const button =
+    document.createElement(
+      "button"
+    );
 
-  soundButton.id =
+  button.id =
     "ffSoundButton";
 
-  soundButton.type =
+  button.type =
     "button";
 
-  soundButton.className =
+  button.className =
     "ff-sound-button";
 
-  soundButton.textContent =
+  button.textContent =
     "SOUND";
 
-  const soundPanel =
-    document.createElement("section");
+  const panel =
+    document.createElement(
+      "section"
+    );
 
-  soundPanel.id =
+  panel.id =
     "ffSoundPanel";
 
-  soundPanel.className =
+  panel.className =
     "ff-sound-panel";
 
-  soundPanel.setAttribute(
+  panel.setAttribute(
     "aria-hidden",
     "true"
   );
 
-  soundPanel.innerHTML = `
+  panel.innerHTML = `
     <h2>SOUND SETTINGS</h2>
 
     <div class="ff-sound-row">
@@ -526,15 +571,12 @@ function createSoundSettings(){
     </button>
   `;
 
-  document.body.appendChild(
-    soundButton
+  document.body.append(
+    button,
+    panel
   );
 
-  document.body.appendChild(
-    soundPanel
-  );
-
-  soundButton.addEventListener(
+  button.addEventListener(
     "click",
     event => {
       event.stopPropagation();
@@ -542,7 +584,7 @@ function createSoundSettings(){
     }
   );
 
-  soundPanel.addEventListener(
+  panel.addEventListener(
     "pointerdown",
     event => {
       event.stopPropagation();
@@ -550,7 +592,9 @@ function createSoundSettings(){
   );
 
   document
-    .getElementById("ffSoundClose")
+    .getElementById(
+      "ffSoundClose"
+    )
     .addEventListener(
       "click",
       event => {
@@ -560,7 +604,9 @@ function createSoundSettings(){
     );
 
   document
-    .getElementById("ffMusicSlider")
+    .getElementById(
+      "ffMusicSlider"
+    )
     .addEventListener(
       "input",
       event => {
@@ -571,7 +617,9 @@ function createSoundSettings(){
     );
 
   document
-    .getElementById("ffSfxSlider")
+    .getElementById(
+      "ffSfxSlider"
+    )
     .addEventListener(
       "input",
       event => {
@@ -583,7 +631,8 @@ function createSoundSettings(){
 }
 
 function toggleSoundPanel(){
-  soundPanelOpen = !soundPanelOpen;
+  soundPanelOpen =
+    !soundPanelOpen;
 
   const panel =
     document.getElementById(
@@ -617,7 +666,9 @@ function closeSoundPanel(){
     return;
   }
 
-  panel.classList.remove("open");
+  panel.classList.remove(
+    "open"
+  );
 
   panel.setAttribute(
     "aria-hidden",
@@ -667,13 +718,18 @@ function updateSoundSettingsDisplay(){
   }
 }
 
-/* -------------------- GAME RESET -------------------- */
+/* -------------------- GAME -------------------- */
 
 function resetGame(){
   frame = 0;
   score = 0;
   tacosCollected = 0;
   gateSequence = 0;
+
+  totalGatesPassed = 0;
+  gatesSinceBillboardUnlock = 0;
+  billboardUnlocked = false;
+  billboardInstances = [];
 
   tacoMessage = "";
   tacoMessageTimer = 0;
@@ -695,10 +751,12 @@ function resetGame(){
 }
 
 function makeStars(){
-  const list = [];
+  return Array.from(
+    {
+      length: 65
+    },
 
-  for(let i = 0; i < 65; i++){
-    list.push({
+    () => ({
       x:
         Math.random() *
         WIDTH,
@@ -724,10 +782,8 @@ function makeStars(){
         Math.random() *
         0.45 +
         0.18
-    });
-  }
-
-  return list;
+    })
+  );
 }
 
 function spawnObstacle(x){
@@ -749,11 +805,6 @@ function spawnObstacle(x){
 
   gateSequence++;
 
-  const hasTaco =
-    gateSequence %
-    CONFIG.tacoEveryNGates ===
-    0;
-
   obstacles.push({
     x,
     gapY,
@@ -769,7 +820,10 @@ function spawnObstacle(x){
     gateNumber:
       gateSequence,
 
-    hasTaco,
+    hasTaco:
+      gateSequence %
+      CONFIG.tacoEveryNGates ===
+      0,
 
     tacoCollected: false,
 
@@ -780,12 +834,14 @@ function spawnObstacle(x){
   });
 }
 
-/* -------------------- INPUT -------------------- */
-
 function flap(){
+  initializeSfxAudio();
   startMusic();
 
-  if(gameState === "title"){
+  if(
+    gameState === "title" ||
+    gameState === "gameover"
+  ){
     resetGame();
     gameState = "playing";
   }
@@ -801,14 +857,7 @@ function flap(){
       8
     );
   }
-
-  if(gameState === "gameover"){
-    resetGame();
-    gameState = "playing";
-  }
 }
-
-/* -------------------- PARTICLES -------------------- */
 
 function burst(
   x,
@@ -816,7 +865,11 @@ function burst(
   color,
   amount
 ){
-  for(let i = 0; i < amount; i++){
+  for(
+    let i = 0;
+    i < amount;
+    i++
+  ){
     particles.push({
       x,
       y,
@@ -856,7 +909,11 @@ function tacoBurst(x, y){
     COLORS.white
   ];
 
-  for(let i = 0; i < 24; i++){
+  for(
+    let i = 0;
+    i < 24;
+    i++
+  ){
     particles.push({
       x,
       y,
@@ -896,8 +953,6 @@ function tacoBurst(x, y){
   }
 }
 
-/* -------------------- UPDATE -------------------- */
-
 function update(){
   frame++;
 
@@ -925,6 +980,7 @@ function update(){
   player.rotation =
     Math.max(
       -0.38,
+
       Math.min(
         0.62,
         player.vy / 13
@@ -937,41 +993,59 @@ function update(){
       CONFIG.obstacleSpeed
     );
 
-  if(frame % spawnRate === 0){
+  if(
+    frame %
+    spawnRate ===
+    0
+  ){
     spawnObstacle(
       WIDTH + 80
     );
   }
 
-  obstacles.forEach(
-    obstacle => {
-      obstacle.x -=
-        CONFIG.obstacleSpeed;
+  for(
+    const obstacle
+    of obstacles
+  ){
+    obstacle.x -=
+      CONFIG.obstacleSpeed;
 
-      checkTacoCollection(
-        obstacle
+    checkTacoCollection(
+      obstacle
+    );
+
+    if(
+      !obstacle.passed &&
+      obstacle.x +
+      obstacle.width <
+      player.x
+    ){
+      obstacle.passed = true;
+      score++;
+      totalGatesPassed++;
+
+      if(billboardUnlocked){
+        gatesSinceBillboardUnlock++;
+
+        if(
+          gatesSinceBillboardUnlock %
+          CONFIG.billboardEveryGates ===
+          0
+        ){
+          spawnBillboard();
+        }
+      }
+
+      burst(
+        player.x,
+        player.y,
+        COLORS.magenta,
+        10
       );
 
-      if(
-        !obstacle.passed &&
-        obstacle.x +
-        obstacle.width <
-        player.x
-      ){
-        obstacle.passed = true;
-        score++;
-
-        burst(
-          player.x,
-          player.y,
-          COLORS.magenta,
-          10
-        );
-
-        updateBestScore();
-      }
+      updateBestScore();
     }
-  );
+  }
 
   obstacles =
     obstacles.filter(
@@ -980,6 +1054,8 @@ function update(){
         obstacle.width >
         -120
     );
+
+  updateBillboards();
 
   if(
     player.y -
@@ -1011,8 +1087,12 @@ function update(){
 }
 
 function updateStars(){
-  stars.forEach(star => {
-    star.x -= star.speed;
+  for(
+    const star
+    of stars
+  ){
+    star.x -=
+      star.speed;
 
     if(star.x < -4){
       star.x =
@@ -1027,24 +1107,25 @@ function updateStars(){
           CONFIG.floorHeight
         );
     }
-  });
+  }
 }
 
 function updateParticles(){
-  particles.forEach(
-    particle => {
-      particle.x +=
-        particle.vx;
+  for(
+    const particle
+    of particles
+  ){
+    particle.x +=
+      particle.vx;
 
-      particle.y +=
-        particle.vy;
+    particle.y +=
+      particle.vy;
 
-      particle.vy +=
-        0.045;
+    particle.vy +=
+      0.045;
 
-      particle.life--;
-    }
-  );
+    particle.life--;
+  }
 
   particles =
     particles.filter(
@@ -1101,16 +1182,13 @@ function checkTacoCollection(
     player.y -
     position.y;
 
-  const distanceSquared =
-    dx * dx +
-    dy * dy;
-
   const combinedRadius =
     CONFIG.playerRadius +
     CONFIG.tacoCollisionRadius;
 
   if(
-    distanceSquared <=
+    dx * dx +
+    dy * dy <=
     combinedRadius *
     combinedRadius
   ){
@@ -1131,6 +1209,15 @@ function collectTaco(
     true;
 
   tacosCollected++;
+
+  if(
+    !billboardUnlocked &&
+    tacosCollected >=
+    CONFIG.billboardUnlockTacos
+  ){
+    billboardUnlocked = true;
+    gatesSinceBillboardUnlock = 0;
+  }
 
   score +=
     CONFIG.tacoBonusPoints;
@@ -1170,6 +1257,65 @@ function updateBestScore(){
     "flappyFaceBest",
     String(best)
   );
+}
+
+/* -------------------- BILLBOARD -------------------- */
+
+function spawnBillboard(){
+  if(!billboardUnlocked){
+    return;
+  }
+
+  billboardInstances.push({
+    x: WIDTH + 120,
+    y: CONFIG.billboardY,
+    width: CONFIG.billboardWidth,
+    height: CONFIG.billboardHeight
+  });
+}
+
+function updateBillboards(){
+  const speed =
+    CONFIG.obstacleSpeed *
+    CONFIG.billboardParallax;
+
+  for(
+    const billboard
+    of billboardInstances
+  ){
+    billboard.x -=
+      speed;
+  }
+
+  billboardInstances =
+    billboardInstances.filter(
+      billboard =>
+        billboard.x +
+        billboard.width >
+        -80
+    );
+}
+
+function drawBillboards(){
+  if(
+    !billboardLoaded ||
+    billboardFailed
+  ){
+    return;
+  }
+
+  for(
+    const billboard
+    of billboardInstances
+  ){
+    ctx.drawImage(
+      billboardImage,
+      billboard.x,
+      billboard.y,
+      billboard.width,
+      billboard.height
+    );
+  }
 }
 
 /* -------------------- COLLISION -------------------- */
@@ -1219,10 +1365,12 @@ function endGame(){
   );
 }
 
-/* -------------------- DRAW LOOP -------------------- */
+/* -------------------- DRAW -------------------- */
 
 function draw(){
   drawBackground();
+  drawBillboards();
+  drawForegroundRailings();
   drawStars();
   drawObstacles();
   drawTacos();
@@ -1249,8 +1397,6 @@ function loop(){
   update();
   draw();
 }
-
-/* -------------------- BACKGROUND -------------------- */
 
 function drawBackground(){
   const gradient =
@@ -1322,8 +1468,6 @@ function drawBackground(){
       );
     }
 
-    ctx.save();
-
     ctx.fillStyle =
       "rgba(5,7,13,.18)";
 
@@ -1333,12 +1477,73 @@ function drawBackground(){
       WIDTH,
       bgDrawHeight
     );
+  }else if(bgFailed){
+    drawFallbackGrid();
+  }
+}
 
-    ctx.restore();
+function drawForegroundRailings(){
+  if(!bgLoaded){
+    return;
   }
 
-  if(bgFailed){
-    drawFallbackGrid();
+  const bgDrawHeight =
+    HEIGHT -
+    CONFIG.floorHeight;
+
+  const scale =
+    bgDrawHeight /
+    bgImage.height;
+
+  const bgDrawWidth =
+    bgImage.width *
+    scale;
+
+  const offset =
+    (
+      frame *
+      CONFIG.backgroundSpeed
+    ) %
+    bgDrawWidth;
+
+  const sourceY =
+    Math.floor(
+      bgImage.height *
+      CONFIG.railingSourceStartRatio
+    );
+
+  const sourceHeight =
+    bgImage.height -
+    sourceY;
+
+  const destinationY =
+    sourceY *
+    scale;
+
+  const destinationHeight =
+    sourceHeight *
+    scale;
+
+  for(
+    let x = -offset;
+    x <
+    WIDTH +
+    bgDrawWidth;
+    x += bgDrawWidth
+  ){
+    ctx.drawImage(
+      bgImage,
+
+      0,
+      sourceY,
+      bgImage.width,
+      sourceHeight,
+
+      x,
+      destinationY,
+      bgDrawWidth,
+      destinationHeight
+    );
   }
 }
 
@@ -1355,7 +1560,8 @@ function drawFallbackGrid(){
 
   for(
     let x = -80;
-    x < WIDTH + 80;
+    x <
+    WIDTH + 80;
     x += 80
   ){
     ctx.beginPath();
@@ -1419,7 +1625,10 @@ function drawStars(){
     return;
   }
 
-  stars.forEach(star => {
+  for(
+    const star
+    of stars
+  ){
     ctx.globalAlpha =
       star.alpha;
 
@@ -1432,40 +1641,39 @@ function drawStars(){
       star.size,
       star.size
     );
-  });
+  }
 
   ctx.globalAlpha = 1;
 }
 
-/* -------------------- OBSTACLES -------------------- */
-
 function drawObstacles(){
-  obstacles.forEach(
-    obstacle => {
-      drawPipeTop(
-        obstacle.x,
-        0,
-        obstacle.width,
-        obstacle.gapY
-      );
+  for(
+    const obstacle
+    of obstacles
+  ){
+    drawPipeTop(
+      obstacle.x,
+      0,
+      obstacle.width,
+      obstacle.gapY
+    );
 
-      drawPipeBottom(
-        obstacle.x,
+    drawPipeBottom(
+      obstacle.x,
 
+      obstacle.gapY +
+      obstacle.gap,
+
+      obstacle.width,
+
+      HEIGHT -
+      CONFIG.floorHeight -
+      (
         obstacle.gapY +
-        obstacle.gap,
-
-        obstacle.width,
-
-        HEIGHT -
-        CONFIG.floorHeight -
-        (
-          obstacle.gapY +
-          obstacle.gap
-        )
-      );
-    }
-  );
+        obstacle.gap
+      )
+    );
+  }
 }
 
 function drawPipeTop(
@@ -1646,80 +1854,78 @@ function drawGate(
   ctx.restore();
 }
 
-/* -------------------- TACO DRAWING -------------------- */
-
 function drawTacos(){
-  obstacles.forEach(
-    obstacle => {
-      if(
-        !obstacle.hasTaco ||
-        obstacle.tacoCollected
-      ){
-        return;
-      }
+  for(
+    const obstacle
+    of obstacles
+  ){
+    if(
+      !obstacle.hasTaco ||
+      obstacle.tacoCollected
+    ){
+      continue;
+    }
 
-      const position =
-        getTacoPosition(
-          obstacle
-        );
-
-      ctx.save();
-
-      ctx.translate(
-        position.x,
-        position.y
+    const position =
+      getTacoPosition(
+        obstacle
       );
 
-      const rotation =
-        Math.sin(
-          frame *
-          0.045 +
-          obstacle.tacoPhase
-        ) *
-        0.08;
+    ctx.save();
 
-      ctx.rotate(rotation);
+    ctx.translate(
+      position.x,
+      position.y
+    );
 
-      const pulse =
-        1 +
-        Math.sin(
-          frame *
-          0.085 +
-          obstacle.tacoPhase
-        ) *
-        0.055;
+    ctx.rotate(
+      Math.sin(
+        frame *
+        0.045 +
+        obstacle.tacoPhase
+      ) *
+      0.08
+    );
 
-      const width =
-        CONFIG.tacoWidth *
-        pulse;
+    const pulse =
+      1 +
+      Math.sin(
+        frame *
+        0.085 +
+        obstacle.tacoPhase
+      ) *
+      0.055;
 
-      const height =
-        CONFIG.tacoHeight *
-        pulse;
+    const width =
+      CONFIG.tacoWidth *
+      pulse;
 
-      ctx.shadowColor =
-        COLORS.gold;
+    const height =
+      CONFIG.tacoHeight *
+      pulse;
 
-      ctx.shadowBlur = 20;
+    ctx.shadowColor =
+      COLORS.gold;
 
-      if(tacoLoaded){
-        ctx.drawImage(
-          tacoImage,
-          -width / 2,
-          -height / 2,
-          width,
-          height
-        );
-      }else{
-        drawFallbackTaco(
-          width,
-          height
-        );
-      }
+    ctx.shadowBlur = 20;
 
-      ctx.restore();
+    if(tacoLoaded){
+      ctx.drawImage(
+        tacoImage,
+        -width / 2,
+        -height / 2,
+        width,
+        height
+      );
+    }else{
+      drawFallbackTaco(
+        width,
+        height
+      );
     }
-  );
+
+    ctx.restore();
+  }
 }
 
 function drawFallbackTaco(
@@ -1787,8 +1993,6 @@ function drawFallbackTaco(
   ctx.restore();
 }
 
-/* -------------------- FLOOR -------------------- */
-
 function drawFloor(){
   ctx.save();
 
@@ -1832,7 +2036,8 @@ function drawFloor(){
 
   for(
     let x = -40;
-    x < WIDTH + 40;
+    x <
+    WIDTH + 40;
     x += 55
   ){
     ctx.fillRect(
@@ -1851,8 +2056,6 @@ function drawFloor(){
   ctx.restore();
 }
 
-/* -------------------- PLAYER -------------------- */
-
 function drawPlayer(){
   ctx.save();
 
@@ -1864,8 +2067,6 @@ function drawPlayer(){
   ctx.rotate(
     player.rotation
   );
-
-  ctx.save();
 
   ctx.shadowColor =
     COLORS.cyan;
@@ -1884,11 +2085,7 @@ function drawPlayer(){
     drawPlaceholderFace();
   }
 
-  ctx.restore();
-
   if(faceFailed){
-    ctx.save();
-
     ctx.fillStyle =
       COLORS.magenta;
 
@@ -1903,8 +2100,6 @@ function drawPlayer(){
       0,
       46
     );
-
-    ctx.restore();
   }
 
   ctx.restore();
@@ -1992,36 +2187,33 @@ function drawPlaceholderFace(){
   ctx.stroke();
 }
 
-/* -------------------- PARTICLES -------------------- */
-
 function drawParticles(){
-  particles.forEach(
-    particle => {
-      ctx.globalAlpha =
-        Math.max(
-          0,
-          particle.life / 24
-        );
-
-      ctx.fillStyle =
-        particle.color;
-
-      const size =
-        particle.size || 4;
-
-      ctx.fillRect(
-        particle.x,
-        particle.y,
-        size,
-        size
+  for(
+    const particle
+    of particles
+  ){
+    ctx.globalAlpha =
+      Math.max(
+        0,
+        particle.life / 24
       );
-    }
-  );
+
+    ctx.fillStyle =
+      particle.color;
+
+    const size =
+      particle.size || 4;
+
+    ctx.fillRect(
+      particle.x,
+      particle.y,
+      size,
+      size
+    );
+  }
 
   ctx.globalAlpha = 1;
 }
-
-/* -------------------- HUD -------------------- */
 
 function drawHud(){
   ctx.save();
@@ -2151,13 +2343,13 @@ function drawTacoMessage(){
   ctx.restore();
 }
 
-/* -------------------- SCREENS -------------------- */
-
 function drawTitleScreen(){
   drawOverlay();
 
   ctx.save();
-  ctx.textAlign = "center";
+
+  ctx.textAlign =
+    "center";
 
   ctx.font =
     "900 64px Orbitron, Arial";
@@ -2242,7 +2434,9 @@ function drawGameOver(){
   drawOverlay();
 
   ctx.save();
-  ctx.textAlign = "center";
+
+  ctx.textAlign =
+    "center";
 
   ctx.font =
     "900 58px Orbitron, Arial";
@@ -2405,7 +2599,7 @@ document.addEventListener(
       musicStarted
     ){
       music.play().catch(error => {
-        console.log(
+        console.warn(
           "Music resume after visibility change failed:",
           error
         );
