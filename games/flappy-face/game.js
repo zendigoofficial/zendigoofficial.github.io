@@ -4,13 +4,18 @@ const ctx = canvas.getContext("2d");
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
 
+ctx.imageSmoothingEnabled = false;
+
 const COLORS = {
   cyan: "#00FFEE",
   magenta: "#FF20FF",
   purple: "#A230F0",
   white: "#EEEEEE",
   muted: "#A9AEC3",
-  black: "#05070d"
+  black: "#05070d",
+  gold: "#FFD84D",
+  orange: "#FF9F1C",
+  red: "#FF3B5C"
 };
 
 const CONFIG = {
@@ -28,21 +33,43 @@ const CONFIG = {
   obstacleSpacing: 390,
 
   floorHeight: 46,
-
   backgroundSpeed: 1.15,
 
-  musicVolume: 0.32
+  musicVolume: 0.32,
+  tacoCrunchVolume: 0.72,
+
+  // Taco system
+  tacoEveryNGates: 5,
+  tacoBonusPoints: 5,
+  tacoWidth: 82,
+  tacoHeight: 54,
+  tacoCollisionRadius: 25,
+  tacoBobAmount: 7,
+  tacoBobSpeed: 0.075
 };
 
 let gameState = "title";
 let frame = 0;
+
 let score = 0;
-let best = Number(localStorage.getItem("flappyFaceBest") || 0);
+let best = Number(
+  localStorage.getItem("flappyFaceBest") || 0
+);
+
+let tacosCollected = 0;
+let bestTacos = Number(
+  localStorage.getItem("flappyFaceBestTacos") || 0
+);
+
+let gateSequence = 0;
 
 let player;
 let obstacles;
 let particles;
 let stars;
+
+let tacoMessage = "";
+let tacoMessageTimer = 0;
 
 const faceImage = new Image();
 faceImage.src = "assets/player_face.png";
@@ -56,10 +83,23 @@ pipeTopImage.src = "assets/pipe_top.png";
 const pipeBottomImage = new Image();
 pipeBottomImage.src = "assets/pipe_bottom.png";
 
-const music = new Audio("assets/flappy_face_theme.wav");
+const tacoImage = new Image();
+tacoImage.src = "assets/taco_collectible.png";
+
+const music = new Audio(
+  "assets/flappy_face_theme.wav"
+);
+
 music.loop = true;
 music.volume = CONFIG.musicVolume;
 music.preload = "auto";
+
+const tacoCrunch = new Audio(
+  "assets/audio/taco_crunch.wav"
+);
+
+tacoCrunch.volume = CONFIG.tacoCrunchVolume;
+tacoCrunch.preload = "auto";
 
 let musicStarted = false;
 let musicEnabled = true;
@@ -73,13 +113,19 @@ let bgFailed = false;
 let pipeTopLoaded = false;
 let pipeBottomLoaded = false;
 
+let tacoLoaded = false;
+let tacoFailed = false;
+
 faceImage.onload = () => {
   faceLoaded = true;
 };
 
 faceImage.onerror = () => {
   faceFailed = true;
-  console.log("Face failed to load:", faceImage.src);
+  console.log(
+    "Face failed to load:",
+    faceImage.src
+  );
 };
 
 bgImage.onload = () => {
@@ -88,7 +134,10 @@ bgImage.onload = () => {
 
 bgImage.onerror = () => {
   bgFailed = true;
-  console.log("Background failed to load:", bgImage.src);
+  console.log(
+    "Background failed to load:",
+    bgImage.src
+  );
 };
 
 pipeTopImage.onload = () => {
@@ -100,15 +149,43 @@ pipeBottomImage.onload = () => {
 };
 
 pipeTopImage.onerror = () => {
-  console.log("Top pipe failed to load:", pipeTopImage.src);
+  console.log(
+    "Top pipe failed to load:",
+    pipeTopImage.src
+  );
 };
 
 pipeBottomImage.onerror = () => {
-  console.log("Bottom pipe failed to load:", pipeBottomImage.src);
+  console.log(
+    "Bottom pipe failed to load:",
+    pipeBottomImage.src
+  );
+};
+
+tacoImage.onload = () => {
+  tacoLoaded = true;
+};
+
+tacoImage.onerror = () => {
+  tacoFailed = true;
+  console.log(
+    "Taco failed to load:",
+    tacoImage.src
+  );
 };
 
 music.onerror = () => {
-  console.log("Music failed to load:", music.src);
+  console.log(
+    "Music failed to load:",
+    music.src
+  );
+};
+
+tacoCrunch.onerror = () => {
+  console.log(
+    "Taco crunch failed to load:",
+    tacoCrunch.src
+  );
 };
 
 function startMusic(){
@@ -119,7 +196,11 @@ function startMusic(){
   musicStarted = true;
 
   music.play().catch(error => {
-    console.log("Music play blocked or failed:", error);
+    console.log(
+      "Music play blocked or failed:",
+      error
+    );
+
     musicStarted = false;
   });
 }
@@ -134,15 +215,36 @@ function toggleMusic(){
 
   if(gameState === "playing"){
     music.play().catch(error => {
-      console.log("Music resume failed:", error);
+      console.log(
+        "Music resume failed:",
+        error
+      );
     });
+
     musicStarted = true;
   }
+}
+
+function playTacoCrunch(){
+  tacoCrunch.pause();
+  tacoCrunch.currentTime = 0;
+
+  tacoCrunch.play().catch(error => {
+    console.log(
+      "Taco crunch play failed:",
+      error
+    );
+  });
 }
 
 function resetGame(){
   frame = 0;
   score = 0;
+  tacosCollected = 0;
+  gateSequence = 0;
+
+  tacoMessage = "";
+  tacoMessageTimer = 0;
 
   player = {
     x: CONFIG.playerX,
@@ -164,10 +266,18 @@ function makeStars(){
   for(let i = 0; i < 65; i++){
     list.push({
       x: Math.random() * WIDTH,
-      y: Math.random() * (HEIGHT - CONFIG.floorHeight),
-      size: Math.random() * 2 + 0.5,
-      speed: Math.random() * 0.35 + 0.12,
-      alpha: Math.random() * 0.45 + 0.18
+      y:
+        Math.random() *
+        (HEIGHT - CONFIG.floorHeight),
+
+      size:
+        Math.random() * 2 + 0.5,
+
+      speed:
+        Math.random() * 0.35 + 0.12,
+
+      alpha:
+        Math.random() * 0.45 + 0.18
     });
   }
 
@@ -176,15 +286,48 @@ function makeStars(){
 
 function spawnObstacle(x){
   const minTop = 70;
-  const maxTop = HEIGHT - CONFIG.floorHeight - CONFIG.obstacleGap - 80;
-  const gapY = minTop + Math.random() * (maxTop - minTop);
+
+  const maxTop =
+    HEIGHT -
+    CONFIG.floorHeight -
+    CONFIG.obstacleGap -
+    80;
+
+  const gapY =
+    minTop +
+    Math.random() *
+    (maxTop - minTop);
+
+  gateSequence++;
+
+  const hasTaco =
+    gateSequence %
+      CONFIG.tacoEveryNGates ===
+    0;
 
   obstacles.push({
     x,
     gapY,
-    width: CONFIG.obstacleWidth,
-    gap: CONFIG.obstacleGap,
-    passed: false
+
+    width:
+      CONFIG.obstacleWidth,
+
+    gap:
+      CONFIG.obstacleGap,
+
+    passed: false,
+
+    gateNumber:
+      gateSequence,
+
+    hasTaco,
+
+    tacoCollected: false,
+
+    tacoPhase:
+      Math.random() *
+      Math.PI *
+      2
   });
 }
 
@@ -197,8 +340,15 @@ function flap(){
   }
 
   if(gameState === "playing"){
-    player.vy = CONFIG.flapPower;
-    burst(player.x - 22, player.y + 10, COLORS.cyan, 8);
+    player.vy =
+      CONFIG.flapPower;
+
+    burst(
+      player.x - 22,
+      player.y + 10,
+      COLORS.cyan,
+      8
+    );
   }
 
   if(gameState === "gameover"){
@@ -207,15 +357,69 @@ function flap(){
   }
 }
 
-function burst(x, y, color, amount){
+function burst(
+  x,
+  y,
+  color,
+  amount
+){
   for(let i = 0; i < amount; i++){
     particles.push({
       x,
       y,
-      vx: (Math.random() - 0.5) * 4,
-      vy: (Math.random() - 0.5) * 4,
+
+      vx:
+        (Math.random() - 0.5) *
+        4,
+
+      vy:
+        (Math.random() - 0.5) *
+        4,
+
       life: 24,
+      size:
+        Math.random() * 3 + 3,
+
       color
+    });
+  }
+}
+
+function tacoBurst(x, y){
+  const colors = [
+    COLORS.gold,
+    COLORS.orange,
+    COLORS.cyan,
+    COLORS.magenta,
+    COLORS.white
+  ];
+
+  for(let i = 0; i < 24; i++){
+    particles.push({
+      x,
+      y,
+
+      vx:
+        (Math.random() - 0.5) *
+        7,
+
+      vy:
+        (Math.random() - 0.5) *
+        7,
+
+      life:
+        Math.random() * 14 + 20,
+
+      size:
+        Math.random() * 5 + 3,
+
+      color:
+        colors[
+          Math.floor(
+            Math.random() *
+            colors.length
+          )
+        ]
     });
   }
 }
@@ -226,47 +430,201 @@ function update(){
   updateStars();
   updateParticles();
 
+  if(tacoMessageTimer > 0){
+    tacoMessageTimer--;
+
+    if(tacoMessageTimer <= 0){
+      tacoMessage = "";
+    }
+  }
+
   if(gameState !== "playing"){
     return;
   }
 
   player.vy += CONFIG.gravity;
   player.y += player.vy;
-  player.rotation = Math.max(-0.38, Math.min(0.62, player.vy / 13));
 
-  const spawnRate = Math.floor(CONFIG.obstacleSpacing / CONFIG.obstacleSpeed);
+  player.rotation =
+    Math.max(
+      -0.38,
+      Math.min(
+        0.62,
+        player.vy / 13
+      )
+    );
+
+  const spawnRate =
+    Math.floor(
+      CONFIG.obstacleSpacing /
+      CONFIG.obstacleSpeed
+    );
 
   if(frame % spawnRate === 0){
     spawnObstacle(WIDTH + 80);
   }
 
   obstacles.forEach(obstacle => {
-    obstacle.x -= CONFIG.obstacleSpeed;
+    obstacle.x -=
+      CONFIG.obstacleSpeed;
 
-    if(!obstacle.passed && obstacle.x + obstacle.width < player.x){
+    checkTacoCollection(obstacle);
+
+    if(
+      !obstacle.passed &&
+      obstacle.x +
+        obstacle.width <
+        player.x
+    ){
       obstacle.passed = true;
       score++;
-      burst(player.x, player.y, COLORS.magenta, 10);
 
-      if(score > best){
-        best = score;
-        localStorage.setItem("flappyFaceBest", String(best));
-      }
+      burst(
+        player.x,
+        player.y,
+        COLORS.magenta,
+        10
+      );
+
+      updateBestScore();
     }
   });
 
-  obstacles = obstacles.filter(obstacle => obstacle.x + obstacle.width > -120);
+  obstacles =
+    obstacles.filter(
+      obstacle =>
+        obstacle.x +
+          obstacle.width >
+        -120
+    );
 
-  if(player.y - CONFIG.playerRadius < 0 || player.y + CONFIG.playerRadius > HEIGHT - CONFIG.floorHeight){
+  if(
+    player.y -
+      CONFIG.playerRadius <
+      0 ||
+    player.y +
+      CONFIG.playerRadius >
+      HEIGHT -
+        CONFIG.floorHeight
+  ){
     endGame();
   }
 
   for(const obstacle of obstacles){
-    if(playerHitsObstacle(player, obstacle)){
+    if(
+      playerHitsObstacle(
+        player,
+        obstacle
+      )
+    ){
       endGame();
       break;
     }
   }
+}
+
+function checkTacoCollection(obstacle){
+  if(
+    !obstacle.hasTaco ||
+    obstacle.tacoCollected
+  ){
+    return;
+  }
+
+  const tacoPosition =
+    getTacoPosition(obstacle);
+
+  const dx =
+    player.x -
+    tacoPosition.x;
+
+  const dy =
+    player.y -
+    tacoPosition.y;
+
+  const distanceSquared =
+    dx * dx + dy * dy;
+
+  const combinedRadius =
+    CONFIG.playerRadius +
+    CONFIG.tacoCollisionRadius;
+
+  if(
+    distanceSquared <=
+    combinedRadius *
+      combinedRadius
+  ){
+    collectTaco(
+      obstacle,
+      tacoPosition.x,
+      tacoPosition.y
+    );
+  }
+}
+
+function getTacoPosition(obstacle){
+  const bob =
+    Math.sin(
+      frame *
+        CONFIG.tacoBobSpeed +
+        obstacle.tacoPhase
+    ) *
+    CONFIG.tacoBobAmount;
+
+  return {
+    x:
+      obstacle.x +
+      obstacle.width / 2,
+
+    y:
+      obstacle.gapY +
+      obstacle.gap / 2 +
+      bob
+  };
+}
+
+function collectTaco(
+  obstacle,
+  x,
+  y
+){
+  obstacle.tacoCollected = true;
+
+  tacosCollected++;
+  score +=
+    CONFIG.tacoBonusPoints;
+
+  tacoMessage =
+    `TACO CRUNCHED! +${CONFIG.tacoBonusPoints}`;
+
+  tacoMessageTimer = 72;
+
+  tacoBurst(x, y);
+  playTacoCrunch();
+
+  if(tacosCollected > bestTacos){
+    bestTacos = tacosCollected;
+
+    localStorage.setItem(
+      "flappyFaceBestTacos",
+      String(bestTacos)
+    );
+  }
+
+  updateBestScore();
+}
+
+function updateBestScore(){
+  if(score <= best){
+    return;
+  }
+
+  best = score;
+
+  localStorage.setItem(
+    "flappyFaceBest",
+    String(best)
+  );
 }
 
 function updateStars(){
@@ -274,8 +632,16 @@ function updateStars(){
     star.x -= star.speed;
 
     if(star.x < -4){
-      star.x = WIDTH + Math.random() * 40;
-      star.y = Math.random() * (HEIGHT - CONFIG.floorHeight);
+      star.x =
+        WIDTH +
+        Math.random() * 40;
+
+      star.y =
+        Math.random() *
+        (
+          HEIGHT -
+          CONFIG.floorHeight
+        );
     }
   });
 }
@@ -284,21 +650,44 @@ function updateParticles(){
   particles.forEach(particle => {
     particle.x += particle.vx;
     particle.y += particle.vy;
+
+    particle.vy += 0.045;
+
     particle.life--;
   });
 
-  particles = particles.filter(particle => particle.life > 0);
+  particles =
+    particles.filter(
+      particle =>
+        particle.life > 0
+    );
 }
 
-function playerHitsObstacle(p, obstacle){
-  const r = CONFIG.playerRadius;
-  const withinX = p.x + r > obstacle.x && p.x - r < obstacle.x + obstacle.width;
+function playerHitsObstacle(
+  p,
+  obstacle
+){
+  const r =
+    CONFIG.playerRadius;
+
+  const withinX =
+    p.x + r >
+      obstacle.x &&
+    p.x - r <
+      obstacle.x +
+        obstacle.width;
 
   if(!withinX){
     return false;
   }
 
-  return !(p.y - r > obstacle.gapY && p.y + r < obstacle.gapY + obstacle.gap);
+  return !(
+    p.y - r >
+      obstacle.gapY &&
+    p.y + r <
+      obstacle.gapY +
+        obstacle.gap
+  );
 }
 
 function endGame(){
@@ -307,17 +696,25 @@ function endGame(){
   }
 
   gameState = "gameover";
-  burst(player.x, player.y, COLORS.magenta, 26);
+
+  burst(
+    player.x,
+    player.y,
+    COLORS.magenta,
+    26
+  );
 }
 
 function draw(){
   drawBackground();
   drawStars();
   drawObstacles();
+  drawTacos();
   drawFloor();
   drawPlayer();
   drawParticles();
   drawHud();
+  drawTacoMessage();
 
   if(gameState === "title"){
     drawTitleScreen();
@@ -336,21 +733,64 @@ function loop(){
 }
 
 function drawBackground(){
-  const gradient = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
-  gradient.addColorStop(0, "#05070d");
-  gradient.addColorStop(0.45, "#0b1020");
-  gradient.addColorStop(1, "#05070d");
+  const gradient =
+    ctx.createLinearGradient(
+      0,
+      0,
+      WIDTH,
+      HEIGHT
+    );
+
+  gradient.addColorStop(
+    0,
+    "#05070d"
+  );
+
+  gradient.addColorStop(
+    0.45,
+    "#0b1020"
+  );
+
+  gradient.addColorStop(
+    1,
+    "#05070d"
+  );
 
   ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  ctx.fillRect(
+    0,
+    0,
+    WIDTH,
+    HEIGHT
+  );
 
   if(bgLoaded){
-    const bgDrawHeight = HEIGHT - CONFIG.floorHeight;
-    const scale = bgDrawHeight / bgImage.height;
-    const bgDrawWidth = bgImage.width * scale;
-    const offset = (frame * CONFIG.backgroundSpeed) % bgDrawWidth;
+    const bgDrawHeight =
+      HEIGHT -
+      CONFIG.floorHeight;
 
-    for(let x = -offset; x < WIDTH + bgDrawWidth; x += bgDrawWidth){
+    const scale =
+      bgDrawHeight /
+      bgImage.height;
+
+    const bgDrawWidth =
+      bgImage.width *
+      scale;
+
+    const offset =
+      (
+        frame *
+        CONFIG.backgroundSpeed
+      ) %
+      bgDrawWidth;
+
+    for(
+      let x = -offset;
+      x <
+      WIDTH + bgDrawWidth;
+      x += bgDrawWidth
+    ){
       ctx.drawImage(
         bgImage,
         x,
@@ -361,8 +801,17 @@ function drawBackground(){
     }
 
     ctx.save();
-    ctx.fillStyle = "rgba(5,7,13,.18)";
-    ctx.fillRect(0, 0, WIDTH, bgDrawHeight);
+
+    ctx.fillStyle =
+      "rgba(5,7,13,.18)";
+
+    ctx.fillRect(
+      0,
+      0,
+      WIDTH,
+      bgDrawHeight
+    );
+
     ctx.restore();
   }
 
@@ -378,19 +827,56 @@ function drawFallbackGrid(){
   ctx.strokeStyle = COLORS.cyan;
   ctx.lineWidth = 1;
 
-  for(let x = -80; x < WIDTH + 80; x += 80){
+  for(
+    let x = -80;
+    x < WIDTH + 80;
+    x += 80
+  ){
     ctx.beginPath();
-    ctx.moveTo(x - (frame % 80), 0);
-    ctx.lineTo(x + 140 - (frame % 80), HEIGHT);
+
+    ctx.moveTo(
+      x - (frame % 80),
+      0
+    );
+
+    ctx.lineTo(
+      x +
+        140 -
+        (frame % 80),
+      HEIGHT
+    );
+
     ctx.stroke();
   }
 
-  ctx.strokeStyle = COLORS.magenta;
+  ctx.strokeStyle =
+    COLORS.magenta;
 
-  for(let y = 40; y < HEIGHT; y += 80){
+  for(
+    let y = 40;
+    y < HEIGHT;
+    y += 80
+  ){
     ctx.beginPath();
-    ctx.moveTo(0, y + Math.sin(frame / 50) * 6);
-    ctx.lineTo(WIDTH, y + Math.sin(frame / 50) * 6);
+
+    ctx.moveTo(
+      0,
+      y +
+        Math.sin(
+          frame / 50
+        ) *
+        6
+    );
+
+    ctx.lineTo(
+      WIDTH,
+      y +
+        Math.sin(
+          frame / 50
+        ) *
+        6
+    );
+
     ctx.stroke();
   }
 
@@ -403,9 +889,18 @@ function drawStars(){
   }
 
   stars.forEach(star => {
-    ctx.globalAlpha = star.alpha;
-    ctx.fillStyle = COLORS.white;
-    ctx.fillRect(star.x, star.y, star.size, star.size);
+    ctx.globalAlpha =
+      star.alpha;
+
+    ctx.fillStyle =
+      COLORS.white;
+
+    ctx.fillRect(
+      star.x,
+      star.y,
+      star.size,
+      star.size
+    );
   });
 
   ctx.globalAlpha = 1;
@@ -413,78 +908,336 @@ function drawStars(){
 
 function drawObstacles(){
   obstacles.forEach(obstacle => {
-    drawPipeTop(obstacle.x, 0, obstacle.width, obstacle.gapY);
+    drawPipeTop(
+      obstacle.x,
+      0,
+      obstacle.width,
+      obstacle.gapY
+    );
 
     drawPipeBottom(
       obstacle.x,
-      obstacle.gapY + obstacle.gap,
+      obstacle.gapY +
+        obstacle.gap,
+
       obstacle.width,
-      HEIGHT - CONFIG.floorHeight - (obstacle.gapY + obstacle.gap)
+
+      HEIGHT -
+        CONFIG.floorHeight -
+        (
+          obstacle.gapY +
+          obstacle.gap
+        )
     );
   });
 }
 
-function drawPipeTop(x, y, width, height){
+function drawTacos(){
+  obstacles.forEach(obstacle => {
+    if(
+      !obstacle.hasTaco ||
+      obstacle.tacoCollected
+    ){
+      return;
+    }
+
+    const position =
+      getTacoPosition(obstacle);
+
+    ctx.save();
+
+    ctx.translate(
+      position.x,
+      position.y
+    );
+
+    const rotation =
+      Math.sin(
+        frame * 0.045 +
+        obstacle.tacoPhase
+      ) *
+      0.08;
+
+    ctx.rotate(rotation);
+
+    const pulse =
+      1 +
+      Math.sin(
+        frame * 0.085 +
+        obstacle.tacoPhase
+      ) *
+      0.055;
+
+    const width =
+      CONFIG.tacoWidth *
+      pulse;
+
+    const height =
+      CONFIG.tacoHeight *
+      pulse;
+
+    ctx.shadowColor =
+      COLORS.gold;
+
+    ctx.shadowBlur = 20;
+
+    if(tacoLoaded){
+      ctx.drawImage(
+        tacoImage,
+        -width / 2,
+        -height / 2,
+        width,
+        height
+      );
+    }else{
+      drawFallbackTaco(
+        width,
+        height
+      );
+    }
+
+    ctx.restore();
+  });
+}
+
+function drawFallbackTaco(
+  width,
+  height
+){
+  ctx.save();
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.strokeStyle =
+    COLORS.black;
+
+  ctx.lineWidth = 4;
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    0,
+    4,
+    width / 2,
+    height / 2,
+    0,
+    Math.PI,
+    Math.PI * 2
+  );
+
+  ctx.lineTo(
+    width / 2,
+    6
+  );
+
+  ctx.quadraticCurveTo(
+    0,
+    height / 2,
+    -width / 2,
+    6
+  );
+
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle =
+    "#61D836";
+
+  ctx.fillRect(
+    -width * 0.28,
+    -2,
+    width * 0.56,
+    8
+  );
+
+  ctx.fillStyle =
+    COLORS.red;
+
+  ctx.fillRect(
+    -width * 0.18,
+    -7,
+    width * 0.36,
+    7
+  );
+
+  ctx.restore();
+}
+
+function drawPipeTop(
+  x,
+  y,
+  width,
+  height
+){
   if(height <= 0){
     return;
   }
 
   if(pipeTopLoaded){
-    ctx.drawImage(pipeTopImage, x, y, width, height);
+    ctx.drawImage(
+      pipeTopImage,
+      x,
+      y,
+      width,
+      height
+    );
   }else{
-    drawGate(x, y, width, height, true);
+    drawGate(
+      x,
+      y,
+      width,
+      height,
+      true
+    );
   }
 }
 
-function drawPipeBottom(x, y, width, height){
+function drawPipeBottom(
+  x,
+  y,
+  width,
+  height
+){
   if(height <= 0){
     return;
   }
 
   if(pipeBottomLoaded){
-    ctx.drawImage(pipeBottomImage, x, y, width, height);
+    ctx.drawImage(
+      pipeBottomImage,
+      x,
+      y,
+      width,
+      height
+    );
   }else{
-    drawGate(x, y, width, height, false);
+    drawGate(
+      x,
+      y,
+      width,
+      height,
+      false
+    );
   }
 }
 
-function drawGate(x, y, width, height, top){
+function drawGate(
+  x,
+  y,
+  width,
+  height,
+  top
+){
   if(height <= 0){
     return;
   }
 
-  const gradient = ctx.createLinearGradient(x, y, x + width, y);
-  gradient.addColorStop(0, "rgba(0,255,238,.95)");
-  gradient.addColorStop(0.5, "rgba(162,48,240,.92)");
-  gradient.addColorStop(1, "rgba(255,32,255,.95)");
+  const gradient =
+    ctx.createLinearGradient(
+      x,
+      y,
+      x + width,
+      y
+    );
+
+  gradient.addColorStop(
+    0,
+    "rgba(0,255,238,.95)"
+  );
+
+  gradient.addColorStop(
+    0.5,
+    "rgba(162,48,240,.92)"
+  );
+
+  gradient.addColorStop(
+    1,
+    "rgba(255,32,255,.95)"
+  );
 
   ctx.save();
 
-  ctx.shadowColor = COLORS.magenta;
+  ctx.shadowColor =
+    COLORS.magenta;
+
   ctx.shadowBlur = 18;
-  ctx.fillStyle = gradient;
-  ctx.fillRect(x, y, width, height);
+
+  ctx.fillStyle =
+    gradient;
+
+  ctx.fillRect(
+    x,
+    y,
+    width,
+    height
+  );
 
   ctx.shadowBlur = 0;
-  ctx.fillStyle = "rgba(5,7,13,.68)";
-  ctx.fillRect(x + 10, y + 10, width - 20, Math.max(0, height - 20));
 
-  ctx.strokeStyle = COLORS.cyan;
+  ctx.fillStyle =
+    "rgba(5,7,13,.68)";
+
+  ctx.fillRect(
+    x + 10,
+    y + 10,
+    width - 20,
+    Math.max(
+      0,
+      height - 20
+    )
+  );
+
+  ctx.strokeStyle =
+    COLORS.cyan;
+
   ctx.lineWidth = 3;
-  ctx.strokeRect(x + 4, y + 4, width - 8, height - 8);
 
-  ctx.fillStyle = "rgba(255,255,255,.08)";
+  ctx.strokeRect(
+    x + 4,
+    y + 4,
+    width - 8,
+    height - 8
+  );
 
-  for(let i = 0; i < height; i += 28){
-    ctx.fillRect(x + 12, y + i, width - 24, 3);
+  ctx.fillStyle =
+    "rgba(255,255,255,.08)";
+
+  for(
+    let i = 0;
+    i < height;
+    i += 28
+  ){
+    ctx.fillRect(
+      x + 12,
+      y + i,
+      width - 24,
+      3
+    );
   }
 
-  ctx.fillStyle = top ? COLORS.magenta : COLORS.cyan;
+  ctx.fillStyle =
+    top
+      ? COLORS.magenta
+      : COLORS.cyan;
 
   if(top){
-    ctx.fillRect(x - 8, y + height - 20, width + 16, 20);
+    ctx.fillRect(
+      x - 8,
+      y +
+        height -
+        20,
+      width + 16,
+      20
+    );
   }else{
-    ctx.fillRect(x - 8, y, width + 16, 20);
+    ctx.fillRect(
+      x - 8,
+      y,
+      width + 16,
+      20
+    );
   }
 
   ctx.restore();
@@ -493,21 +1246,58 @@ function drawGate(x, y, width, height, top){
 function drawFloor(){
   ctx.save();
 
-  ctx.fillStyle = "rgba(10,10,18,.95)";
-  ctx.fillRect(0, HEIGHT - CONFIG.floorHeight, WIDTH, CONFIG.floorHeight);
+  ctx.fillStyle =
+    "rgba(10,10,18,.95)";
 
-  ctx.strokeStyle = COLORS.cyan;
+  ctx.fillRect(
+    0,
+    HEIGHT -
+      CONFIG.floorHeight,
+    WIDTH,
+    CONFIG.floorHeight
+  );
+
+  ctx.strokeStyle =
+    COLORS.cyan;
+
   ctx.lineWidth = 2;
+
   ctx.beginPath();
-  ctx.moveTo(0, HEIGHT - CONFIG.floorHeight);
-  ctx.lineTo(WIDTH, HEIGHT - CONFIG.floorHeight);
+
+  ctx.moveTo(
+    0,
+    HEIGHT -
+      CONFIG.floorHeight
+  );
+
+  ctx.lineTo(
+    WIDTH,
+    HEIGHT -
+      CONFIG.floorHeight
+  );
+
   ctx.stroke();
 
   ctx.globalAlpha = 0.4;
-  ctx.fillStyle = COLORS.magenta;
+  ctx.fillStyle =
+    COLORS.magenta;
 
-  for(let x = -40; x < WIDTH + 40; x += 55){
-    ctx.fillRect(x - ((frame * 2) % 55), HEIGHT - 22, 28, 3);
+  for(
+    let x = -40;
+    x < WIDTH + 40;
+    x += 55
+  ){
+    ctx.fillRect(
+      x -
+        (
+          (frame * 2) %
+          55
+        ),
+
+      HEIGHT - 22,
+      28,
+      3
+    );
   }
 
   ctx.restore();
@@ -516,18 +1306,32 @@ function drawFloor(){
 function drawPlayer(){
   ctx.save();
 
-  ctx.translate(player.x, player.y);
-  ctx.rotate(player.rotation);
+  ctx.translate(
+    player.x,
+    player.y
+  );
+
+  ctx.rotate(
+    player.rotation
+  );
 
   ctx.save();
-  ctx.shadowColor = COLORS.cyan;
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
   ctx.shadowBlur = 18;
 
   if(faceLoaded){
     ctx.drawImage(
       faceImage,
-      -CONFIG.playerSpriteW / 2,
-      -CONFIG.playerSpriteH / 2,
+
+      -CONFIG.playerSpriteW /
+        2,
+
+      -CONFIG.playerSpriteH /
+        2,
+
       CONFIG.playerSpriteW,
       CONFIG.playerSpriteH
     );
@@ -539,10 +1343,22 @@ function drawPlayer(){
 
   if(faceFailed){
     ctx.save();
-    ctx.fillStyle = COLORS.magenta;
-    ctx.font = "700 9px Orbitron, Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("NO FACE", 0, 46);
+
+    ctx.fillStyle =
+      COLORS.magenta;
+
+    ctx.font =
+      "700 9px Orbitron, Arial";
+
+    ctx.textAlign =
+      "center";
+
+    ctx.fillText(
+      "NO FACE",
+      0,
+      46
+    );
+
     ctx.restore();
   }
 
@@ -550,34 +1366,107 @@ function drawPlayer(){
 }
 
 function drawPlaceholderFace(){
-  const gradient = ctx.createRadialGradient(-8, -8, 5, 0, 0, CONFIG.playerRadius);
-  gradient.addColorStop(0, "#ffffff");
-  gradient.addColorStop(0.4, COLORS.cyan);
-  gradient.addColorStop(1, COLORS.purple);
+  const gradient =
+    ctx.createRadialGradient(
+      -8,
+      -8,
+      5,
+      0,
+      0,
+      CONFIG.playerRadius
+    );
 
-  ctx.fillStyle = gradient;
+  gradient.addColorStop(
+    0,
+    "#ffffff"
+  );
+
+  gradient.addColorStop(
+    0.4,
+    COLORS.cyan
+  );
+
+  gradient.addColorStop(
+    1,
+    COLORS.purple
+  );
+
+  ctx.fillStyle =
+    gradient;
+
   ctx.beginPath();
-  ctx.arc(0, 0, CONFIG.playerRadius, 0, Math.PI * 2);
+
+  ctx.arc(
+    0,
+    0,
+    CONFIG.playerRadius,
+    0,
+    Math.PI * 2
+  );
+
   ctx.fill();
 
-  ctx.fillStyle = COLORS.black;
+  ctx.fillStyle =
+    COLORS.black;
+
   ctx.beginPath();
-  ctx.arc(-9, -5, 4, 0, Math.PI * 2);
-  ctx.arc(9, -5, 4, 0, Math.PI * 2);
+
+  ctx.arc(
+    -9,
+    -5,
+    4,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.arc(
+    9,
+    -5,
+    4,
+    0,
+    Math.PI * 2
+  );
+
   ctx.fill();
 
-  ctx.strokeStyle = COLORS.black;
+  ctx.strokeStyle =
+    COLORS.black;
+
   ctx.lineWidth = 3;
+
   ctx.beginPath();
-  ctx.arc(0, 5, 9, 0.1, Math.PI - 0.1);
+
+  ctx.arc(
+    0,
+    5,
+    9,
+    0.1,
+    Math.PI - 0.1
+  );
+
   ctx.stroke();
 }
 
 function drawParticles(){
   particles.forEach(particle => {
-    ctx.globalAlpha = particle.life / 24;
-    ctx.fillStyle = particle.color;
-    ctx.fillRect(particle.x, particle.y, 4, 4);
+    ctx.globalAlpha =
+      Math.max(
+        0,
+        particle.life / 24
+      );
+
+    ctx.fillStyle =
+      particle.color;
+
+    const size =
+      particle.size || 4;
+
+    ctx.fillRect(
+      particle.x,
+      particle.y,
+      size,
+      size
+    );
   });
 
   ctx.globalAlpha = 1;
@@ -586,20 +1475,121 @@ function drawParticles(){
 function drawHud(){
   ctx.save();
 
-  ctx.font = "900 26px Orbitron, Arial";
-  ctx.fillStyle = COLORS.cyan;
-  ctx.shadowColor = COLORS.cyan;
+  ctx.font =
+    "900 26px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.cyan;
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
   ctx.shadowBlur = 12;
-  ctx.fillText(`SIGNAL SCORE: ${score}`, 26, 42);
 
-  ctx.fillStyle = COLORS.magenta;
-  ctx.shadowColor = COLORS.magenta;
-  ctx.fillText(`BEST BROADCAST: ${best}`, 26, 76);
+  ctx.fillText(
+    `SIGNAL SCORE: ${score}`,
+    26,
+    42
+  );
 
-  ctx.font = "700 14px Orbitron, Arial";
+  ctx.fillStyle =
+    COLORS.magenta;
+
+  ctx.shadowColor =
+    COLORS.magenta;
+
+  ctx.fillText(
+    `BEST BROADCAST: ${best}`,
+    26,
+    76
+  );
+
+  ctx.font =
+    "900 19px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.shadowColor =
+    COLORS.gold;
+
+  ctx.fillText(
+    `TACOS: ${tacosCollected}`,
+    26,
+    108
+  );
+
+  ctx.font =
+    "700 14px Orbitron, Arial";
+
   ctx.shadowBlur = 0;
-  ctx.fillStyle = musicEnabled ? COLORS.cyan : COLORS.muted;
-  ctx.fillText(musicEnabled ? "MUSIC: ON" : "MUSIC: OFF", WIDTH - 150, 42);
+
+  ctx.fillStyle =
+    musicEnabled
+      ? COLORS.cyan
+      : COLORS.muted;
+
+  ctx.fillText(
+    musicEnabled
+      ? "MUSIC: ON"
+      : "MUSIC: OFF",
+
+    WIDTH - 150,
+    42
+  );
+
+  ctx.restore();
+}
+
+function drawTacoMessage(){
+  if(
+    tacoMessageTimer <= 0 ||
+    !tacoMessage
+  ){
+    return;
+  }
+
+  const alpha =
+    Math.min(
+      1,
+      tacoMessageTimer / 18
+    );
+
+  const lift =
+    (
+      72 -
+      tacoMessageTimer
+    ) *
+    0.35;
+
+  ctx.save();
+
+  ctx.globalAlpha =
+    alpha;
+
+  ctx.textAlign =
+    "center";
+
+  ctx.font =
+    "900 28px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.shadowColor =
+    COLORS.orange;
+
+  ctx.shadowBlur = 18;
+
+  ctx.fillText(
+    tacoMessage,
+
+    WIDTH / 2,
+
+    HEIGHT / 2 -
+      120 -
+      lift
+  );
 
   ctx.restore();
 }
@@ -610,26 +1600,81 @@ function drawTitleScreen(){
   ctx.save();
   ctx.textAlign = "center";
 
-  ctx.font = "900 64px Orbitron, Arial";
-  ctx.fillStyle = COLORS.cyan;
-  ctx.shadowColor = COLORS.cyan;
+  ctx.font =
+    "900 64px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.cyan;
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
   ctx.shadowBlur = 18;
-  ctx.fillText("FLAPPY FACE", WIDTH / 2, HEIGHT / 2 - 92);
 
-  ctx.font = "900 22px Orbitron, Arial";
-  ctx.fillStyle = COLORS.magenta;
-  ctx.shadowColor = COLORS.magenta;
-  ctx.fillText("UNAUTHORIZED BROADCAST MINI-GAME", WIDTH / 2, HEIGHT / 2 - 46);
+  ctx.fillText(
+    "FLAPPY FACE",
+    WIDTH / 2,
+    HEIGHT / 2 - 112
+  );
 
-  ctx.font = "900 24px Orbitron, Arial";
-  ctx.fillStyle = COLORS.white;
+  ctx.font =
+    "900 22px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.magenta;
+
+  ctx.shadowColor =
+    COLORS.magenta;
+
+  ctx.fillText(
+    "UNAUTHORIZED BROADCAST MINI-GAME",
+    WIDTH / 2,
+    HEIGHT / 2 - 66
+  );
+
+  ctx.font =
+    "900 24px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.white;
+
   ctx.shadowBlur = 0;
-  ctx.fillText("CLICK / TAP / SPACE TO GO LIVE", WIDTH / 2, HEIGHT / 2 + 18);
 
-  ctx.font = "700 16px Orbitron, Arial";
-  ctx.fillStyle = COLORS.muted;
-  ctx.fillText("Avoid the signal gates. Protect the broadcast.", WIDTH / 2, HEIGHT / 2 + 54);
-  ctx.fillText("Press M to toggle music.", WIDTH / 2, HEIGHT / 2 + 80);
+  ctx.fillText(
+    "CLICK / TAP / SPACE TO GO LIVE",
+    WIDTH / 2,
+    HEIGHT / 2 + 6
+  );
+
+  ctx.font =
+    "700 16px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.muted;
+
+  ctx.fillText(
+    "Avoid the signal gates. Protect the broadcast.",
+    WIDTH / 2,
+    HEIGHT / 2 + 44
+  );
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.fillText(
+    "Crunch the taco in every fifth gate for +5 points.",
+    WIDTH / 2,
+    HEIGHT / 2 + 72
+  );
+
+  ctx.fillStyle =
+    COLORS.muted;
+
+  ctx.fillText(
+    "Press M to toggle music.",
+    WIDTH / 2,
+    HEIGHT / 2 + 100
+  );
 
   ctx.restore();
 }
@@ -640,25 +1685,75 @@ function drawGameOver(){
   ctx.save();
   ctx.textAlign = "center";
 
-  ctx.font = "900 58px Orbitron, Arial";
-  ctx.fillStyle = COLORS.magenta;
-  ctx.shadowColor = COLORS.magenta;
+  ctx.font =
+    "900 58px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.magenta;
+
+  ctx.shadowColor =
+    COLORS.magenta;
+
   ctx.shadowBlur = 18;
-  ctx.fillText("SIGNAL LOST", WIDTH / 2, HEIGHT / 2 - 64);
 
-  ctx.font = "900 24px Orbitron, Arial";
-  ctx.fillStyle = COLORS.cyan;
-  ctx.shadowColor = COLORS.cyan;
-  ctx.fillText(`FINAL SIGNAL SCORE: ${score}`, WIDTH / 2, HEIGHT / 2 - 14);
+  ctx.fillText(
+    "SIGNAL LOST",
+    WIDTH / 2,
+    HEIGHT / 2 - 94
+  );
 
-  ctx.font = "900 22px Orbitron, Arial";
-  ctx.fillStyle = COLORS.white;
+  ctx.font =
+    "900 24px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.cyan;
+
+  ctx.shadowColor =
+    COLORS.cyan;
+
+  ctx.fillText(
+    `FINAL SIGNAL SCORE: ${score}`,
+    WIDTH / 2,
+    HEIGHT / 2 - 42
+  );
+
+  ctx.fillStyle =
+    COLORS.gold;
+
+  ctx.shadowColor =
+    COLORS.gold;
+
+  ctx.fillText(
+    `TACOS CRUNCHED: ${tacosCollected}`,
+    WIDTH / 2,
+    HEIGHT / 2 - 6
+  );
+
+  ctx.font =
+    "900 22px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.white;
+
   ctx.shadowBlur = 0;
-  ctx.fillText("CLICK / TAP / SPACE TO REBOOT BROADCAST", WIDTH / 2, HEIGHT / 2 + 44);
 
-  ctx.font = "700 15px Orbitron, Arial";
-  ctx.fillStyle = COLORS.muted;
-  ctx.fillText("Press M to toggle music.", WIDTH / 2, HEIGHT / 2 + 76);
+  ctx.fillText(
+    "CLICK / TAP / SPACE TO REBOOT BROADCAST",
+    WIDTH / 2,
+    HEIGHT / 2 + 58
+  );
+
+  ctx.font =
+    "700 15px Orbitron, Arial";
+
+  ctx.fillStyle =
+    COLORS.muted;
+
+  ctx.fillText(
+    "Press M to toggle music.",
+    WIDTH / 2,
+    HEIGHT / 2 + 90
+  );
 
   ctx.restore();
 }
@@ -666,48 +1761,83 @@ function drawGameOver(){
 function drawOverlay(){
   ctx.save();
 
-  ctx.fillStyle = "rgba(5,7,13,.72)";
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  ctx.fillStyle =
+    "rgba(5,7,13,.72)";
 
-  ctx.strokeStyle = "rgba(0,255,238,.28)";
+  ctx.fillRect(
+    0,
+    0,
+    WIDTH,
+    HEIGHT
+  );
+
+  ctx.strokeStyle =
+    "rgba(0,255,238,.28)";
+
   ctx.lineWidth = 3;
-  ctx.strokeRect(24, 24, WIDTH - 48, HEIGHT - 48);
+
+  ctx.strokeRect(
+    24,
+    24,
+    WIDTH - 48,
+    HEIGHT - 48
+  );
 
   ctx.restore();
 }
 
-window.addEventListener("keydown", event => {
-  if(event.code === "Space" || event.code === "ArrowUp" || event.code === "KeyW"){
+window.addEventListener(
+  "keydown",
+  event => {
+    if(
+      event.code === "Space" ||
+      event.code === "ArrowUp" ||
+      event.code === "KeyW"
+    ){
+      event.preventDefault();
+      flap();
+    }
+
+    if(event.code === "KeyR"){
+      event.preventDefault();
+      resetGame();
+      gameState = "title";
+    }
+
+    if(event.code === "KeyM"){
+      event.preventDefault();
+      toggleMusic();
+    }
+  }
+);
+
+canvas.addEventListener(
+  "pointerdown",
+  event => {
     event.preventDefault();
     flap();
   }
+);
 
-  if(event.code === "KeyR"){
-    event.preventDefault();
-    resetGame();
-    gameState = "title";
+document.addEventListener(
+  "visibilitychange",
+  () => {
+    if(document.hidden){
+      music.pause();
+      tacoCrunch.pause();
+    }else if(
+      musicEnabled &&
+      musicStarted
+    ){
+      music.play().catch(error => {
+        console.log(
+          "Music resume after visibility change failed:",
+          error
+        );
+      });
+    }
   }
-
-  if(event.code === "KeyM"){
-    event.preventDefault();
-    toggleMusic();
-  }
-});
-
-canvas.addEventListener("pointerdown", event => {
-  event.preventDefault();
-  flap();
-});
-
-document.addEventListener("visibilitychange", () => {
-  if(document.hidden){
-    music.pause();
-  }else if(musicEnabled && musicStarted){
-    music.play().catch(error => {
-      console.log("Music resume after visibility change failed:", error);
-    });
-  }
-});
+);
 
 resetGame();
 loop();
