@@ -38,14 +38,32 @@ const CONFIG = {
   defaultMusicLevel: 2,
   defaultSfxLevel: 8,
 
-  tacoEveryNGates: 5,
-  tacoBonusPoints: 5,
-  tacoWidth: 82,
-  tacoHeight: 54,
-  tacoCollisionRadius: 25,
-  tacoBobAmount: 7,
-  tacoBobSpeed: 0.075
-};
+// Music level 10 is half of the browser's old maximum.
+musicMaxVolume: 0.5,
+
+// SFX level 5 equals the old maximum.
+// SFX level 10 uses 2× gain.
+sfxMaxGain: 2.0,
+
+tacoEveryNGates: 5,
+tacoBonusPoints: 5,
+tacoWidth: 82,
+tacoHeight: 54,
+tacoCollisionRadius: 25,
+tacoBobAmount: 7,
+tacoBobSpeed: 0.075,
+
+// Sheetz billboard easter egg.
+billboardUnlockTacos: 10,
+billboardEveryGates: 10,
+billboardWidth: 250,
+billboardHeight: 200,
+billboardY: 205,
+billboardParallax: 0.62,
+
+// Lower portion of bg_neon_city.png containing the railing.
+// This is redrawn above the billboard.
+railingSourceStartRatio: 0.77
 
 let gameState = "title";
 let frame = 0;
@@ -69,6 +87,10 @@ let stars;
 
 let tacoMessage = "";
 let tacoMessageTimer = 0;
+let totalGatesPassed = 0;
+let gatesSinceBillboardUnlock = 0;
+let billboardUnlocked = false;
+let billboardInstances = [];
 
 let musicStarted = false;
 let soundPanelOpen = false;
@@ -120,6 +142,9 @@ pipeBottomImage.src = "assets/pipe_bottom.png";
 const tacoImage = new Image();
 tacoImage.src = "assets/taco_collectible.png";
 
+const billboardImage = new Image();
+billboardImage.src = "assets/sheetz_billboard.png";
+
 const music = new Audio(
   "assets/flappy_face_theme.wav"
 );
@@ -144,6 +169,9 @@ let pipeBottomLoaded = false;
 
 let tacoLoaded = false;
 let tacoFailed = false;
+
+let billboardLoaded = false;
+let billboardFailed = false;
 
 faceImage.onload = () => {
   faceLoaded = true;
@@ -217,11 +245,84 @@ tacoCrunch.onerror = () => {
   );
 };
 
+billboardImage.onload = () => {
+  billboardLoaded = true;
+};
+
+billboardImage.onerror = () => {
+  billboardFailed = true;
+
+  console.log(
+    "Billboard failed to load:",
+    billboardImage.src
+  );
+};
+
+let sfxAudioContext = null;
+let tacoCrunchSource = null;
+let tacoCrunchGain = null;
+
+function initializeSfxAudio(){
+  if(sfxAudioContext){
+    return;
+  }
+
+  const AudioContextClass =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+  if(!AudioContextClass){
+    console.warn(
+      "Web Audio is not supported. Using normal SFX volume."
+    );
+
+    return;
+  }
+
+  sfxAudioContext =
+    new AudioContextClass();
+
+  tacoCrunchSource =
+    sfxAudioContext.createMediaElementSource(
+      tacoCrunch
+    );
+
+  tacoCrunchGain =
+    sfxAudioContext.createGain();
+
+  tacoCrunchSource.connect(
+    tacoCrunchGain
+  );
+
+  tacoCrunchGain.connect(
+    sfxAudioContext.destination
+  );
+
+  updateSfxGain();
+}
+
+function updateSfxGain(){
+  const gain =
+    (sfxLevel / 10) *
+    CONFIG.sfxMaxGain;
+
+  if(tacoCrunchGain){
+    tacoCrunchGain.gain.value =
+      gain;
+  }else{
+    tacoCrunch.volume =
+      Math.min(1, gain);
+  }
+}
+
 /* -------------------- SOUND -------------------- */
 
 function applySoundLevels(){
-  music.volume = musicLevel / 10;
-  tacoCrunch.volume = sfxLevel / 10;
+  music.volume =
+    (musicLevel / 10) *
+    CONFIG.musicMaxVolume;
+
+  updateSfxGain();
 }
 
 function saveSoundLevels(){
@@ -316,9 +417,25 @@ function playTacoCrunch(){
     return;
   }
 
+  initializeSfxAudio();
+  updateSfxGain();
+
+  if(
+    sfxAudioContext &&
+    sfxAudioContext.state === "suspended"
+  ){
+    sfxAudioContext
+      .resume()
+      .catch(error => {
+        console.log(
+          "Audio context resume failed:",
+          error
+        );
+      });
+  }
+
   tacoCrunch.pause();
   tacoCrunch.currentTime = 0;
-  tacoCrunch.volume = sfxLevel / 10;
 
   tacoCrunch.play().catch(error => {
     console.log(
@@ -674,6 +791,10 @@ function resetGame(){
   score = 0;
   tacosCollected = 0;
   gateSequence = 0;
+  totalGatesPassed = 0;
+  gatesSinceBillboardUnlock = 0;
+  billboardUnlocked = false;
+  billboardInstances = [];
 
   tacoMessage = "";
   tacoMessageTimer = 0;
@@ -783,6 +904,7 @@ function spawnObstacle(x){
 /* -------------------- INPUT -------------------- */
 
 function flap(){
+  initializeSfxAudio();
   startMusic();
 
   if(gameState === "title"){
@@ -960,6 +1082,19 @@ function update(){
       ){
         obstacle.passed = true;
         score++;
+totalGatesPassed++;
+
+if(billboardUnlocked){
+  gatesSinceBillboardUnlock++;
+
+  if(
+    gatesSinceBillboardUnlock %
+    CONFIG.billboardEveryGates ===
+    0
+  ){
+    spawnBillboard();
+  }
+}
 
         burst(
           player.x,
@@ -980,6 +1115,8 @@ function update(){
         obstacle.width >
         -120
     );
+
+  updateBillboards();
 
   if(
     player.y -
@@ -1131,6 +1268,14 @@ function collectTaco(
     true;
 
   tacosCollected++;
+  if(
+  !billboardUnlocked &&
+  tacosCollected >=
+  CONFIG.billboardUnlockTacos
+){
+  billboardUnlocked = true;
+  gatesSinceBillboardUnlock = 0;
+}
 
   score +=
     CONFIG.tacoBonusPoints;
@@ -1172,6 +1317,63 @@ function updateBestScore(){
   );
 }
 
+/* -------------------- BILLBOARD -------------------- */
+
+function spawnBillboard(){
+  if(!billboardUnlocked){
+    return;
+  }
+
+  billboardInstances.push({
+    x: WIDTH + 120,
+    y: CONFIG.billboardY,
+    width: CONFIG.billboardWidth,
+    height: CONFIG.billboardHeight
+  });
+}
+
+function updateBillboards(){
+  const speed =
+    CONFIG.obstacleSpeed *
+    CONFIG.billboardParallax;
+
+  billboardInstances.forEach(
+    billboard => {
+      billboard.x -= speed;
+    }
+  );
+
+  billboardInstances =
+    billboardInstances.filter(
+      billboard =>
+        billboard.x +
+        billboard.width >
+        -80
+    );
+}
+
+function drawBillboards(){
+  if(
+    !billboardLoaded ||
+    billboardFailed
+  ){
+    return;
+  }
+
+  billboardInstances.forEach(
+    billboard => {
+      ctx.drawImage(
+        billboardImage,
+        billboard.x,
+        billboard.y,
+        billboard.width,
+        billboard.height
+      );
+    }
+  );
+}
+
+/* -------------------- COLLISION -------------------- */
 /* -------------------- COLLISION -------------------- */
 
 function playerHitsObstacle(
@@ -1223,6 +1425,8 @@ function endGame(){
 
 function draw(){
   drawBackground();
+  drawBillboards();
+  drawForegroundRailings();
   drawStars();
   drawObstacles();
   drawTacos();
