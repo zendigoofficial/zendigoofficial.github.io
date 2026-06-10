@@ -54,6 +54,9 @@ const CONFIG = {
   waterSpeed: 1.6,
   waterCropTop: 270,
   waterCropBottom: 150,
+  waterCropLeft: 18,
+  waterCropRight: 18,
+  waterTileOverlap: 12,
 
   billboardUnlockTacos: 3,
   billboardEveryGates: 7,
@@ -1588,11 +1591,16 @@ function drawForegroundWall(){
     ) %
     tileWidth;
 
+  const tileStep =
+  tileWidth -
+  CONFIG.waterTileOverlap;
+
   for(
     let x = -offset;
     x < WIDTH + tileWidth;
-    x += tileWidth
-  ){
+    x += tileStep
+)
+  {
     ctx.drawImage(
       foregroundWallImage,
 
@@ -1623,8 +1631,16 @@ function drawWater(){
   const sourceCropBottom =
     CONFIG.waterCropBottom;
 
+  const sourceCropLeft =
+    CONFIG.waterCropLeft;
+
+  const sourceCropRight =
+    CONFIG.waterCropRight;
+
   const sourceWidth =
-    waterImage.width;
+    waterImage.width -
+    sourceCropLeft -
+    sourceCropRight;
 
   const sourceHeight =
     waterImage.height -
@@ -1640,12 +1656,12 @@ function drawWater(){
   CONFIG.waterScaleY;
 
   const offset =
-    (
-      frame *
-      CONFIG.waterSpeed
-    ) %
-    tileWidth;
-
+  (
+    frame *
+    CONFIG.waterSpeed
+  ) %
+  tileStep;
+  
   for(
     let x = -offset;
     x < WIDTH + tileWidth;
@@ -1654,7 +1670,7 @@ function drawWater(){
     ctx.drawImage(
       waterImage,
 
-      0,
+      sourceCropLeft,
       sourceCropTop,
       sourceWidth,
       sourceHeight,
