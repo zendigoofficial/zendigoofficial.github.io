@@ -50,7 +50,7 @@ const CONFIG = {
 
   waterScaleX: 0.80,
   waterScaleY: 0.42,
-  waterY: 2425,
+  waterY: 425,
   waterSpeed: 1.6,
   waterCropTop: 270,
   waterCropBottom: 150,
