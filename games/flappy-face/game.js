@@ -1648,24 +1648,28 @@ function drawWater(){
     sourceCropBottom;
 
   const tileWidth =
-  sourceWidth *
-  CONFIG.waterScaleX;
+    sourceWidth *
+    CONFIG.waterScaleX;
 
   const tileHeight =
-  sourceHeight *
-  CONFIG.waterScaleY;
+    sourceHeight *
+    CONFIG.waterScaleY;
+
+  const tileStep =
+    tileWidth -
+    CONFIG.waterTileOverlap;
 
   const offset =
-  (
-    frame *
-    CONFIG.waterSpeed
-  ) %
-  tileStep;
-  
+    (
+      frame *
+      CONFIG.waterSpeed
+    ) %
+    tileStep;
+
   for(
     let x = -offset;
     x < WIDTH + tileWidth;
-    x += tileWidth
+    x += tileStep
   ){
     ctx.drawImage(
       waterImage,
