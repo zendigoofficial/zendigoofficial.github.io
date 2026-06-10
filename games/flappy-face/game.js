@@ -1512,12 +1512,6 @@ function drawForegroundWall(){
     return;
   }
 
-  const drawWidth = WIDTH;
-
-  const scale =
-    drawWidth /
-    foregroundWallImage.width;
-
   const sourceCropTop = 18;
   const sourceCropBottom = 8;
 
@@ -1529,7 +1523,13 @@ function drawForegroundWall(){
     sourceCropTop -
     sourceCropBottom;
 
-  const drawHeight =
+  const scale = 0.72;
+
+  const tileWidth =
+    sourceWidth *
+    scale;
+
+  const tileHeight =
     sourceHeight *
     scale;
 
@@ -1538,22 +1538,38 @@ function drawForegroundWall(){
   const drawY =
     HEIGHT -
     CONFIG.floorHeight -
-    drawHeight +
+    tileHeight +
     wallLift;
 
-  ctx.drawImage(
-    foregroundWallImage,
+  const scrollSpeed =
+    CONFIG.backgroundSpeed;
 
-    0,
-    sourceCropTop,
-    sourceWidth,
-    sourceHeight,
+  const offset =
+    (
+      frame *
+      scrollSpeed
+    ) %
+    tileWidth;
 
-    0,
-    drawY,
-    drawWidth,
-    drawHeight
-  );
+  for(
+    let x = -offset;
+    x < WIDTH + tileWidth;
+    x += tileWidth
+  ){
+    ctx.drawImage(
+      foregroundWallImage,
+
+      0,
+      sourceCropTop,
+      sourceWidth,
+      sourceHeight,
+
+      x,
+      drawY,
+      tileWidth,
+      tileHeight
+    );
+  }
 }
 
 function drawFallbackGrid(){
