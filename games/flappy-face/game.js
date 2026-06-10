@@ -48,7 +48,8 @@ const CONFIG = {
   tacoBobAmount: 7,
   tacoBobSpeed: 0.075,
 
-  waterScale: 0.65,
+  waterScaleX: 0.70,
+  waterScaleY: 0.46,
   waterY: 300,
   waterSpeed: 1.6,
   waterCropTop: 270,
@@ -1631,12 +1632,12 @@ function drawWater(){
     sourceCropBottom;
 
   const tileWidth =
-    sourceWidth *
-    CONFIG.waterScale;
+  sourceWidth *
+  CONFIG.waterScaleX;
 
   const tileHeight =
-    sourceHeight *
-    CONFIG.waterScale;
+  sourceHeight *
+  CONFIG.waterScaleY;
 
   const offset =
     (
