@@ -48,8 +48,8 @@ const CONFIG = {
   tacoBobAmount: 7,
   tacoBobSpeed: 0.075,
 
-  billboardUnlockTacos: 5,
-  billboardEveryGates: 10,
+  billboardUnlockTacos: 3,
+  billboardEveryGates: 7,
 
   billboardScale: 0.13,
   billboardY: 250,
