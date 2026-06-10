@@ -50,8 +50,8 @@ const CONFIG = {
 
   billboardUnlockTacos: 10,
   billboardEveryGates: 10,
-  billboardWidth: 250,
-  billboardHeight: 200,
+
+  billboardScale: 0.24,
   billboardY: 205,
   billboardParallax: 0.62,
 
@@ -1291,8 +1291,7 @@ function spawnBillboard(){
   billboardInstances.push({
     x: WIDTH + 120,
     y: CONFIG.billboardY,
-    width: CONFIG.billboardWidth,
-    height: CONFIG.billboardHeight
+    scale: CONFIG.billboardScale
   });
 }
 
@@ -1301,20 +1300,25 @@ function updateBillboards(){
     CONFIG.obstacleSpeed *
     CONFIG.billboardParallax;
 
-  for(
-    const billboard
-    of billboardInstances
-  ){
-    billboard.x -=
-      speed;
-  }
+  billboardInstances.forEach(
+    billboard => {
+      billboard.x -= speed;
+    }
+  );
 
   billboardInstances =
     billboardInstances.filter(
-      billboard =>
-        billboard.x +
-        billboard.width >
-        -80
+      billboard => {
+        const width =
+          billboardImage.width *
+          billboard.scale;
+
+        return (
+          billboard.x +
+          width >
+          -80
+        );
+      }
     );
 }
 
@@ -1326,18 +1330,25 @@ function drawBillboards(){
     return;
   }
 
-  for(
-    const billboard
-    of billboardInstances
-  ){
-    ctx.drawImage(
-      billboardImage,
-      billboard.x,
-      billboard.y,
-      billboard.width,
-      billboard.height
-    );
-  }
+  billboardInstances.forEach(
+    billboard => {
+      const drawWidth =
+        billboardImage.width *
+        billboard.scale;
+
+      const drawHeight =
+        billboardImage.height *
+        billboard.scale;
+
+      ctx.drawImage(
+        billboardImage,
+        billboard.x,
+        billboard.y,
+        drawWidth,
+        drawHeight
+      );
+    }
+  );
 }
 
 /* -------------------- COLLISION -------------------- */
