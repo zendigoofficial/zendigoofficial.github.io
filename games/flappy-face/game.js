@@ -48,6 +48,12 @@ const CONFIG = {
   tacoBobAmount: 7,
   tacoBobSpeed: 0.075,
 
+  waterScale: 0.46,
+  waterY: 500,
+  waterSpeed: 1.6,
+  waterCropTop: 270,
+  waterCropBottom: 150,
+
   billboardUnlockTacos: 3,
   billboardEveryGates: 7,
 
@@ -116,6 +122,9 @@ billboardImage.src = "assets/sheetz_billboard.png";
 const foregroundWallImage = new Image();
 foregroundWallImage.src = "assets/foreground_wall_railing.png";
 
+const waterImage = new Image();
+waterImage.src = "assets/water_asset_transparent.png";
+
 const music = new Audio("assets/flappy_face_theme.wav");
 music.loop = true;
 music.preload = "auto";
@@ -135,6 +144,8 @@ let billboardLoaded = false;
 let billboardFailed = false;
 let foregroundWallLoaded = false;
 let foregroundWallFailed = false;
+let waterLoaded = false;
+let waterFailed = false;
 
 faceImage.onload = () => {
   faceLoaded = true;
@@ -202,6 +213,19 @@ foregroundWallImage.onerror = () => {
   console.warn(
     "Foreground wall failed to load:",
     foregroundWallImage.src
+  );
+};
+
+waterImage.onload = () => {
+  waterLoaded = true;
+};
+
+waterImage.onerror = () => {
+  waterFailed = true;
+
+  console.warn(
+    "Water failed to load:",
+    waterImage.src
   );
 };
 
@@ -1404,6 +1428,7 @@ function draw(){
   drawBackground();
   drawBillboards();
   drawForegroundWall();
+  drawWater();
   drawStars();
   drawObstacles();
   drawTacos();
@@ -1577,6 +1602,64 @@ function drawForegroundWall(){
 
       x,
       drawY,
+      tileWidth,
+      tileHeight
+    );
+  }
+}
+
+function drawWater(){
+  if(
+    !waterLoaded ||
+    waterFailed
+  ){
+    return;
+  }
+
+  const sourceCropTop =
+    CONFIG.waterCropTop;
+
+  const sourceCropBottom =
+    CONFIG.waterCropBottom;
+
+  const sourceWidth =
+    waterImage.width;
+
+  const sourceHeight =
+    waterImage.height -
+    sourceCropTop -
+    sourceCropBottom;
+
+  const tileWidth =
+    sourceWidth *
+    CONFIG.waterScale;
+
+  const tileHeight =
+    sourceHeight *
+    CONFIG.waterScale;
+
+  const offset =
+    (
+      frame *
+      CONFIG.waterSpeed
+    ) %
+    tileWidth;
+
+  for(
+    let x = -offset;
+    x < WIDTH + tileWidth;
+    x += tileWidth
+  ){
+    ctx.drawImage(
+      waterImage,
+
+      0,
+      sourceCropTop,
+      sourceWidth,
+      sourceHeight,
+
+      x,
+      CONFIG.waterY,
       tileWidth,
       tileHeight
     );
