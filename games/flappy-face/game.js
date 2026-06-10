@@ -48,9 +48,9 @@ const CONFIG = {
   tacoBobAmount: 7,
   tacoBobSpeed: 0.075,
 
-  waterScaleX: 0.70,
-  waterScaleY: 0.46,
-  waterY: 300,
+  waterScaleX: 0.75,
+  waterScaleY: 0.42,
+  waterY: 275,
   waterSpeed: 1.6,
   waterCropTop: 270,
   waterCropBottom: 150,
