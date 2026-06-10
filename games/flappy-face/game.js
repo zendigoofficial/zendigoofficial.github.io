@@ -113,6 +113,9 @@ tacoImage.src = "assets/taco_collectible.png";
 const billboardImage = new Image();
 billboardImage.src = "assets/sheetz_billboard.png";
 
+const foregroundWallImage = new Image();
+foregroundWallImage.src = "assets/foreground_wall_railing.png";
+
 const music = new Audio("assets/flappy_face_theme.wav");
 music.loop = true;
 music.preload = "auto";
@@ -130,6 +133,8 @@ let tacoLoaded = false;
 let tacoFailed = false;
 let billboardLoaded = false;
 let billboardFailed = false;
+let foregroundWallLoaded = false;
+let foregroundWallFailed = false;
 
 faceImage.onload = () => {
   faceLoaded = true;
@@ -180,7 +185,24 @@ billboardImage.onload = () => {
 
 billboardImage.onerror = () => {
   billboardFailed = true;
-  console.warn("Billboard failed to load:", billboardImage.src);
+  
+  console.warn(
+    "Billboard failed to load:", 
+    billboardImage.src
+  );
+};
+
+foregroundWallImage.onload = () => {
+  foregroundWallLoaded = true;
+};
+
+foregroundWallImage.onerror = () => {
+  foregroundWallFailed = true;
+
+  console.warn(
+    "Foreground wall failed to load:",
+    foregroundWallImage.src
+  );
 };
 
 music.onerror = () => {
@@ -1370,7 +1392,7 @@ function endGame(){
 function draw(){
   drawBackground();
   drawBillboards();
-  drawForegroundRailings();
+  drawForegroundWall();
   drawStars();
   drawObstacles();
   drawTacos();
@@ -1482,69 +1504,36 @@ function drawBackground(){
   }
 }
 
-function drawForegroundRailings(){
-  if(!bgLoaded){
+function drawForegroundWall(){
+  if(
+    !foregroundWallLoaded ||
+    foregroundWallFailed
+  ){
     return;
   }
 
-  const bgDrawHeight =
-    HEIGHT -
-    CONFIG.floorHeight;
+  const drawWidth = WIDTH;
 
   const scale =
-    bgDrawHeight /
-    bgImage.height;
+    drawWidth /
+    foregroundWallImage.width;
 
-  const bgDrawWidth =
-    bgImage.width *
+  const drawHeight =
+    foregroundWallImage.height *
     scale;
 
-  const offset =
-    (
-      frame *
-      CONFIG.backgroundSpeed
-    ) %
-    bgDrawWidth;
+  const drawY =
+    HEIGHT -
+    CONFIG.floorHeight -
+    drawHeight;
 
-  const sourceY =
-    Math.floor(
-      bgImage.height *
-      CONFIG.railingSourceStartRatio
-    );
-
-  const sourceHeight =
-    bgImage.height -
-    sourceY;
-
-  const destinationY =
-    sourceY *
-    scale;
-
-  const destinationHeight =
-    sourceHeight *
-    scale;
-
-  for(
-    let x = -offset;
-    x <
-    WIDTH +
-    bgDrawWidth;
-    x += bgDrawWidth
-  ){
-    ctx.drawImage(
-      bgImage,
-
-      0,
-      sourceY,
-      bgImage.width,
-      sourceHeight,
-
-      x,
-      destinationY,
-      bgDrawWidth,
-      destinationHeight
-    );
-  }
+  ctx.drawImage(
+    foregroundWallImage,
+    0,
+    drawY,
+    drawWidth,
+    drawHeight
+  );
 }
 
 function drawFallbackGrid(){
