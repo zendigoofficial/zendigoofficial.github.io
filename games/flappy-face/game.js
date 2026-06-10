@@ -52,7 +52,7 @@ const CONFIG = {
   billboardEveryGates: 10,
 
   billboardScale: 0.13,
-  billboardY: 315,
+  billboardY: 250,
   billboardParallax: 0.62,
 
   railingSourceStartRatio: 0.77
