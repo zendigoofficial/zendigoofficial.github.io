@@ -1563,7 +1563,7 @@ function drawForegroundWall(){
     sourceCropTop -
     sourceCropBottom;
 
-  const scale = 0.20;
+  const scale = 0.72;
 
   const tileWidth =
     sourceWidth *
@@ -1573,7 +1573,7 @@ function drawForegroundWall(){
     sourceHeight *
     scale;
 
-  const wallLift = -25;
+  const wallLift = 160;
 
   const drawY =
     HEIGHT -
@@ -1581,26 +1581,11 @@ function drawForegroundWall(){
     tileHeight +
     wallLift;
 
-  const scrollSpeed =
-    CONFIG.backgroundSpeed;
-
-  const offset =
-    (
-      frame *
-      scrollSpeed
-    ) %
-    tileWidth;
-
-  const tileStep =
-  tileWidth -
-  CONFIG.waterTileOverlap;
-
   for(
-    let x = -offset;
+    let x = 0;
     x < WIDTH + tileWidth;
-    x += tileStep
-)
-  {
+    x += tileWidth
+  ){
     ctx.drawImage(
       foregroundWallImage,
 
@@ -1616,7 +1601,6 @@ function drawForegroundWall(){
     );
   }
 }
-
 function drawWater(){
   if(
     !waterLoaded ||
