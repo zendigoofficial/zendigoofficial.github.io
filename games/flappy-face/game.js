@@ -51,8 +51,8 @@ const CONFIG = {
   billboardUnlockTacos: 5,
   billboardEveryGates: 10,
 
-  billboardScale: 0.12,
-  billboardY: 280,
+  billboardScale: 0.13,
+  billboardY: 315,
   billboardParallax: 0.62,
 
   railingSourceStartRatio: 0.77
