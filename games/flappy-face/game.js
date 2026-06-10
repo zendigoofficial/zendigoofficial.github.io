@@ -1522,10 +1522,13 @@ function drawForegroundWall(){
     foregroundWallImage.height *
     scale;
 
+  const wallLift = 52;
+
   const drawY =
     HEIGHT -
     CONFIG.floorHeight -
-    drawHeight;
+    drawHeight +
+    wallLift;
 
   ctx.drawImage(
     foregroundWallImage,
