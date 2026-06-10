@@ -1518,8 +1518,19 @@ function drawForegroundWall(){
     drawWidth /
     foregroundWallImage.width;
 
+  const sourceCropTop = 18;
+  const sourceCropBottom = 8;
+
+  const sourceWidth =
+    foregroundWallImage.width;
+
+  const sourceHeight =
+    foregroundWallImage.height -
+    sourceCropTop -
+    sourceCropBottom;
+
   const drawHeight =
-    foregroundWallImage.height *
+    sourceHeight *
     scale;
 
   const wallLift = 160;
@@ -1532,6 +1543,12 @@ function drawForegroundWall(){
 
   ctx.drawImage(
     foregroundWallImage,
+
+    0,
+    sourceCropTop,
+    sourceWidth,
+    sourceHeight,
+
     0,
     drawY,
     drawWidth,
