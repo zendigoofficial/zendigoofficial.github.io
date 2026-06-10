@@ -1563,7 +1563,7 @@ function drawForegroundWall(){
     sourceCropTop -
     sourceCropBottom;
 
-  const scale = 0.15;
+  const scale = 0.10;
 
   const tileWidth =
     sourceWidth *
@@ -1573,7 +1573,7 @@ function drawForegroundWall(){
     sourceHeight *
     scale;
 
-  const wallLift = -40;
+  const wallLift = -45;
 
   const drawY =
     HEIGHT -
