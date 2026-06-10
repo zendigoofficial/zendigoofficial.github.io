@@ -1573,7 +1573,7 @@ function drawForegroundWall(){
     sourceHeight *
     scale;
 
-  const wallLift = -25;
+  const wallLift = -19;
 
   const drawY =
     HEIGHT -
