@@ -1,0 +1,1 @@
+var e=`https://zendigo-redline-82.plathippy.chatgpt.site`;function t(t){return typeof window<`u`&&window.location.hostname===`zendigoofficial.github.io`?`${e}${t}`:t}export{t};
