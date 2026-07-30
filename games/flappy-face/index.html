@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Flappy Face | Zendigo Arcade</title>
+<meta
+  name="description"
+  content="Play Flappy Face, Zendigo's keyboard, touch and controller-ready browser arcade game."
+/>
+<meta name="theme-color" content="#05070d" />
+<script>
+  if (new URLSearchParams(window.location.search).has("embed")) {
+    document.documentElement.classList.add("is-embedded");
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap"
+/>
+<link
+  rel="preload"
+  as="image"
+  href="assets/bg_neon_city.webp"
+  type="image/webp"
+/>
+<link
+  rel="preload"
+  as="image"
+  href="assets/player_face.webp"
+  type="image/webp"
+/>
+<link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<main class="page">
+
+  <section class="game-shell">
+
+    <header class="game-header">
+      <div>
+        <p class="eyebrow">UNAUTHORIZED BROADCAST MINI-GAME</p>
+        <h1>Flappy Face</h1>
+      </div>
+
+      <a class="back-link" href="../../#tools">Back To Zendigo →</a>
+    </header>
+
+    <div class="canvas-wrap">
+      <canvas
+        id="gameCanvas"
+        width="960"
+        height="540"
+        tabindex="0"
+        role="img"
+        aria-label="Flappy Face game canvas"
+        aria-describedby="gameInstructions controllerStatus"
+      ></canvas>
+    </div>
+
+    <div class="play-status">
+      <p id="controllerStatus" class="controller-status" aria-live="polite">
+        Controller: connect and press a button
+      </p>
+      <p class="landscape-hint">Rotate to landscape for a larger playfield.</p>
+    </div>
+
+    <section class="info-panel">
+      <div>
+        <h2>How To Play</h2>
+        <p id="gameInstructions">
+          Press <strong>Space</strong>, click, or tap to flap. Avoid the signal gates.
+          Tacos appear every fifth gate and add five points.
+        </p>
+      </div>
+
+      <div>
+        <h2>Controls</h2>
+        <p>
+          <strong>Keyboard:</strong> Space / W / ↑ / Enter = Flap · R = Restart · M = Mute · S = Sound<br>
+          <strong>Touch:</strong> Tap the game = Flap<br>
+          <strong>Controller:</strong> A / Cross, X / Square, shoulder, trigger, D-pad ↑ or stick ↑ = Flap<br>
+          <strong>B / Circle or View</strong> = Restart · <strong>Y / Triangle</strong> = Mute · <strong>Start</strong> = Sound
+        </p>
+      </div>
+    </section>
+
+  </section>
+
+</main>
+
+<script src="game.js"></script>
+</body>
+</html>
