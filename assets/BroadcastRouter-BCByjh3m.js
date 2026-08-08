@@ -1,1 +1,1601 @@
-import{r as e}from"./rolldown-runtime-S-ySWqyJ.js";import{i as t,r as n}from"./framework-CXnKph_e.js";import{n as r,t as i}from"./api-origin-Zd20260808.js";import{FlappyFaceLauncher as a}from"./FlappyFaceLauncher-C8afDH6s.js";var o=e(t(),1),s=n(),c=null,l={id:`yWQd21OF_c0`,title:`Freeway WR Speedrun | Atari 2600 | 1:26 | 32 Score | Flawless`,publishedAt:`2026-07-27T17:32:40+00:00`,watchUrl:`https://www.youtube.com/watch?v=yWQd21OF_c0`,embedUrl:`https://www.youtube-nocookie.com/embed/yWQd21OF_c0?rel=0&playsinline=1`,thumbnailUrl:`https://i.ytimg.com/vi/yWQd21OF_c0/hqdefault.jpg`},u=25e3,d=75e3,f=8500,p=`zendigo:audio-owner`,m=`PLdYm82eUYRWg`,h=`PLZ8R2NimMyCc`,g=`https://zendigoofficial.github.io`;function _(e){return`${g}/partners/${e}`}var v=[{id:`overtake-2026-polo-front`,brandId:`overtake`,format:`product`,brand:`OVERTAKE`,relationship:`OFFICIAL ORGANIZATION MERCH`,product:`Official 2026 Polo`,kicker:`OFFICIAL 2026 DROP`,headline:`REP THE SECTOR.`,copy:`Dark navy performance fabric, red dragon-art sleeves and the Overtake crosshair.`,url:`https://overtakegg.com/store`,logoUrl:_(`overtake-wordmark.webp`),productImageUrl:_(`overtake-2026-polo-front.webp`),productImageAlt:`Official Overtake 2026 Polo front`,accent:`#df1828`,cta:`SHOP OVERTAKE`},{id:`advanced-loch-ness-lake-water`,brandId:`advanced`,format:`collection`,brand:`ADVANCED`,relationship:`PERSONAL PARTNER // AFFILIATE`,product:`Loch Ness Lake Water`,kicker:`CRYPTIDS VOL. 1`,headline:`SOMETHING HAS SURFACED.`,copy:`Blue Raspberry Focus. Forty servings recovered from the deep.`,code:`CODE ZENDIGO // 10% OFF`,url:`https://advanced.gg/products/loch-ness-lake-water?ref=zendigo`,logoUrl:_(`advanced-logo.png`),productImageUrl:_(`advanced-loch-ness-lake-water.webp`),backgroundImageUrl:_(`advanced-loch-ness-hero.webp`),productImageAlt:`Official ADVANCED Loch Ness Lake Water Focus jar`,accent:`#45c7cf`,cta:`SHOP THE DROP`},{id:`overtake-2026-vneck-front`,brandId:`overtake`,format:`product`,brand:`OVERTAKE`,relationship:`OFFICIAL ORGANIZATION MERCH`,product:`Official 2026 V-Neck Jersey`,kicker:`CHOOSE YOUR CUT`,headline:`BUILT TO REPRESENT.`,copy:`A clean black-and-white competition jersey with red accents and crosshair detail.`,url:`https://overtakegg.com/store`,logoUrl:_(`overtake-wordmark.webp`),productImageUrl:_(`overtake-2026-vneck-front.webp`),productImageAlt:`Official Overtake 2026 V-Neck Jersey front`,accent:`#df1828`,cta:`SHOP OVERTAKE`},{id:`advanced-loch-ness-shakers`,brandId:`advanced`,format:`trio`,brand:`ADVANCED`,relationship:`PERSONAL PARTNER // AFFILIATE`,product:`Loch Ness 40oz Legend Series Ice Shaker`,kicker:`THE VESSEL`,headline:`CARRY THE LEGEND.`,copy:`Official Nessie tarot artwork in Black, Royal Blue and Mint.`,code:`CODE ZENDIGO // 10% OFF`,url:`https://advanced.gg/pages/cryptids-vol-1?ref=zendigo`,logoUrl:_(`advanced-logo.png`),productImageUrl:_(`advanced-loch-ness-shaker-black.webp`),secondaryProductImageUrl:_(`advanced-loch-ness-shaker-blue.webp`),tertiaryProductImageUrl:_(`advanced-loch-ness-shaker-mint.webp`),productImageAlt:`Official ADVANCED Loch Ness Legend Series Ice Shakers`,accent:`#58d8dc`,cta:`VIEW ALL COLORS`},{id:`overtake-2026-polo-personalized`,brandId:`overtake`,format:`duo`,brand:`OVERTAKE`,relationship:`OFFICIAL ORGANIZATION MERCH`,product:`Official 2026 Polo // Personalized`,kicker:`MAKE IT YOURS`,headline:`YOUR NAME. OUR COLORS.`,copy:`Front-and-back team presentation with a personalized nickname.`,url:`https://overtakegg.com/store`,logoUrl:_(`overtake-wordmark.webp`),productImageUrl:_(`overtake-2026-polo-front.webp`),secondaryProductImageUrl:_(`overtake-2026-polo-back.webp`),productImageAlt:`Official Overtake 2026 Polo front and personalized back`,accent:`#df1828`,cta:`CUSTOMIZE YOURS`},{id:`advanced-loch-ness-tarot-shirt`,brandId:`advanced`,format:`duo`,brand:`ADVANCED`,relationship:`PERSONAL PARTNER // AFFILIATE`,product:`Loch Ness Monster Tarot T-Shirt`,kicker:`THE KEEPER BELOW`,headline:`WEAR THE LEGEND.`,copy:`The official Loch Ness tarot design, front and back.`,code:`CODE ZENDIGO // 10% OFF`,url:`https://advanced.gg/products/loch-ness-monster-tarot-t-shirt?ref=zendigo`,logoUrl:_(`advanced-logo.png`),productImageUrl:_(`advanced-loch-ness-tarot-shirt-front.webp`),secondaryProductImageUrl:_(`advanced-loch-ness-tarot-shirt-back.webp`),productImageAlt:`Official ADVANCED Loch Ness Monster Tarot T-Shirt front and back`,accent:`#c2aa64`,cta:`SHOP THE TAROT TEE`},{id:`overtake-2026-vneck-personalized`,brandId:`overtake`,format:`duo`,brand:`OVERTAKE`,relationship:`OFFICIAL ORGANIZATION MERCH`,product:`Official 2026 V-Neck Jersey // Personalized`,kicker:`NAME + NUMBER`,headline:`OWN YOUR NUMBER.`,copy:`Custom name and number on the official Overtake V-Neck Jersey.`,url:`https://overtakegg.com/store`,logoUrl:_(`overtake-wordmark.webp`),productImageUrl:_(`overtake-2026-vneck-front.webp`),secondaryProductImageUrl:_(`overtake-2026-vneck-back.webp`),productImageAlt:`Official Overtake 2026 V-Neck Jersey front and personalized back`,accent:`#df1828`,cta:`CUSTOMIZE YOURS`},{id:`advanced-cryptids-vol-one`,brandId:`advanced`,format:`collection`,brand:`ADVANCED`,relationship:`PERSONAL PARTNER // AFFILIATE`,product:`Cryptids Vol. 1 // Loch Ness Monster`,kicker:`EXPEDITION FILE 001`,headline:`ENTER THE DEEP.`,copy:`Lake Water Focus, Legend Series shakers, tarot apparel and official Nessie collectibles.`,code:`CODE ZENDIGO // 10% OFF`,url:`https://advanced.gg/pages/cryptids-vol-1?ref=zendigo`,logoUrl:_(`advanced-logo.png`),productImageUrl:_(`advanced-loch-ness-collection.webp`),backgroundImageUrl:_(`advanced-loch-ness-hero.webp`),productImageAlt:`Official ADVANCED Cryptids Vol. 1 Loch Ness collection`,accent:`#45c7cf`,cta:`EXPLORE THE COLLECTION`},{id:`overtake-built-with-partners`,brandId:`overtake`,format:`partners`,brand:`OVERTAKE`,relationship:`OFFICIAL ORGANIZATION PARTNERS`,product:`Built With RepulseCo, Ink3D and SCL`,kicker:`BUILT WITH THE SECTOR`,headline:`COMPETE TOGETHER.`,copy:`Apparel, custom design and organized competition behind Overtake.`,url:`https://overtakegg.com/partners`,logoUrl:_(`overtake-wordmark.webp`),productImageUrl:_(`overtake-partner-repulse.webp`),partnerMarks:[{name:`RepulseCo`,imageUrl:_(`overtake-partner-repulse.webp`)},{name:`Ink3D`,imageUrl:_(`overtake-partner-ink3d.webp`)},{name:`SCL`,imageUrl:_(`overtake-partner-scl.webp`)}],productImageAlt:`Official Overtake partner logos for RepulseCo, Ink3D and SCL`,accent:`#df1828`,cta:`MEET THE PARTNERS`}],y=[{id:`rush`,playlistId:m,label:`All Rush Mixtape`,catalogLabel:`All Rush Mixtape`,edition:`PROG ARCHIVE // CX-82-01`,side:`A`,accent:`#df1828`,caseArt:`/mixtapes/all-rush-spine.webp`,tapeArt:`/mixtapes/all-rush-tape.webp`,tracks:[{id:`g_QtO0Rhp0w`,title:`Rush - The Spirit Of Radio`},{id:`rz-MKLcUF4g`,title:`Digital Man`},{id:`sQRShD0xuAk`,title:`Rush - New World Man`},{id:`LdpMpfp-J_I`,title:`Rush - YYZ (HQ)`},{id:`FAvQSkK8Z8U`,title:`Rush - Red Barchetta`},{id:`WQgu0MpnKq8`,title:`Rush - The Big Money`},{id:`8Kiz5jyG5j4`,title:`Rush - Marathon`},{id:`qSWn9qbaFu8`,title:`RUSH - Headlong Flight (Official Lyric Video HD)`},{id:`5jPondwDDOE`,title:`RUSH - Driven (video)`},{id:`ZiRuj2_czzw`,title:`Rush - Limelight`},{id:`rMYDuPWHFAo`,title:`Rush: One Little Victory`},{id:`Gztabfs5ngA`,title:`Tom Sawyer - Rush (HD Remaster by Platinum Productions)`},{id:`iIGKlicb8n0`,title:`Rush - Working Man`}].map(e=>({...e}))},{id:`college-rock`,playlistId:h,label:`90s College Rock`,catalogLabel:`90s College Rock`,edition:`CAMPUS RADIO // CX-82-02`,side:`A`,accent:`#b83b35`,caseArt:`/mixtapes/90s-college-rock-spine.webp`,tapeArt:`/mixtapes/90s-college-rock-tape.webp`,tracks:[]}];function b(e){let t=0;return e.flatMap((e,n)=>{let r=[{kind:`video`,id:`video-${e.id}`,video:e}];return(n+1)%3==0&&(t+=1,r.push({kind:`commercial`,id:`commercial-break-${t}`,breakNumber:t})),r})}function x(e,t){for(let n=1;n<=e.length;n+=1){let r=e[(t-n+e.length)%e.length];if(r?.kind===`video`)return r.video}return l}function S(e){typeof window>`u`||window.dispatchEvent(new CustomEvent(p,{detail:e}))}var C=[{id:`twitch`,name:`Twitch`,shortName:`TW`,handle:`Zendigo`,url:`https://www.twitch.tv/zendigo_playz`},{id:`youtube`,name:`YouTube`,shortName:`YT`,handle:`Zendigo`,url:`https://www.youtube.com/@zendigoplayz/live`},{id:`kick`,name:`Kick`,shortName:`K`,handle:`Zendigo`,url:`https://kick.com/zendigo-playz`},{id:`x`,name:`X`,shortName:`X`,handle:`Zendigo`,url:`https://x.com/ZendigoPlayz`}],w=(0,o.createContext)(null);function T({children:e}){let[t,n]=(0,o.useState)([]),[i,a]=(0,o.useState)(null),[c,l]=(0,o.useState)(`off`);(0,o.useEffect)(()=>{let e=!0,t=null;async function i(){t?.abort(),t=new AbortController;try{let i=await fetch(r(`/api/broadcast-status`),{cache:`no-store`,signal:t.signal});if(!i.ok)return;let a=await i.json();e&&Array.isArray(a.platforms)&&n(a.platforms)}catch(t){e&&!(t instanceof DOMException&&t.name===`AbortError`)&&n([])}}i();let a=window.setInterval(i,9e4);return()=>{e=!1,t?.abort(),window.clearInterval(a)}},[]);let u=(0,o.useMemo)(()=>new Map(t.map(e=>[e.id,e])),[t]),d=(0,o.useMemo)(()=>C.flatMap(e=>{let t=u.get(e.id);return t?.status===`live`?[{...e,...t,url:t.url||e.url}]:[]}),[u]),f=d[0]??null,p=d.find(e=>e.id===i)??null;(0,o.useEffect)(()=>{if(c!==`off`){if(d.length===0){i&&a(null);return}d.some(e=>e.id===i)||(a(d[0].id),c===`ready`&&l(`scanning`))}},[d,c,i]),(0,o.useEffect)(()=>{if(c!==`booting`&&c!==`scanning`)return;let e=window.setTimeout(()=>l(e=>e===`booting`?`scanning`:`ready`),c===`booting`?320:720);return()=>window.clearTimeout(e)},[c]);let m=(0,o.useCallback)(e=>{S(`tuner`),a(e??f?.id??null),l(`booting`)},[f]),h=(0,o.useCallback)(()=>{a(null),l(`off`)},[]),g=(0,o.useMemo)(()=>({livePlatforms:d,primaryLive:f,statusById:u,viewerPlatform:p,tunerPhase:c,openViewer:m,closeViewer:h}),[h,d,m,f,u,c,p]);return(0,s.jsx)(w.Provider,{value:g,children:e})}function E(){let e=(0,o.useContext)(w);if(!e)throw Error(`Broadcast controls require BroadcastProvider.`);return e}function D(){let{livePlatforms:e,primaryLive:t,openViewer:n}=E(),r=e.length>1?`${e.length} Live Signals`:t?`${t.name} Live`:`Signal Standby`,i=(0,s.jsxs)(s.Fragment,{children:[(0,s.jsx)(`span`,{className:`status-lamp`,"aria-hidden":`true`}),(0,s.jsxs)(`span`,{children:[(0,s.jsx)(`small`,{children:`Broadcast`}),(0,s.jsx)(`strong`,{children:r})]})]}),a=(0,o.useCallback)(()=>{let e=document.getElementById(`broadcast-tuner`);if(e){let t=e.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:Math.max(0,t-115),behavior:`auto`})}window.history.replaceState(window.history.state,``,`${window.location.pathname}${window.location.search}`),n(t?.id)},[n,t?.id]);return(0,s.jsx)(`button`,{className:`status-control ${t?`is-live`:`is-standby`}`,type:`button`,onClick:a,"aria-controls":`broadcast-tuner`,"aria-label":t?`Return to the TV and play Zendigo's ${t.name} broadcast`:`Return to the TV and power on the Zendigo broadcast tuner`,children:i})}function O(){let{livePlatforms:e,primaryLive:t,openViewer:n}=E(),r=e.length>1?`Choose live signal`:t?`Enter ${t.name} broadcast`:`Find the broadcast`;return(0,s.jsx)(`button`,{className:`button button-primary ${t?`is-live`:``}`,type:`button`,onClick:()=>n(t?.id),children:(0,s.jsxs)(s.Fragment,{children:[(0,s.jsx)(`span`,{className:`button-light`,"aria-hidden":`true`}),r]})})}function k(){let{livePlatforms:e,statusById:t,openViewer:n}=E();return(0,s.jsxs)(`div`,{className:`broadcast-deck`,id:`broadcast-deck`,children:[(0,s.jsxs)(`div`,{className:`broadcast-deck-label`,children:[(0,s.jsx)(`span`,{children:`Broadcast outputs`}),(0,s.jsx)(`b`,{children:e.length>0?`${e.length.toString().padStart(2,`0`)} ACTIVE`:`AUTO SCAN`})]}),(0,s.jsx)(`div`,{className:`platform-grid`,children:C.map(e=>{let r=t.get(e.id),i=r?.status===`live`,a=i?`Live now`:r?.status===`offline`?`Standby`:`Channel`,o=(0,s.jsxs)(s.Fragment,{children:[(0,s.jsx)(`span`,{className:`platform-mark`,children:e.shortName}),(0,s.jsxs)(`span`,{className:`platform-identity`,children:[(0,s.jsx)(`strong`,{children:e.name}),(0,s.jsx)(`small`,{children:e.handle})]}),(0,s.jsxs)(`span`,{className:`platform-state`,children:[(0,s.jsx)(`i`,{"aria-hidden":`true`}),a]})]});return i?(0,s.jsx)(`button`,{className:`platform-channel is-live`,type:`button`,onClick:()=>n(e.id),"aria-label":`Play Zendigo's live ${e.name} broadcast on this page`,children:o},e.id):(0,s.jsx)(`a`,{className:`platform-channel`,href:r?.url||e.url,target:`_blank`,rel:`noreferrer`,"aria-label":`Open Zendigo on ${e.name}`,children:o},e.id)})})]})}function A(){let{livePlatforms:e,viewerPlatform:t,tunerPhase:n,openViewer:i,closeViewer:a}=E(),[c,p]=(0,o.useState)([l]),[m,h]=(0,o.useState)(0),[g,_]=(0,o.useState)(0),[y,C]=(0,o.useState)(!0),[w,T]=(0,o.useState)(!1),D=(0,o.useRef)(!1),O=n!==`off`,k=O&&n===`ready`&&!t,A=(0,o.useMemo)(()=>b(c),[c]),j=A[m%A.length]??{kind:`video`,id:`video-fallback`,video:l},I=j.kind===`video`?j.video:x(A,m),L=j.kind===`commercial`?v[g%v.length]:null;(0,o.useEffect)(()=>{let e=!0,t=null,n=0,i=[1500,3e3,6e3,12e3];function a(){if(!e||n>=i.length)return;t!==null&&window.clearTimeout(t);let r=i[n];n+=1,t=window.setTimeout(()=>{t=null,o()},r)}async function o(){try{let i=await fetch(r(`/api/latest-youtube-video`),{cache:`no-store`});if(!i.ok)return;let o=await i.json(),s=o.videos?.filter(e=>e?.id)??(o.video?.id?[o.video]:[]);if(!e||s.length===0)return;let c=s.slice(0,12);p(e=>e.length===c.length&&e.every((e,t)=>e.id===c[t]?.id)?e:c),o.source===`fallback`||s.length<12?a():(n=0,t!==null&&(window.clearTimeout(t),t=null))}catch{a()}}o();let s=window.setInterval(()=>{n=0,o()},900*1e3);return()=>{e=!1,t!==null&&window.clearTimeout(t),window.clearInterval(s)}},[]);let R=(0,o.useCallback)(e=>{A.length<2||D.current||(D.current=!0,T(!0),window.setTimeout(()=>{j.kind===`commercial`&&_(t=>(t+e+v.length)%v.length),h(t=>(t+e+A.length)%A.length),D.current=!1,T(!1)},320))},[A.length,j.kind]);return(0,o.useEffect)(()=>{if(!k||!y||A.length<2)return;let e=j.kind===`commercial`?f:u+Math.floor(Math.random()*(d-u+1)),t=window.setTimeout(()=>R(1),e);return()=>window.clearTimeout(t)},[k,A.length,y,R,j.id,j.kind]),(0,o.useEffect)(()=>{O||(C(!0),h(0),D.current=!1,T(!1))},[O]),(0,o.useEffect)(()=>{n===`ready`&&S(`tuner`)},[n,t?.id]),(0,s.jsx)(`aside`,{id:`broadcast-tuner`,className:`mission-console ${O?`is-powered`:``}`,"aria-label":O?`Zendigo broadcast tuner`:`Current mission`,children:(0,s.jsxs)(`div`,{className:`console-hardware`,children:[(0,s.jsx)(`span`,{className:`screw screw-one`,"aria-hidden":`true`}),(0,s.jsx)(`span`,{className:`screw screw-two`,"aria-hidden":`true`}),(0,s.jsx)(`span`,{className:`screw screw-three`,"aria-hidden":`true`}),(0,s.jsx)(`span`,{className:`screw screw-four`,"aria-hidden":`true`}),(0,s.jsx)(`div`,{className:`console-label`,children:(0,s.jsx)(`span`,{children:`Broadcast tuner`})}),(0,s.jsxs)(`div`,{className:`console-screen ${O?`tuner-screen`:`powered-off-screen`} phase-${n}`,"aria-live":`polite`,children:[O?(0,s.jsx)(`div`,{className:`screen-scan`,"aria-hidden":`true`}):null,n===`off`?(0,s.jsx)(M,{}):n===`booting`||n===`scanning`?(0,s.jsx)(N,{phase:n}):t?(0,s.jsx)(P,{platform:t,livePlatforms:e,onSelect:i}):(0,s.jsx)(F,{program:j,commercial:L,video:I,channelNumber:m+1,isFlipping:w,autoCycle:y})]}),(0,s.jsxs)(`div`,{className:`console-controls`,children:[(0,s.jsxs)(`button`,{className:`toggle console-power ${O?`is-on`:``}`,type:`button`,onClick:()=>O?a():i(e[0]?.id),"aria-label":O?`Power off broadcast tuner`:`Power on broadcast tuner`,children:[(0,s.jsx)(`i`,{"aria-hidden":`true`}),` POWER`]}),(0,s.jsxs)(`div`,{className:`console-channel-controls`,"aria-label":`Broadcast channel controls`,children:[(0,s.jsx)(`button`,{type:`button`,onClick:()=>R(-1),disabled:!k||A.length<2,children:`CH −`}),(0,s.jsx)(`button`,{type:`button`,onClick:()=>R(1),disabled:!k||A.length<2,children:`CH +`}),(0,s.jsx)(`button`,{className:`hold-channel`,type:`button`,onClick:()=>C(e=>!e),disabled:!k,children:y?`Hold channel`:`Resume channel scan`})]})]})]})})}function j({tuner:e}){let t=(0,o.useRef)(null),n=(0,o.useRef)(!1),c=(0,o.useRef)(null),l=(0,o.useRef)(0),u=(0,o.useRef)(y),d=(0,o.useRef)(72),f=(0,o.useRef)(72),[m,h]=(0,o.useState)(y),[g,_]=(0,o.useState)(null),[v,b]=(0,o.useState)(!1),[x,C]=(0,o.useState)(1),[w,T]=(0,o.useState)(0),[E,D]=(0,o.useState)(`No cassette loaded`),[O,k]=(0,o.useState)(72),[A,j]=(0,o.useState)(!1),M=m.find(e=>e.id===g)??null,N=(0,o.useCallback)(e=>{if(!t.current?.contentWindow)return;let n=new URL(i).origin;t.current.contentWindow.postMessage(e,n)},[]);(0,o.useEffect)(()=>{let e=window.requestAnimationFrame(()=>{let e=Number(window.localStorage.getItem(`zendigo-cassette-volume`));Number.isFinite(e)&&e>=0&&e<=100&&(d.current=e,e>0&&(f.current=e),k(e))});return()=>window.cancelAnimationFrame(e)},[]),(0,o.useEffect)(()=>{u.current=m},[m]),(0,o.useEffect)(()=>{let e=!0;async function t(){try{let t=await fetch(r(`/api/youtube-playlists`),{cache:`no-store`});if(!t.ok)return;let n=await t.json();if(!e||!n.playlists?.length)return;h(e=>e.map(e=>{let t=n.playlists?.find(t=>t.id===e.playlistId);return t?{...e,tracks:t.tracks?.length?t.tracks:e.tracks}:e}))}catch{}}return t(),()=>{e=!1}},[]),(0,o.useEffect)(()=>{d.current=O,O>0&&(f.current=O),window.localStorage.setItem(`zendigo-cassette-volume`,String(O)),n.current&&N({type:`zendigo-cassette:volume`,volume:O,muted:O===0})},[N,O]);let P=(0,o.useCallback)((e,t=0)=>{let r=u.current.find(t=>t.id===e);r&&(c.current=e,l.current=t,_(e),b(!1),C(t+1),T(r.tracks.length),D(r.tracks[t]?.title||`Loading ${r.label}`),n.current&&(S(`cassette`),N({type:`zendigo-cassette:load`,cassetteId:r.id,playlistId:r.playlistId,tracks:r.tracks.map(e=>e.id),index:t,volume:d.current,muted:d.current===0})))},[N]);(0,o.useEffect)(()=>{let e=new URL(i).origin;function t(t){if(t.origin!==e||!t.data)return;if(t.data.type===`zendigo-cassette:ready`){n.current=!0,N({type:`zendigo-cassette:volume`,volume:d.current,muted:d.current===0});let e=c.current;e&&P(e,l.current);return}let r=u.current.find(e=>e.id===c.current);if(!r||t.data.cassetteId&&t.data.cassetteId!==r.id)return;if(t.data.type===`zendigo-cassette:error`){if(!r.tracks.length){b(!1),D(`Playlist track unavailable`);return}let e=(l.current+1)%r.tracks.length;l.current=e,N({type:`zendigo-cassette:play-at`,index:e});return}let i=t.data.videoId?r.tracks.findIndex(e=>e.id===t.data.videoId):-1;if(r.tracks.length&&t.data.videoId&&i<0)return;let a=i>=0?i:Math.max(0,t.data.index);l.current=a,b(t.data.state===1),C(a+1),T(t.data.total||r.tracks.length||0),D(r.tracks[a]?.title||t.data.title?.trim()||r.label)}return window.addEventListener(`message`,t),()=>{window.removeEventListener(`message`,t),n.current=!1}},[P,N]),(0,o.useEffect)(()=>{function e(e){e.detail===`tuner`&&n.current&&(N({type:`zendigo-cassette:pause`}),b(!1))}return window.addEventListener(p,e),()=>window.removeEventListener(p,e)},[N]);let F=(0,o.useCallback)(()=>{if(!g){P(`rush`);return}n.current&&(v?(N({type:`zendigo-cassette:pause`}),b(!1)):(S(`cassette`),N({type:`zendigo-cassette:play`}),b(!0)))},[g,P,v,N]),I=(0,o.useCallback)(e=>{if(!M||!n.current)return;let t=l.current,r=M.tracks.length||w;if(!r)return;let i=(t+e+r)%r;l.current=i,S(`cassette`),N({type:`zendigo-cassette:play-at`,index:i}),C(i+1),T(r),D(M.tracks[i]?.title||`Loading track ${i+1}`),b(!0)},[M,N,w]),L=(0,o.useCallback)(()=>{N({type:`zendigo-cassette:stop`}),c.current=null,l.current=0,_(null),b(!1),j(!1),C(1),T(0),D(`No cassette loaded`)},[N]),R=(0,o.useCallback)(()=>{k(e=>e===0?f.current:0)},[]);return(0,s.jsxs)(`section`,{className:`cassette-component ${M?`has-cassette`:``}`,"aria-label":`Selectable YouTube playlist cassette deck`,children:[(0,s.jsx)(`div`,{className:`media-tuner-slot`,children:e}),(0,s.jsxs)(`div`,{className:`game-case-library media-game-library`,children:[(0,s.jsxs)(`div`,{className:`cassette-stack-heading`,children:[(0,s.jsx)(`span`,{children:`ZENDIGO ARCADE`}),(0,s.jsx)(`b`,{children:`01 GAME`})]}),(0,s.jsx)(a,{variant:`case`})]}),(0,s.jsxs)(`div`,{className:`cassette-machine ${A?`is-player-open`:``}`,children:[(0,s.jsxs)(`div`,{className:`cassette-machine-brand`,children:[(0,s.jsxs)(`div`,{children:[(0,s.jsx)(`strong`,{children:`CX-82`}),(0,s.jsx)(`span`,{children:`STEREO CASSETTE DECK`})]}),(0,s.jsx)(`b`,{children:v?`PLAY`:M?`PAUSE`:`STOP`})]}),(0,s.jsxs)(`div`,{className:`cassette-machine-display`,"aria-live":`polite`,children:[(0,s.jsx)(`span`,{children:M?`${M.label} // SIDE ${M.side}`:`CASSETTE BAY // EMPTY`}),(0,s.jsx)(`strong`,{children:E}),(0,s.jsx)(`small`,{children:M?`TRACK ${String(x).padStart(2,`0`)}${w?` / ${String(w).padStart(2,`0`)}`:``}`:`SELECT A CASE TO LOAD`})]}),(0,s.jsxs)(`div`,{className:`cassette-machine-main`,children:[(0,s.jsxs)(`div`,{className:`cassette-bay`,children:[M?(0,s.jsxs)(`div`,{className:`inserted-tape ${v?`is-playing`:``}`,style:{"--tape-accent":M.accent},"aria-label":`${M.label} inserted`,children:[(0,s.jsx)(`img`,{className:`inserted-tape-art`,src:M.tapeArt,alt:``,"aria-hidden":`true`}),(0,s.jsxs)(`span`,{className:`inserted-tape-title`,children:[(0,s.jsx)(`small`,{children:M.edition}),(0,s.jsx)(`strong`,{children:M.label}),(0,s.jsxs)(`i`,{children:[`SIDE `,M.side]})]})]}):(0,s.jsx)(`div`,{className:`cassette-bay-empty`,children:(0,s.jsx)(`span`,{children:`NO TAPE`})}),(0,s.jsx)(`div`,{className:`cassette-player-engine ${M?``:`is-stowed`} ${A?`is-open`:``}`,"aria-hidden":!A,children:(0,s.jsx)(`iframe`,{ref:t,src:`${i}/api/cassette-player`,title:`Zendigo cassette playback engine`,allow:`autoplay; encrypted-media; picture-in-picture; fullscreen`})})]}),(0,s.jsxs)(`div`,{className:`vu-bank`,"aria-hidden":`true`,children:[(0,s.jsxs)(`div`,{className:`vu-meter`,children:[(0,s.jsx)(`span`,{children:`L`}),(0,s.jsx)(`i`,{className:v?`is-active`:``})]}),(0,s.jsxs)(`div`,{className:`vu-meter`,children:[(0,s.jsx)(`span`,{children:`R`}),(0,s.jsx)(`i`,{className:v?`is-active`:``})]}),(0,s.jsx)(`small`,{children:`PEAK LEVEL`})]}),(0,s.jsxs)(`div`,{className:`cassette-volume-panel`,children:[(0,s.jsx)(`span`,{children:`OUTPUT`}),(0,s.jsx)(`button`,{type:`button`,className:`cassette-volume-knob`,onClick:R,"aria-label":O===0?`Unmute cassette`:`Mute cassette`,style:{"--volume":`${O*2.7}deg`},children:(0,s.jsx)(`i`,{})}),(0,s.jsx)(`output`,{children:O===0?`MUTE`:`VOL ${O}`}),(0,s.jsx)(`input`,{type:`range`,min:`0`,max:`100`,step:`1`,value:O,onChange:e=>k(Number(e.target.value)),"aria-label":`Cassette volume`,"aria-valuetext":O===0?`Muted`:`${O} percent`})]})]}),(0,s.jsxs)(`div`,{className:`cassette-transport`,"aria-label":`Cassette controls`,children:[(0,s.jsxs)(`button`,{type:`button`,onClick:()=>I(-1),disabled:!M,children:[(0,s.jsx)(`span`,{children:`◀◀`}),(0,s.jsx)(`small`,{children:`PREV`})]}),(0,s.jsxs)(`button`,{type:`button`,onClick:F,children:[(0,s.jsx)(`span`,{children:v?`Ⅱ`:`▶`}),(0,s.jsx)(`small`,{children:v?`PAUSE`:`PLAY`})]}),(0,s.jsxs)(`button`,{type:`button`,onClick:()=>I(1),disabled:!M,children:[(0,s.jsx)(`span`,{children:`▶▶`}),(0,s.jsx)(`small`,{children:`NEXT`})]}),(0,s.jsxs)(`button`,{type:`button`,onClick:L,disabled:!M,children:[(0,s.jsx)(`span`,{children:`△`}),(0,s.jsx)(`small`,{children:`EJECT`})]}),(0,s.jsxs)(`button`,{type:`button`,onClick:()=>j(e=>!e),disabled:!M,"aria-label":A?`Close YouTube video and ad controls`:`Open YouTube video and ad controls`,children:[(0,s.jsx)(`span`,{children:A?`×`:`▣`}),(0,s.jsx)(`small`,{children:A?`CLOSE`:`VIDEO / ADS`})]})]}),A?(0,s.jsxs)(s.Fragment,{children:[(0,s.jsx)(`button`,{type:`button`,className:`cassette-player-backdrop`,onClick:()=>j(!1),"aria-label":`Close YouTube video and ad controls`}),(0,s.jsx)(`button`,{type:`button`,className:`cassette-player-close`,onClick:()=>j(!1),children:`Close player`})]}):null]}),(0,s.jsxs)(`div`,{className:`cassette-case-stack`,"aria-label":`Playlist cassette cases`,children:[(0,s.jsxs)(`div`,{className:`cassette-stack-heading`,children:[(0,s.jsx)(`span`,{children:`PLAYLIST LIBRARY`}),(0,s.jsxs)(`b`,{children:[String(m.length).padStart(2,`0`),` TAPES`]})]}),(0,s.jsx)(`div`,{className:`cassette-case-pile`,children:m.map((e,t)=>(0,s.jsx)(`button`,{type:`button`,className:`cassette-case ${g===e.id?`is-loaded`:``}`,onClick:()=>P(e.id),"aria-pressed":g===e.id,"aria-label":`Insert and play ${e.catalogLabel}`,style:{"--case-accent":e.accent,"--case-offset":`${t%3*2}px`},children:(0,s.jsxs)(`span`,{className:`cassette-case-shell`,children:[(0,s.jsx)(`img`,{className:`cassette-case-art`,src:e.caseArt,alt:``,"aria-hidden":`true`}),(0,s.jsxs)(`span`,{className:`cassette-case-title`,children:[(0,s.jsx)(`small`,{children:e.edition}),(0,s.jsx)(`strong`,{children:e.catalogLabel}),(0,s.jsx)(`i`,{children:g===e.id?`LOADED`:`TAPE ${String(t+1).padStart(2,`0`)}`})]})]})},e.id))})]})]})}function M(){return(0,s.jsx)(`div`,{className:`powered-off-crt`,role:`img`,"aria-label":`Broadcast tuner powered off`})}function N({phase:e}){return(0,s.jsxs)(`div`,{className:`tuner-startup`,children:[(0,s.jsx)(`div`,{className:`crt-boot-line`,"aria-hidden":`true`}),(0,s.jsx)(`span`,{className:`tuner-target`,"aria-hidden":`true`,children:`Z`}),(0,s.jsx)(`p`,{children:e===`booting`?`Powering broadcast array`:`Scanning signals`}),(0,s.jsx)(`div`,{className:`tuner-progress`,"aria-hidden":`true`,children:(0,s.jsx)(`i`,{})}),(0,s.jsx)(`small`,{children:`TW · YT · K · X · ARCHIVE`})]})}function P({platform:e,livePlatforms:t,onSelect:n}){return(0,s.jsxs)(`div`,{className:`tuner-program`,children:[(0,s.jsxs)(`div`,{className:`tuner-osd`,children:[(0,s.jsxs)(`span`,{children:[`Live signal acquired // `,e.name]}),(0,s.jsx)(`b`,{children:e.title||`Zendigo live broadcast`})]}),t.length>1?(0,s.jsx)(`div`,{className:`tuner-channels`,"aria-label":`Active live channels`,children:t.map((t,r)=>(0,s.jsxs)(`button`,{className:t.id===e.id?`is-selected`:void 0,type:`button`,onClick:()=>n(t.id),children:[`CH `,String(r+1).padStart(2,`0`),` · `,t.shortName]},t.id))}):null,(0,s.jsx)(z,{platform:e})]})}function F({program:e,commercial:t,video:n,channelNumber:r,isFlipping:i,autoCycle:a}){let o=new Date(n.publishedAt),c=n.publishedLabel||(Number.isNaN(o.valueOf())?`Recent upload`:new Intl.DateTimeFormat(`en-US`,{month:`short`,day:`numeric`,year:`numeric`}).format(o)),l=e.kind===`commercial`;return(0,s.jsxs)(`div`,{className:`tuner-program archive-program ${l?`is-commercial`:``} ${i?`is-flipping`:``}`,children:[l?null:(0,s.jsxs)(`div`,{className:`tuner-osd archive-osd`,children:[(0,s.jsxs)(`span`,{children:[`Zendigo Archive Network // CH `,String(r).padStart(2,`0`)]}),(0,s.jsx)(`b`,{children:n.title}),(0,s.jsxs)(`small`,{children:[c,` ·`,` `,a?`25–75 SEC AUTO PREVIEW`:`FULL TRANSMISSION`]})]}),(0,s.jsxs)(`div`,{className:`broadcast-player-frame archive-player ${l?`commercial-break-player`:``}`,children:[(0,s.jsx)(L,{video:n,active:!l}),e.kind===`commercial`&&t?(0,s.jsx)(I,{commercial:t}):null,i?(0,s.jsx)(`div`,{className:`channel-static`,"aria-hidden":`true`,children:(0,s.jsxs)(`span`,{children:[`CH `,String(r).padStart(2,`0`)]})}):null]})]})}function I({commercial:e}){return(0,s.jsxs)(`article`,{className:`commercial-spot commercial-${e.brandId} commercial-format-${e.format}`,style:{"--commercial-accent":e.accent},"aria-label":`${e.brand} affiliate commercial for ${e.product}`,children:[(0,s.jsx)(`img`,{className:`commercial-creative`,src:_(`commercials/${e.id}.webp`),alt:`${e.brand}: ${e.headline} ${e.product}`}),(0,s.jsx)(`div`,{className:`commercial-disclosure`,children:`Ad · official merch · Zendigo may earn commission`}),(0,s.jsxs)(`a`,{className:`commercial-cta`,href:e.url,target:`_blank`,rel:`sponsored noreferrer`,children:[e.cta,` `,(0,s.jsx)(`span`,{"aria-hidden":`true`,children:`↗`})]})]})}function L({video:e,active:t}){let n=(0,o.useRef)(null),r=(0,o.useRef)(null),i=(0,o.useRef)(!1),a=(0,o.useRef)(e.id),c=(0,o.useRef)(t),l=(0,o.useRef)(`tuner`);return(0,o.useEffect)(()=>{let e=!0;return R().then(()=>{!e||!n.current||!window.YT?.Player||(r.current=new window.YT.Player(n.current,{videoId:a.current,playerVars:{autoplay:1,playsinline:1,rel:0,origin:window.location.origin},events:{onReady:t=>{e&&(i.current=!0,t.target.loadVideoById(a.current),c.current&&l.current===`tuner`?t.target.playVideo():t.target.pauseVideo())}}}))}),()=>{e=!1,i.current=!1,r.current?.destroy(),r.current=null}},[]),(0,o.useEffect)(()=>{a.current=e.id,!(!i.current||!r.current)&&(r.current.loadVideoById(e.id),t&&l.current===`tuner`&&r.current.playVideo())},[t,e.id]),(0,o.useEffect)(()=>{c.current=t,!(!i.current||!r.current)&&(t&&l.current===`tuner`?r.current.playVideo():r.current.pauseVideo())},[t]),(0,o.useEffect)(()=>{function e(e){let t=e.detail;l.current=t,!(!i.current||!r.current)&&(t===`cassette`?r.current.pauseVideo():c.current&&r.current.playVideo())}return window.addEventListener(p,e),()=>window.removeEventListener(p,e)},[]),(0,s.jsx)(`div`,{className:`youtube-player-mount ${t?``:`is-suspended`}`,"aria-label":`Zendigo Archive Network: ${e.title}`,children:(0,s.jsx)(`div`,{ref:n})})}function R(){return typeof window>`u`||window.YT?.Player?Promise.resolve():c||(c=new Promise(e=>{let t=window.onYouTubeIframeAPIReady;if(window.onYouTubeIframeAPIReady=()=>{t?.(),e()},!document.querySelector(`script[src="https://www.youtube.com/iframe_api"]`)){let e=document.createElement(`script`);e.src=`https://www.youtube.com/iframe_api`,e.async=!0,document.head.appendChild(e)}}),c)}function z({platform:e}){let[t,n]=(0,o.useState)(``);if((0,o.useEffect)(()=>{n(window.location.hostname)},[]),e.id===`twitch`){if(!t)return(0,s.jsx)(B,{platformName:e.name});let n=new URL(`https://player.twitch.tv/`);return n.searchParams.set(`channel`,`zendigo_playz`),n.searchParams.set(`parent`,t),n.searchParams.set(`autoplay`,`true`),(0,s.jsx)(`div`,{className:`broadcast-player-frame`,children:(0,s.jsx)(`iframe`,{src:n.toString(),title:`Zendigo live on Twitch`,allow:`autoplay; encrypted-media; picture-in-picture; fullscreen`,allowFullScreen:!0})})}if(e.id===`youtube`){let t=H(e.url);return t?(0,s.jsx)(`div`,{className:`broadcast-player-frame`,children:(0,s.jsx)(`iframe`,{src:`https://www.youtube-nocookie.com/embed/${encodeURIComponent(t)}?autoplay=1&playsinline=1&rel=0`,title:`Zendigo live on YouTube`,allow:`autoplay; encrypted-media; picture-in-picture; fullscreen`,allowFullScreen:!0})}):(0,s.jsx)(V,{platform:e})}if(e.id===`kick`)return(0,s.jsx)(`div`,{className:`broadcast-player-frame`,children:(0,s.jsx)(`iframe`,{src:`https://player.kick.com/zendigo-playz?autoplay=true`,title:`Zendigo live on Kick`,allow:`autoplay; encrypted-media; picture-in-picture; fullscreen`,allowFullScreen:!0})});let r=U(e.url);return r?(0,s.jsx)(`div`,{className:`broadcast-player-frame broadcast-player-x`,children:(0,s.jsx)(`iframe`,{src:`https://platform.twitter.com/embed/Tweet.html?id=${encodeURIComponent(r)}&theme=dark&dnt=true&hideCard=false&hideThread=true`,title:`Zendigo live broadcast on X`,allow:`autoplay; encrypted-media; picture-in-picture; fullscreen`,allowFullScreen:!0})}):(0,s.jsx)(V,{platform:e})}function B({platformName:e}){return(0,s.jsxs)(`div`,{className:`broadcast-player-frame broadcast-player-message`,children:[(0,s.jsx)(`span`,{className:`broadcast-loader`,"aria-hidden":`true`}),(0,s.jsxs)(`p`,{children:[`Locking onto `,e,` signal…`]})]})}function V({platform:e}){return(0,s.jsxs)(`div`,{className:`broadcast-player-frame broadcast-player-message`,children:[(0,s.jsx)(`span`,{className:`broadcast-fallback-mark`,children:e.shortName}),(0,s.jsxs)(`p`,{children:[`This signal needs to finish opening on `,e.name,`.`]}),(0,s.jsxs)(`a`,{href:e.url,target:`_blank`,rel:`noreferrer`,children:[`Continue to `,e.name,` `,(0,s.jsx)(`span`,{"aria-hidden":`true`,children:`↗`})]})]})}function H(e){try{let t=new URL(e);return t.hostname===`youtu.be`?t.pathname.slice(1)||null:t.pathname.startsWith(`/embed/`)?t.pathname.split(`/`)[2]||null:t.searchParams.get(`v`)}catch{return null}}function U(e){try{return new URL(e).pathname.match(/\/status\/(\d+)/)?.[1]??null}catch{return null}}export{k as BroadcastPlatformDeck,T as BroadcastProvider,j as CassettePlaylistDeck,D as HeaderBroadcastControl,O as HeroBroadcastControl,A as MissionBroadcastTuner};
+import { r as e } from "./rolldown-runtime-S-ySWqyJ.js";
+import { i as t, r as n } from "./framework-CXnKph_e.js";
+import { n as r, t as i } from "./api-origin-Zd20260808.js";
+import { FlappyFaceLauncher as a } from "./FlappyFaceLauncher-C8afDH6s.js";
+var o = e(t(), 1),
+  s = n(),
+  c = null,
+  l = {
+    id: `yWQd21OF_c0`,
+    title: `Freeway WR Speedrun | Atari 2600 | 1:26 | 32 Score | Flawless`,
+    publishedAt: `2026-07-27T17:32:40+00:00`,
+    watchUrl: `https://www.youtube.com/watch?v=yWQd21OF_c0`,
+    embedUrl: `https://www.youtube-nocookie.com/embed/yWQd21OF_c0?rel=0&playsinline=1`,
+    thumbnailUrl: `https://i.ytimg.com/vi/yWQd21OF_c0/hqdefault.jpg`,
+  },
+  u = 25e3,
+  d = 75e3,
+  f = 8500,
+  p = `zendigo:audio-owner`,
+  m = `PLdYm82eUYRWg`,
+  h = `PLZ8R2NimMyCc`,
+  g = `https://zendigoofficial.github.io`;
+function _(e) {
+  return `${g}/partners/${e}`;
+}
+var v = [
+    {
+      id: `overtake-2026-polo-front`,
+      brandId: `overtake`,
+      format: `product`,
+      brand: `OVERTAKE`,
+      relationship: `OFFICIAL ORGANIZATION MERCH`,
+      product: `Official 2026 Polo`,
+      kicker: `OFFICIAL 2026 DROP`,
+      headline: `REP THE SECTOR.`,
+      copy: `Dark navy performance fabric, red dragon-art sleeves and the Overtake crosshair.`,
+      url: `https://overtakegg.com/store`,
+      logoUrl: _(`overtake-wordmark.webp`),
+      productImageUrl: _(`overtake-2026-polo-front.webp`),
+      productImageAlt: `Official Overtake 2026 Polo front`,
+      accent: `#df1828`,
+      cta: `SHOP OVERTAKE`,
+    },
+    {
+      id: `advanced-loch-ness-lake-water`,
+      brandId: `advanced`,
+      format: `collection`,
+      brand: `ADVANCED`,
+      relationship: `PERSONAL PARTNER // AFFILIATE`,
+      product: `Loch Ness Lake Water`,
+      kicker: `CRYPTIDS VOL. 1`,
+      headline: `SOMETHING HAS SURFACED.`,
+      copy: `Blue Raspberry Focus. Forty servings recovered from the deep.`,
+      code: `CODE ZENDIGO // 10% OFF`,
+      url: `https://advanced.gg/products/loch-ness-lake-water?ref=zendigo`,
+      logoUrl: _(`advanced-logo.png`),
+      productImageUrl: _(`advanced-loch-ness-lake-water.webp`),
+      backgroundImageUrl: _(`advanced-loch-ness-hero.webp`),
+      productImageAlt: `Official ADVANCED Loch Ness Lake Water Focus jar`,
+      accent: `#45c7cf`,
+      cta: `SHOP THE DROP`,
+    },
+    {
+      id: `overtake-2026-vneck-front`,
+      brandId: `overtake`,
+      format: `product`,
+      brand: `OVERTAKE`,
+      relationship: `OFFICIAL ORGANIZATION MERCH`,
+      product: `Official 2026 V-Neck Jersey`,
+      kicker: `CHOOSE YOUR CUT`,
+      headline: `BUILT TO REPRESENT.`,
+      copy: `A clean black-and-white competition jersey with red accents and crosshair detail.`,
+      url: `https://overtakegg.com/store`,
+      logoUrl: _(`overtake-wordmark.webp`),
+      productImageUrl: _(`overtake-2026-vneck-front.webp`),
+      productImageAlt: `Official Overtake 2026 V-Neck Jersey front`,
+      accent: `#df1828`,
+      cta: `SHOP OVERTAKE`,
+    },
+    {
+      id: `advanced-loch-ness-shakers`,
+      brandId: `advanced`,
+      format: `trio`,
+      brand: `ADVANCED`,
+      relationship: `PERSONAL PARTNER // AFFILIATE`,
+      product: `Loch Ness 40oz Legend Series Ice Shaker`,
+      kicker: `THE VESSEL`,
+      headline: `CARRY THE LEGEND.`,
+      copy: `Official Nessie tarot artwork in Black, Royal Blue and Mint.`,
+      code: `CODE ZENDIGO // 10% OFF`,
+      url: `https://advanced.gg/pages/cryptids-vol-1?ref=zendigo`,
+      logoUrl: _(`advanced-logo.png`),
+      productImageUrl: _(`advanced-loch-ness-shaker-black.webp`),
+      secondaryProductImageUrl: _(`advanced-loch-ness-shaker-blue.webp`),
+      tertiaryProductImageUrl: _(`advanced-loch-ness-shaker-mint.webp`),
+      productImageAlt: `Official ADVANCED Loch Ness Legend Series Ice Shakers`,
+      accent: `#58d8dc`,
+      cta: `VIEW ALL COLORS`,
+    },
+    {
+      id: `overtake-2026-polo-personalized`,
+      brandId: `overtake`,
+      format: `duo`,
+      brand: `OVERTAKE`,
+      relationship: `OFFICIAL ORGANIZATION MERCH`,
+      product: `Official 2026 Polo // Personalized`,
+      kicker: `MAKE IT YOURS`,
+      headline: `YOUR NAME. OUR COLORS.`,
+      copy: `Front-and-back team presentation with a personalized nickname.`,
+      url: `https://overtakegg.com/store`,
+      logoUrl: _(`overtake-wordmark.webp`),
+      productImageUrl: _(`overtake-2026-polo-front.webp`),
+      secondaryProductImageUrl: _(`overtake-2026-polo-back.webp`),
+      productImageAlt: `Official Overtake 2026 Polo front and personalized back`,
+      accent: `#df1828`,
+      cta: `CUSTOMIZE YOURS`,
+    },
+    {
+      id: `advanced-loch-ness-tarot-shirt`,
+      brandId: `advanced`,
+      format: `duo`,
+      brand: `ADVANCED`,
+      relationship: `PERSONAL PARTNER // AFFILIATE`,
+      product: `Loch Ness Monster Tarot T-Shirt`,
+      kicker: `THE KEEPER BELOW`,
+      headline: `WEAR THE LEGEND.`,
+      copy: `The official Loch Ness tarot design, front and back.`,
+      code: `CODE ZENDIGO // 10% OFF`,
+      url: `https://advanced.gg/products/loch-ness-monster-tarot-t-shirt?ref=zendigo`,
+      logoUrl: _(`advanced-logo.png`),
+      productImageUrl: _(`advanced-loch-ness-tarot-shirt-front.webp`),
+      secondaryProductImageUrl: _(`advanced-loch-ness-tarot-shirt-back.webp`),
+      productImageAlt: `Official ADVANCED Loch Ness Monster Tarot T-Shirt front and back`,
+      accent: `#c2aa64`,
+      cta: `SHOP THE TAROT TEE`,
+    },
+    {
+      id: `overtake-2026-vneck-personalized`,
+      brandId: `overtake`,
+      format: `duo`,
+      brand: `OVERTAKE`,
+      relationship: `OFFICIAL ORGANIZATION MERCH`,
+      product: `Official 2026 V-Neck Jersey // Personalized`,
+      kicker: `NAME + NUMBER`,
+      headline: `OWN YOUR NUMBER.`,
+      copy: `Custom name and number on the official Overtake V-Neck Jersey.`,
+      url: `https://overtakegg.com/store`,
+      logoUrl: _(`overtake-wordmark.webp`),
+      productImageUrl: _(`overtake-2026-vneck-front.webp`),
+      secondaryProductImageUrl: _(`overtake-2026-vneck-back.webp`),
+      productImageAlt: `Official Overtake 2026 V-Neck Jersey front and personalized back`,
+      accent: `#df1828`,
+      cta: `CUSTOMIZE YOURS`,
+    },
+    {
+      id: `advanced-cryptids-vol-one`,
+      brandId: `advanced`,
+      format: `collection`,
+      brand: `ADVANCED`,
+      relationship: `PERSONAL PARTNER // AFFILIATE`,
+      product: `Cryptids Vol. 1 // Loch Ness Monster`,
+      kicker: `EXPEDITION FILE 001`,
+      headline: `ENTER THE DEEP.`,
+      copy: `Lake Water Focus, Legend Series shakers, tarot apparel and official Nessie collectibles.`,
+      code: `CODE ZENDIGO // 10% OFF`,
+      url: `https://advanced.gg/pages/cryptids-vol-1?ref=zendigo`,
+      logoUrl: _(`advanced-logo.png`),
+      productImageUrl: _(`advanced-loch-ness-collection.webp`),
+      backgroundImageUrl: _(`advanced-loch-ness-hero.webp`),
+      productImageAlt: `Official ADVANCED Cryptids Vol. 1 Loch Ness collection`,
+      accent: `#45c7cf`,
+      cta: `EXPLORE THE COLLECTION`,
+    },
+    {
+      id: `overtake-built-with-partners`,
+      brandId: `overtake`,
+      format: `partners`,
+      brand: `OVERTAKE`,
+      relationship: `OFFICIAL ORGANIZATION PARTNERS`,
+      product: `Built With RepulseCo, Ink3D and SCL`,
+      kicker: `BUILT WITH THE SECTOR`,
+      headline: `COMPETE TOGETHER.`,
+      copy: `Apparel, custom design and organized competition behind Overtake.`,
+      url: `https://overtakegg.com/partners`,
+      logoUrl: _(`overtake-wordmark.webp`),
+      productImageUrl: _(`overtake-partner-repulse.webp`),
+      partnerMarks: [
+        { name: `RepulseCo`, imageUrl: _(`overtake-partner-repulse.webp`) },
+        { name: `Ink3D`, imageUrl: _(`overtake-partner-ink3d.webp`) },
+        { name: `SCL`, imageUrl: _(`overtake-partner-scl.webp`) },
+      ],
+      productImageAlt: `Official Overtake partner logos for RepulseCo, Ink3D and SCL`,
+      accent: `#df1828`,
+      cta: `MEET THE PARTNERS`,
+    },
+  ],
+  y = [
+    {
+      id: `rush`,
+      playlistId: m,
+      label: `All Rush Mixtape`,
+      catalogLabel: `All Rush Mixtape`,
+      edition: `PROG ARCHIVE // CX-82-01`,
+      side: `A`,
+      accent: `#df1828`,
+      caseArt: `/mixtapes/all-rush-spine.webp`,
+      tapeArt: `/mixtapes/all-rush-tape.webp`,
+      tracks: [
+        { id: `g_QtO0Rhp0w`, title: `Rush - The Spirit Of Radio` },
+        { id: `rz-MKLcUF4g`, title: `Digital Man` },
+        { id: `sQRShD0xuAk`, title: `Rush - New World Man` },
+        { id: `LdpMpfp-J_I`, title: `Rush - YYZ (HQ)` },
+        { id: `FAvQSkK8Z8U`, title: `Rush - Red Barchetta` },
+        { id: `WQgu0MpnKq8`, title: `Rush - The Big Money` },
+        { id: `8Kiz5jyG5j4`, title: `Rush - Marathon` },
+        {
+          id: `qSWn9qbaFu8`,
+          title: `RUSH - Headlong Flight (Official Lyric Video HD)`,
+        },
+        { id: `5jPondwDDOE`, title: `RUSH - Driven (video)` },
+        { id: `ZiRuj2_czzw`, title: `Rush - Limelight` },
+        { id: `rMYDuPWHFAo`, title: `Rush: One Little Victory` },
+        {
+          id: `Gztabfs5ngA`,
+          title: `Tom Sawyer - Rush (HD Remaster by Platinum Productions)`,
+        },
+        { id: `iIGKlicb8n0`, title: `Rush - Working Man` },
+      ].map((e) => ({ ...e })),
+    },
+    {
+      id: `college-rock`,
+      playlistId: h,
+      label: `90s College Rock`,
+      catalogLabel: `90s College Rock`,
+      edition: `CAMPUS RADIO // CX-82-02`,
+      side: `A`,
+      accent: `#b83b35`,
+      caseArt: `/mixtapes/90s-college-rock-spine.webp`,
+      tapeArt: `/mixtapes/90s-college-rock-tape.webp`,
+      tracks: [],
+    },
+  ];
+function b(e) {
+  let t = 0;
+  return e.flatMap((e, n) => {
+    let r = [{ kind: `video`, id: `video-${e.id}`, video: e }];
+    return (
+      (n + 1) % 3 == 0 &&
+        ((t += 1),
+        r.push({
+          kind: `commercial`,
+          id: `commercial-break-${t}`,
+          breakNumber: t,
+        })),
+      r
+    );
+  });
+}
+function x(e, t) {
+  for (let n = 1; n <= e.length; n += 1) {
+    let r = e[(t - n + e.length) % e.length];
+    if (r?.kind === `video`) return r.video;
+  }
+  return l;
+}
+function S(e) {
+  typeof window > `u` ||
+    window.dispatchEvent(new CustomEvent(p, { detail: e }));
+}
+var C = [
+    {
+      id: `twitch`,
+      name: `Twitch`,
+      shortName: `TW`,
+      handle: `Zendigo`,
+      url: `https://www.twitch.tv/zendigo_playz`,
+    },
+    {
+      id: `youtube`,
+      name: `YouTube`,
+      shortName: `YT`,
+      handle: `Zendigo`,
+      url: `https://www.youtube.com/@zendigoplayz/live`,
+    },
+    {
+      id: `kick`,
+      name: `Kick`,
+      shortName: `K`,
+      handle: `Zendigo`,
+      url: `https://kick.com/zendigo-playz`,
+    },
+    {
+      id: `x`,
+      name: `X`,
+      shortName: `X`,
+      handle: `Zendigo`,
+      url: `https://x.com/ZendigoPlayz`,
+    },
+  ],
+  w = (0, o.createContext)(null);
+function T({ children: e }) {
+  let [t, n] = (0, o.useState)([]),
+    [i, a] = (0, o.useState)(null),
+    [c, l] = (0, o.useState)(`off`);
+  (0, o.useEffect)(() => {
+    let e = !0,
+      t = null;
+    async function i() {
+      (t?.abort(), (t = new AbortController()));
+      try {
+        let i = await fetch(r(`/api/broadcast-status`), {
+          cache: `no-store`,
+          signal: t.signal,
+        });
+        if (!i.ok) return;
+        let a = await i.json();
+        e && Array.isArray(a.platforms) && n(a.platforms);
+      } catch (t) {
+        e && !(t instanceof DOMException && t.name === `AbortError`) && n([]);
+      }
+    }
+    i();
+    let a = window.setInterval(i, 9e4);
+    return () => {
+      ((e = !1), t?.abort(), window.clearInterval(a));
+    };
+  }, []);
+  let u = (0, o.useMemo)(() => new Map(t.map((e) => [e.id, e])), [t]),
+    d = (0, o.useMemo)(
+      () =>
+        C.flatMap((e) => {
+          let t = u.get(e.id);
+          return t?.status === `live`
+            ? [{ ...e, ...t, url: t.url || e.url }]
+            : [];
+        }),
+      [u],
+    ),
+    f = d[0] ?? null,
+    p = d.find((e) => e.id === i) ?? null;
+  ((0, o.useEffect)(() => {
+    if (c !== `off`) {
+      if (d.length === 0) {
+        i && a(null);
+        return;
+      }
+      d.some((e) => e.id === i) || (a(d[0].id), c === `ready` && l(`scanning`));
+    }
+  }, [d, c, i]),
+    (0, o.useEffect)(() => {
+      if (c !== `booting` && c !== `scanning`) return;
+      let e = window.setTimeout(
+        () => l((e) => (e === `booting` ? `scanning` : `ready`)),
+        c === `booting` ? 320 : 720,
+      );
+      return () => window.clearTimeout(e);
+    }, [c]));
+  let m = (0, o.useCallback)(
+      (e) => {
+        (S(`tuner`), a(e ?? f?.id ?? null), l(`booting`));
+      },
+      [f],
+    ),
+    h = (0, o.useCallback)(() => {
+      (a(null), l(`off`));
+    }, []),
+    g = (0, o.useMemo)(
+      () => ({
+        livePlatforms: d,
+        primaryLive: f,
+        statusById: u,
+        viewerPlatform: p,
+        tunerPhase: c,
+        openViewer: m,
+        closeViewer: h,
+      }),
+      [h, d, m, f, u, c, p],
+    );
+  return (0, s.jsx)(w.Provider, { value: g, children: e });
+}
+function E() {
+  let e = (0, o.useContext)(w);
+  if (!e) throw Error(`Broadcast controls require BroadcastProvider.`);
+  return e;
+}
+function D() {
+  let { livePlatforms: e, primaryLive: t, openViewer: n } = E(),
+    r =
+      e.length > 1
+        ? `${e.length} Live Signals`
+        : t
+          ? `${t.name} Live`
+          : `Signal Standby`,
+    i = (0, s.jsxs)(s.Fragment, {
+      children: [
+        (0, s.jsx)(`span`, { className: `status-lamp`, "aria-hidden": `true` }),
+        (0, s.jsxs)(`span`, {
+          children: [
+            (0, s.jsx)(`small`, { children: `Broadcast` }),
+            (0, s.jsx)(`strong`, { children: r }),
+          ],
+        }),
+      ],
+    }),
+    a = (0, o.useCallback)(() => {
+      let e = document.getElementById(`broadcast-tuner`);
+      if (e) {
+        let t = e.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: Math.max(0, t - 115), behavior: `auto` });
+      }
+      (window.history.replaceState(
+        window.history.state,
+        ``,
+        `${window.location.pathname}${window.location.search}`,
+      ),
+        n(t?.id));
+    }, [n, t?.id]);
+  return (0, s.jsx)(`button`, {
+    className: `status-control ${t ? `is-live` : `is-standby`}`,
+    type: `button`,
+    onClick: a,
+    "aria-controls": `broadcast-tuner`,
+    "aria-label": t
+      ? `Return to the TV and play Zendigo's ${t.name} broadcast`
+      : `Return to the TV and power on the Zendigo broadcast tuner`,
+    children: i,
+  });
+}
+function O() {
+  let { livePlatforms: e, primaryLive: t, openViewer: n } = E(),
+    r =
+      e.length > 1
+        ? `Choose live signal`
+        : t
+          ? `Enter ${t.name} broadcast`
+          : `Find the broadcast`;
+  return (0, s.jsx)(`button`, {
+    className: `button button-primary ${t ? `is-live` : ``}`,
+    type: `button`,
+    onClick: () => n(t?.id),
+    children: (0, s.jsxs)(s.Fragment, {
+      children: [
+        (0, s.jsx)(`span`, {
+          className: `button-light`,
+          "aria-hidden": `true`,
+        }),
+        r,
+      ],
+    }),
+  });
+}
+function k() {
+  let { livePlatforms: e, statusById: t, openViewer: n } = E();
+  return (0, s.jsxs)(`div`, {
+    className: `broadcast-deck`,
+    id: `broadcast-deck`,
+    children: [
+      (0, s.jsxs)(`div`, {
+        className: `broadcast-deck-label`,
+        children: [
+          (0, s.jsx)(`span`, { children: `Broadcast outputs` }),
+          (0, s.jsx)(`b`, {
+            children:
+              e.length > 0
+                ? `${e.length.toString().padStart(2, `0`)} ACTIVE`
+                : `AUTO SCAN`,
+          }),
+        ],
+      }),
+      (0, s.jsx)(`div`, {
+        className: `platform-grid`,
+        children: C.map((e) => {
+          let r = t.get(e.id),
+            i = r?.status === `live`,
+            a = i
+              ? `Live now`
+              : r?.status === `offline`
+                ? `Standby`
+                : `Channel`,
+            o = (0, s.jsxs)(s.Fragment, {
+              children: [
+                (0, s.jsx)(`span`, {
+                  className: `platform-mark`,
+                  children: e.shortName,
+                }),
+                (0, s.jsxs)(`span`, {
+                  className: `platform-identity`,
+                  children: [
+                    (0, s.jsx)(`strong`, { children: e.name }),
+                    (0, s.jsx)(`small`, { children: e.handle }),
+                  ],
+                }),
+                (0, s.jsxs)(`span`, {
+                  className: `platform-state`,
+                  children: [(0, s.jsx)(`i`, { "aria-hidden": `true` }), a],
+                }),
+              ],
+            });
+          return i
+            ? (0, s.jsx)(
+                `button`,
+                {
+                  className: `platform-channel is-live`,
+                  type: `button`,
+                  onClick: () => n(e.id),
+                  "aria-label": `Play Zendigo's live ${e.name} broadcast on this page`,
+                  children: o,
+                },
+                e.id,
+              )
+            : (0, s.jsx)(
+                `a`,
+                {
+                  className: `platform-channel`,
+                  href: r?.url || e.url,
+                  target: `_blank`,
+                  rel: `noreferrer`,
+                  "aria-label": `Open Zendigo on ${e.name}`,
+                  children: o,
+                },
+                e.id,
+              );
+        }),
+      }),
+    ],
+  });
+}
+function A() {
+  let {
+      livePlatforms: e,
+      viewerPlatform: t,
+      tunerPhase: n,
+      openViewer: i,
+      closeViewer: a,
+    } = E(),
+    [c, p] = (0, o.useState)([l]),
+    [m, h] = (0, o.useState)(0),
+    [g, _] = (0, o.useState)(0),
+    [y, C] = (0, o.useState)(!0),
+    [w, T] = (0, o.useState)(!1),
+    D = (0, o.useRef)(!1),
+    O = n !== `off`,
+    k = O && n === `ready` && !t,
+    A = (0, o.useMemo)(() => b(c), [c]),
+    j = A[m % A.length] ?? { kind: `video`, id: `video-fallback`, video: l },
+    I = j.kind === `video` ? j.video : x(A, m),
+    L = j.kind === `commercial` ? v[g % v.length] : null;
+  (0, o.useEffect)(() => {
+    let e = !0,
+      t = null,
+      n = 0,
+      i = [1500, 3e3, 6e3, 12e3];
+    function a() {
+      if (!e || n >= i.length) return;
+      t !== null && window.clearTimeout(t);
+      let r = i[n];
+      ((n += 1),
+        (t = window.setTimeout(() => {
+          ((t = null), o());
+        }, r)));
+    }
+    async function o() {
+      try {
+        let i = await fetch(r(`/api/latest-youtube-video`), {
+          cache: `no-store`,
+        });
+        if (!i.ok) return;
+        let o = await i.json(),
+          s = o.videos?.filter((e) => e?.id) ?? (o.video?.id ? [o.video] : []);
+        if (!e || s.length === 0) return;
+        let c = s.slice(0, 12);
+        (p((e) =>
+          e.length === c.length && e.every((e, t) => e.id === c[t]?.id) ? e : c,
+        ),
+          o.source === `fallback` || s.length < 12
+            ? a()
+            : ((n = 0), t !== null && (window.clearTimeout(t), (t = null))));
+      } catch {
+        a();
+      }
+    }
+    o();
+    let s = window.setInterval(() => {
+      ((n = 0), o());
+    }, 900 * 1e3);
+    return () => {
+      ((e = !1), t !== null && window.clearTimeout(t), window.clearInterval(s));
+    };
+  }, []);
+  let R = (0, o.useCallback)(
+    (e) => {
+      A.length < 2 ||
+        D.current ||
+        ((D.current = !0),
+        T(!0),
+        window.setTimeout(() => {
+          (j.kind === `commercial` && _((t) => (t + e + v.length) % v.length),
+            h((t) => (t + e + A.length) % A.length),
+            (D.current = !1),
+            T(!1));
+        }, 320));
+    },
+    [A.length, j.kind],
+  );
+  return (
+    (0, o.useEffect)(() => {
+      if (!k || !y || A.length < 2) return;
+      let e =
+          j.kind === `commercial`
+            ? f
+            : u + Math.floor(Math.random() * (d - u + 1)),
+        t = window.setTimeout(() => R(1), e);
+      return () => window.clearTimeout(t);
+    }, [k, A.length, y, R, j.id, j.kind]),
+    (0, o.useEffect)(() => {
+      O || (C(!0), h(0), (D.current = !1), T(!1));
+    }, [O]),
+    (0, o.useEffect)(() => {
+      n === `ready` && S(`tuner`);
+    }, [n, t?.id]),
+    (0, s.jsx)(`aside`, {
+      id: `broadcast-tuner`,
+      className: `mission-console ${O ? `is-powered` : ``}`,
+      "aria-label": O ? `Zendigo broadcast tuner` : `Current mission`,
+      children: (0, s.jsxs)(`div`, {
+        className: `console-hardware`,
+        children: [
+          (0, s.jsx)(`span`, {
+            className: `screw screw-one`,
+            "aria-hidden": `true`,
+          }),
+          (0, s.jsx)(`span`, {
+            className: `screw screw-two`,
+            "aria-hidden": `true`,
+          }),
+          (0, s.jsx)(`span`, {
+            className: `screw screw-three`,
+            "aria-hidden": `true`,
+          }),
+          (0, s.jsx)(`span`, {
+            className: `screw screw-four`,
+            "aria-hidden": `true`,
+          }),
+          (0, s.jsx)(`div`, {
+            className: `console-label`,
+            children: (0, s.jsx)(`span`, { children: `Broadcast tuner` }),
+          }),
+          (0, s.jsxs)(`div`, {
+            className: `console-screen ${O ? `tuner-screen` : `powered-off-screen`} phase-${n}`,
+            "aria-live": `polite`,
+            children: [
+              O
+                ? (0, s.jsx)(`div`, {
+                    className: `screen-scan`,
+                    "aria-hidden": `true`,
+                  })
+                : null,
+              n === `off`
+                ? (0, s.jsx)(M, {})
+                : n === `booting` || n === `scanning`
+                  ? (0, s.jsx)(N, { phase: n })
+                  : t
+                    ? (0, s.jsx)(P, {
+                        platform: t,
+                        livePlatforms: e,
+                        onSelect: i,
+                      })
+                    : (0, s.jsx)(F, {
+                        program: j,
+                        commercial: L,
+                        video: I,
+                        channelNumber: m + 1,
+                        isFlipping: w,
+                        autoCycle: y,
+                      }),
+            ],
+          }),
+          (0, s.jsxs)(`div`, {
+            className: `console-controls`,
+            children: [
+              (0, s.jsxs)(`button`, {
+                className: `toggle console-power ${O ? `is-on` : ``}`,
+                type: `button`,
+                onClick: () => (O ? a() : i(e[0]?.id)),
+                "aria-label": O
+                  ? `Power off broadcast tuner`
+                  : `Power on broadcast tuner`,
+                children: [
+                  (0, s.jsx)(`i`, { "aria-hidden": `true` }),
+                  ` POWER`,
+                ],
+              }),
+              (0, s.jsxs)(`div`, {
+                className: `console-channel-controls`,
+                "aria-label": `Broadcast channel controls`,
+                children: [
+                  (0, s.jsx)(`button`, {
+                    type: `button`,
+                    onClick: () => R(-1),
+                    disabled: !k || A.length < 2,
+                    children: `CH −`,
+                  }),
+                  (0, s.jsx)(`button`, {
+                    type: `button`,
+                    onClick: () => R(1),
+                    disabled: !k || A.length < 2,
+                    children: `CH +`,
+                  }),
+                  (0, s.jsx)(`button`, {
+                    className: `hold-channel`,
+                    type: `button`,
+                    onClick: () => C((e) => !e),
+                    disabled: !k,
+                    children: y ? `Hold channel` : `Resume channel scan`,
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      }),
+    })
+  );
+}
+function j({ tuner: e }) {
+  let t = (0, o.useRef)(null),
+    n = (0, o.useRef)(!1),
+    c = (0, o.useRef)(null),
+    l = (0, o.useRef)(0),
+    u = (0, o.useRef)(y),
+    d = (0, o.useRef)(72),
+    f = (0, o.useRef)(72),
+    [m, h] = (0, o.useState)(y),
+    [g, _] = (0, o.useState)(null),
+    [v, b] = (0, o.useState)(!1),
+    [x, C] = (0, o.useState)(1),
+    [w, T] = (0, o.useState)(0),
+    [E, D] = (0, o.useState)(`No cassette loaded`),
+    [O, k] = (0, o.useState)(72),
+    [A, j] = (0, o.useState)(!1),
+    M = m.find((e) => e.id === g) ?? null,
+    N = (0, o.useCallback)((e) => {
+      if (!t.current?.contentWindow) return;
+      let n = new URL(i).origin;
+      t.current.contentWindow.postMessage(e, n);
+    }, []);
+  ((0, o.useEffect)(() => {
+    let e = window.requestAnimationFrame(() => {
+      let e = Number(window.localStorage.getItem(`zendigo-cassette-volume`));
+      Number.isFinite(e) &&
+        e >= 0 &&
+        e <= 100 &&
+        ((d.current = e), e > 0 && (f.current = e), k(e));
+    });
+    return () => window.cancelAnimationFrame(e);
+  }, []),
+    (0, o.useEffect)(() => {
+      u.current = m;
+    }, [m]),
+    (0, o.useEffect)(() => {
+      let e = !0;
+      async function t() {
+        try {
+          let t = await fetch(r(`/api/youtube-playlists`), {
+            cache: `no-store`,
+          });
+          if (!t.ok) return;
+          let n = await t.json();
+          if (!e || !n.playlists?.length) return;
+          h((e) =>
+            e.map((e) => {
+              let t = n.playlists?.find((t) => t.id === e.playlistId);
+              return t
+                ? { ...e, tracks: t.tracks?.length ? t.tracks : e.tracks }
+                : e;
+            }),
+          );
+        } catch {}
+      }
+      return (
+        t(),
+        () => {
+          e = !1;
+        }
+      );
+    }, []),
+    (0, o.useEffect)(() => {
+      ((d.current = O),
+        O > 0 && (f.current = O),
+        window.localStorage.setItem(`zendigo-cassette-volume`, String(O)),
+        n.current &&
+          N({ type: `zendigo-cassette:volume`, volume: O, muted: O === 0 }));
+    }, [N, O]));
+  let P = (0, o.useCallback)(
+    (e, t = 0) => {
+      let r = u.current.find((t) => t.id === e);
+      r &&
+        ((c.current = e),
+        (l.current = t),
+        _(e),
+        b(!1),
+        C(t + 1),
+        T(r.tracks.length),
+        D(r.tracks[t]?.title || `Loading ${r.label}`),
+        n.current &&
+          (S(`cassette`),
+          N({
+            type: `zendigo-cassette:load`,
+            cassetteId: r.id,
+            playlistId: r.playlistId,
+            tracks: r.tracks[t]?.id ? [r.tracks[t].id] : [],
+            index: 0,
+            volume: d.current,
+            muted: d.current === 0,
+          })));
+    },
+    [N],
+  );
+  ((0, o.useEffect)(() => {
+    let e = new URL(i).origin;
+    function t(t) {
+      if (t.origin !== e || !t.data) return;
+      if (t.data.type === `zendigo-cassette:ready`) {
+        ((n.current = !0),
+          N({
+            type: `zendigo-cassette:volume`,
+            volume: d.current,
+            muted: d.current === 0,
+          }));
+        let e = c.current;
+        e && P(e, l.current);
+        return;
+      }
+      let r = u.current.find((e) => e.id === c.current);
+      if (!r || (t.data.cassetteId && t.data.cassetteId !== r.id)) return;
+      if (t.data.type === `zendigo-cassette:error`) {
+        if (!r.tracks.length) {
+          (b(!1), D(`Playlist track unavailable`));
+          return;
+        }
+        let e = (l.current + 1) % r.tracks.length;
+        ((l.current = e),
+          N({
+            type: `zendigo-cassette:load`,
+            cassetteId: r.id,
+            playlistId: r.playlistId,
+            tracks: r.tracks[e]?.id ? [r.tracks[e].id] : [],
+            index: 0,
+            volume: d.current,
+            muted: d.current === 0,
+          }));
+        return;
+      }
+      let i = t.data.videoId
+        ? r.tracks.findIndex((e) => e.id === t.data.videoId)
+        : -1;
+      if (r.tracks.length && t.data.videoId && i < 0) return;
+      let a = i >= 0 ? i : Math.max(0, t.data.index);
+      ((l.current = a),
+        b(t.data.state === 1),
+        C(a + 1),
+        T(r.tracks.length || t.data.total || 0),
+        D(r.tracks[a]?.title || t.data.title?.trim() || r.label));
+    }
+    return (
+      window.addEventListener(`message`, t),
+      () => {
+        (window.removeEventListener(`message`, t), (n.current = !1));
+      }
+    );
+  }, [P, N]),
+    (0, o.useEffect)(() => {
+      function e(e) {
+        e.detail === `tuner` &&
+          n.current &&
+          (N({ type: `zendigo-cassette:pause` }), b(!1));
+      }
+      return (
+        window.addEventListener(p, e),
+        () => window.removeEventListener(p, e)
+      );
+    }, [N]));
+  let F = (0, o.useCallback)(() => {
+      if (!g) {
+        P(`rush`);
+        return;
+      }
+      n.current &&
+        (v
+          ? (N({ type: `zendigo-cassette:pause` }), b(!1))
+          : (S(`cassette`), N({ type: `zendigo-cassette:play` }), b(!0)));
+    }, [g, P, v, N]),
+    I = (0, o.useCallback)(
+      (e) => {
+        if (!M || !n.current) return;
+        let t = l.current,
+          r = M.tracks.length || w;
+        if (!r) return;
+        let i = (t + e + r) % r;
+        ((l.current = i),
+          S(`cassette`),
+          N({
+            type: `zendigo-cassette:load`,
+            cassetteId: M.id,
+            playlistId: M.playlistId,
+            tracks: M.tracks[i]?.id ? [M.tracks[i].id] : [],
+            index: 0,
+            volume: d.current,
+            muted: d.current === 0,
+          }),
+          C(i + 1),
+          T(r),
+          D(M.tracks[i]?.title || `Loading track ${i + 1}`),
+          b(!0));
+      },
+      [M, N, w],
+    ),
+    L = (0, o.useCallback)(() => {
+      (N({ type: `zendigo-cassette:stop` }),
+        (c.current = null),
+        (l.current = 0),
+        _(null),
+        b(!1),
+        j(!1),
+        C(1),
+        T(0),
+        D(`No cassette loaded`));
+    }, [N]),
+    R = (0, o.useCallback)(() => {
+      k((e) => (e === 0 ? f.current : 0));
+    }, []);
+  return (0, s.jsxs)(`section`, {
+    className: `cassette-component ${M ? `has-cassette` : ``}`,
+    "aria-label": `Selectable YouTube playlist cassette deck`,
+    children: [
+      (0, s.jsx)(`div`, { className: `media-tuner-slot`, children: e }),
+      (0, s.jsxs)(`div`, {
+        className: `game-case-library media-game-library`,
+        children: [
+          (0, s.jsxs)(`div`, {
+            className: `cassette-stack-heading`,
+            children: [
+              (0, s.jsx)(`span`, { children: `ZENDIGO ARCADE` }),
+              (0, s.jsx)(`b`, { children: `01 GAME` }),
+            ],
+          }),
+          (0, s.jsx)(a, { variant: `case` }),
+        ],
+      }),
+      (0, s.jsxs)(`div`, {
+        className: `cassette-machine ${A ? `is-player-open` : ``}`,
+        children: [
+          (0, s.jsxs)(`div`, {
+            className: `cassette-machine-brand`,
+            children: [
+              (0, s.jsxs)(`div`, {
+                children: [
+                  (0, s.jsx)(`strong`, { children: `CX-82` }),
+                  (0, s.jsx)(`span`, { children: `STEREO CASSETTE DECK` }),
+                ],
+              }),
+              (0, s.jsx)(`b`, { children: v ? `PLAY` : M ? `PAUSE` : `STOP` }),
+            ],
+          }),
+          (0, s.jsxs)(`div`, {
+            className: `cassette-machine-display`,
+            "aria-live": `polite`,
+            children: [
+              (0, s.jsx)(`span`, {
+                children: M
+                  ? `${M.label} // SIDE ${M.side}`
+                  : `CASSETTE BAY // EMPTY`,
+              }),
+              (0, s.jsx)(`strong`, { children: E }),
+              (0, s.jsx)(`small`, {
+                children: M
+                  ? `TRACK ${String(x).padStart(2, `0`)}${w ? ` / ${String(w).padStart(2, `0`)}` : ``}`
+                  : `SELECT A CASE TO LOAD`,
+              }),
+            ],
+          }),
+          (0, s.jsxs)(`div`, {
+            className: `cassette-machine-main`,
+            children: [
+              (0, s.jsxs)(`div`, {
+                className: `cassette-bay`,
+                children: [
+                  M
+                    ? (0, s.jsxs)(`div`, {
+                        className: `inserted-tape ${v ? `is-playing` : ``}`,
+                        style: { "--tape-accent": M.accent },
+                        "aria-label": `${M.label} inserted`,
+                        children: [
+                          (0, s.jsx)(`img`, {
+                            className: `inserted-tape-art`,
+                            src: M.tapeArt,
+                            alt: ``,
+                            "aria-hidden": `true`,
+                          }),
+                          (0, s.jsxs)(`span`, {
+                            className: `inserted-tape-title`,
+                            children: [
+                              (0, s.jsx)(`small`, { children: M.edition }),
+                              (0, s.jsx)(`strong`, { children: M.label }),
+                              (0, s.jsxs)(`i`, { children: [`SIDE `, M.side] }),
+                            ],
+                          }),
+                        ],
+                      })
+                    : (0, s.jsx)(`div`, {
+                        className: `cassette-bay-empty`,
+                        children: (0, s.jsx)(`span`, { children: `NO TAPE` }),
+                      }),
+                  (0, s.jsx)(`div`, {
+                    className: `cassette-player-engine ${M ? `` : `is-stowed`} ${A ? `is-open` : ``}`,
+                    "aria-hidden": !A,
+                    children: (0, s.jsx)(`iframe`, {
+                      ref: t,
+                      src: `${i}/api/cassette-player`,
+                      title: `Zendigo cassette playback engine`,
+                      allow: `autoplay; encrypted-media; picture-in-picture; fullscreen`,
+                    }),
+                  }),
+                ],
+              }),
+              (0, s.jsxs)(`div`, {
+                className: `vu-bank`,
+                "aria-hidden": `true`,
+                children: [
+                  (0, s.jsxs)(`div`, {
+                    className: `vu-meter`,
+                    children: [
+                      (0, s.jsx)(`span`, { children: `L` }),
+                      (0, s.jsx)(`i`, { className: v ? `is-active` : `` }),
+                    ],
+                  }),
+                  (0, s.jsxs)(`div`, {
+                    className: `vu-meter`,
+                    children: [
+                      (0, s.jsx)(`span`, { children: `R` }),
+                      (0, s.jsx)(`i`, { className: v ? `is-active` : `` }),
+                    ],
+                  }),
+                  (0, s.jsx)(`small`, { children: `PEAK LEVEL` }),
+                ],
+              }),
+              (0, s.jsxs)(`div`, {
+                className: `cassette-volume-panel`,
+                children: [
+                  (0, s.jsx)(`span`, { children: `OUTPUT` }),
+                  (0, s.jsx)(`button`, {
+                    type: `button`,
+                    className: `cassette-volume-knob`,
+                    onClick: R,
+                    "aria-label": O === 0 ? `Unmute cassette` : `Mute cassette`,
+                    style: { "--volume": `${O * 2.7}deg` },
+                    children: (0, s.jsx)(`i`, {}),
+                  }),
+                  (0, s.jsx)(`output`, {
+                    children: O === 0 ? `MUTE` : `VOL ${O}`,
+                  }),
+                  (0, s.jsx)(`input`, {
+                    type: `range`,
+                    min: `0`,
+                    max: `100`,
+                    step: `1`,
+                    value: O,
+                    onChange: (e) => k(Number(e.target.value)),
+                    "aria-label": `Cassette volume`,
+                    "aria-valuetext": O === 0 ? `Muted` : `${O} percent`,
+                  }),
+                ],
+              }),
+            ],
+          }),
+          (0, s.jsxs)(`div`, {
+            className: `cassette-transport`,
+            "aria-label": `Cassette controls`,
+            children: [
+              (0, s.jsxs)(`button`, {
+                type: `button`,
+                onClick: () => I(-1),
+                disabled: !M,
+                children: [
+                  (0, s.jsx)(`span`, { children: `◀◀` }),
+                  (0, s.jsx)(`small`, { children: `PREV` }),
+                ],
+              }),
+              (0, s.jsxs)(`button`, {
+                type: `button`,
+                onClick: F,
+                children: [
+                  (0, s.jsx)(`span`, { children: v ? `Ⅱ` : `▶` }),
+                  (0, s.jsx)(`small`, { children: v ? `PAUSE` : `PLAY` }),
+                ],
+              }),
+              (0, s.jsxs)(`button`, {
+                type: `button`,
+                onClick: () => I(1),
+                disabled: !M,
+                children: [
+                  (0, s.jsx)(`span`, { children: `▶▶` }),
+                  (0, s.jsx)(`small`, { children: `NEXT` }),
+                ],
+              }),
+              (0, s.jsxs)(`button`, {
+                type: `button`,
+                onClick: L,
+                disabled: !M,
+                children: [
+                  (0, s.jsx)(`span`, { children: `△` }),
+                  (0, s.jsx)(`small`, { children: `EJECT` }),
+                ],
+              }),
+              (0, s.jsxs)(`button`, {
+                type: `button`,
+                onClick: () => j((e) => !e),
+                disabled: !M,
+                "aria-label": A
+                  ? `Close YouTube video and ad controls`
+                  : `Open YouTube video and ad controls`,
+                children: [
+                  (0, s.jsx)(`span`, { children: A ? `×` : `▣` }),
+                  (0, s.jsx)(`small`, {
+                    children: A ? `CLOSE` : `VIDEO / ADS`,
+                  }),
+                ],
+              }),
+            ],
+          }),
+          A
+            ? (0, s.jsxs)(s.Fragment, {
+                children: [
+                  (0, s.jsx)(`button`, {
+                    type: `button`,
+                    className: `cassette-player-backdrop`,
+                    onClick: () => j(!1),
+                    "aria-label": `Close YouTube video and ad controls`,
+                  }),
+                  (0, s.jsx)(`button`, {
+                    type: `button`,
+                    className: `cassette-player-close`,
+                    onClick: () => j(!1),
+                    children: `Close player`,
+                  }),
+                ],
+              })
+            : null,
+        ],
+      }),
+      (0, s.jsxs)(`div`, {
+        className: `cassette-case-stack`,
+        "aria-label": `Playlist cassette cases`,
+        children: [
+          (0, s.jsxs)(`div`, {
+            className: `cassette-stack-heading`,
+            children: [
+              (0, s.jsx)(`span`, { children: `PLAYLIST LIBRARY` }),
+              (0, s.jsxs)(`b`, {
+                children: [String(m.length).padStart(2, `0`), ` TAPES`],
+              }),
+            ],
+          }),
+          (0, s.jsx)(`div`, {
+            className: `cassette-case-pile`,
+            children: m.map((e, t) =>
+              (0, s.jsx)(
+                `button`,
+                {
+                  type: `button`,
+                  className: `cassette-case ${g === e.id ? `is-loaded` : ``}`,
+                  onClick: () => P(e.id),
+                  "aria-pressed": g === e.id,
+                  "aria-label": `Insert and play ${e.catalogLabel}`,
+                  style: {
+                    "--case-accent": e.accent,
+                    "--case-offset": `${(t % 3) * 2}px`,
+                  },
+                  children: (0, s.jsxs)(`span`, {
+                    className: `cassette-case-shell`,
+                    children: [
+                      (0, s.jsx)(`img`, {
+                        className: `cassette-case-art`,
+                        src: e.caseArt,
+                        alt: ``,
+                        "aria-hidden": `true`,
+                      }),
+                      (0, s.jsxs)(`span`, {
+                        className: `cassette-case-title`,
+                        children: [
+                          (0, s.jsx)(`small`, { children: e.edition }),
+                          (0, s.jsx)(`strong`, { children: e.catalogLabel }),
+                          (0, s.jsx)(`i`, {
+                            children:
+                              g === e.id
+                                ? `LOADED`
+                                : `TAPE ${String(t + 1).padStart(2, `0`)}`,
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                },
+                e.id,
+              ),
+            ),
+          }),
+        ],
+      }),
+    ],
+  });
+}
+function M() {
+  return (0, s.jsx)(`div`, {
+    className: `powered-off-crt`,
+    role: `img`,
+    "aria-label": `Broadcast tuner powered off`,
+  });
+}
+function N({ phase: e }) {
+  return (0, s.jsxs)(`div`, {
+    className: `tuner-startup`,
+    children: [
+      (0, s.jsx)(`div`, { className: `crt-boot-line`, "aria-hidden": `true` }),
+      (0, s.jsx)(`span`, {
+        className: `tuner-target`,
+        "aria-hidden": `true`,
+        children: `Z`,
+      }),
+      (0, s.jsx)(`p`, {
+        children:
+          e === `booting` ? `Powering broadcast array` : `Scanning signals`,
+      }),
+      (0, s.jsx)(`div`, {
+        className: `tuner-progress`,
+        "aria-hidden": `true`,
+        children: (0, s.jsx)(`i`, {}),
+      }),
+      (0, s.jsx)(`small`, { children: `TW · YT · K · X · ARCHIVE` }),
+    ],
+  });
+}
+function P({ platform: e, livePlatforms: t, onSelect: n }) {
+  return (0, s.jsxs)(`div`, {
+    className: `tuner-program`,
+    children: [
+      (0, s.jsxs)(`div`, {
+        className: `tuner-osd`,
+        children: [
+          (0, s.jsxs)(`span`, {
+            children: [`Live signal acquired // `, e.name],
+          }),
+          (0, s.jsx)(`b`, { children: e.title || `Zendigo live broadcast` }),
+        ],
+      }),
+      t.length > 1
+        ? (0, s.jsx)(`div`, {
+            className: `tuner-channels`,
+            "aria-label": `Active live channels`,
+            children: t.map((t, r) =>
+              (0, s.jsxs)(
+                `button`,
+                {
+                  className: t.id === e.id ? `is-selected` : void 0,
+                  type: `button`,
+                  onClick: () => n(t.id),
+                  children: [
+                    `CH `,
+                    String(r + 1).padStart(2, `0`),
+                    ` · `,
+                    t.shortName,
+                  ],
+                },
+                t.id,
+              ),
+            ),
+          })
+        : null,
+      (0, s.jsx)(z, { platform: e }),
+    ],
+  });
+}
+function F({
+  program: e,
+  commercial: t,
+  video: n,
+  channelNumber: r,
+  isFlipping: i,
+  autoCycle: a,
+}) {
+  let o = new Date(n.publishedAt),
+    c =
+      n.publishedLabel ||
+      (Number.isNaN(o.valueOf())
+        ? `Recent upload`
+        : new Intl.DateTimeFormat(`en-US`, {
+            month: `short`,
+            day: `numeric`,
+            year: `numeric`,
+          }).format(o)),
+    l = e.kind === `commercial`;
+  return (0, s.jsxs)(`div`, {
+    className: `tuner-program archive-program ${l ? `is-commercial` : ``} ${i ? `is-flipping` : ``}`,
+    children: [
+      l
+        ? null
+        : (0, s.jsxs)(`div`, {
+            className: `tuner-osd archive-osd`,
+            children: [
+              (0, s.jsxs)(`span`, {
+                children: [
+                  `Zendigo Archive Network // CH `,
+                  String(r).padStart(2, `0`),
+                ],
+              }),
+              (0, s.jsx)(`b`, { children: n.title }),
+              (0, s.jsxs)(`small`, {
+                children: [
+                  c,
+                  ` ·`,
+                  ` `,
+                  a ? `25–75 SEC AUTO PREVIEW` : `FULL TRANSMISSION`,
+                ],
+              }),
+            ],
+          }),
+      (0, s.jsxs)(`div`, {
+        className: `broadcast-player-frame archive-player ${l ? `commercial-break-player` : ``}`,
+        children: [
+          (0, s.jsx)(L, { video: n, active: !l }),
+          e.kind === `commercial` && t
+            ? (0, s.jsx)(I, { commercial: t })
+            : null,
+          i
+            ? (0, s.jsx)(`div`, {
+                className: `channel-static`,
+                "aria-hidden": `true`,
+                children: (0, s.jsxs)(`span`, {
+                  children: [`CH `, String(r).padStart(2, `0`)],
+                }),
+              })
+            : null,
+        ],
+      }),
+    ],
+  });
+}
+function I({ commercial: e }) {
+  return (0, s.jsxs)(`article`, {
+    className: `commercial-spot commercial-${e.brandId} commercial-format-${e.format}`,
+    style: { "--commercial-accent": e.accent },
+    "aria-label": `${e.brand} affiliate commercial for ${e.product}`,
+    children: [
+      (0, s.jsx)(`img`, {
+        className: `commercial-creative`,
+        src: _(`commercials/${e.id}.webp`),
+        alt: `${e.brand}: ${e.headline} ${e.product}`,
+      }),
+      (0, s.jsx)(`div`, {
+        className: `commercial-disclosure`,
+        children: `Ad · official merch · Zendigo may earn commission`,
+      }),
+      (0, s.jsxs)(`a`, {
+        className: `commercial-cta`,
+        href: e.url,
+        target: `_blank`,
+        rel: `sponsored noreferrer`,
+        children: [
+          e.cta,
+          ` `,
+          (0, s.jsx)(`span`, { "aria-hidden": `true`, children: `↗` }),
+        ],
+      }),
+    ],
+  });
+}
+function L({ video: e, active: t }) {
+  let n = (0, o.useRef)(null),
+    r = (0, o.useRef)(null),
+    i = (0, o.useRef)(!1),
+    a = (0, o.useRef)(e.id),
+    c = (0, o.useRef)(t),
+    l = (0, o.useRef)(`tuner`);
+  return (
+    (0, o.useEffect)(() => {
+      let e = !0;
+      return (
+        R().then(() => {
+          !e ||
+            !n.current ||
+            !window.YT?.Player ||
+            (r.current = new window.YT.Player(n.current, {
+              videoId: a.current,
+              playerVars: {
+                autoplay: 1,
+                playsinline: 1,
+                rel: 0,
+                origin: window.location.origin,
+              },
+              events: {
+                onReady: (t) => {
+                  e &&
+                    ((i.current = !0),
+                    t.target.loadVideoById(a.current),
+                    c.current && l.current === `tuner`
+                      ? t.target.playVideo()
+                      : t.target.pauseVideo());
+                },
+              },
+            }));
+        }),
+        () => {
+          ((e = !1),
+            (i.current = !1),
+            r.current?.destroy(),
+            (r.current = null));
+        }
+      );
+    }, []),
+    (0, o.useEffect)(() => {
+      ((a.current = e.id),
+        !(!i.current || !r.current) &&
+          (r.current.loadVideoById(e.id),
+          t && l.current === `tuner` && r.current.playVideo()));
+    }, [t, e.id]),
+    (0, o.useEffect)(() => {
+      ((c.current = t),
+        !(!i.current || !r.current) &&
+          (t && l.current === `tuner`
+            ? r.current.playVideo()
+            : r.current.pauseVideo()));
+    }, [t]),
+    (0, o.useEffect)(() => {
+      function e(e) {
+        let t = e.detail;
+        ((l.current = t),
+          !(!i.current || !r.current) &&
+            (t === `cassette`
+              ? r.current.pauseVideo()
+              : c.current && r.current.playVideo()));
+      }
+      return (
+        window.addEventListener(p, e),
+        () => window.removeEventListener(p, e)
+      );
+    }, []),
+    (0, s.jsx)(`div`, {
+      className: `youtube-player-mount ${t ? `` : `is-suspended`}`,
+      "aria-label": `Zendigo Archive Network: ${e.title}`,
+      children: (0, s.jsx)(`div`, { ref: n }),
+    })
+  );
+}
+function R() {
+  return typeof window > `u` || window.YT?.Player
+    ? Promise.resolve()
+    : c ||
+        ((c = new Promise((e) => {
+          let t = window.onYouTubeIframeAPIReady;
+          if (
+            ((window.onYouTubeIframeAPIReady = () => {
+              (t?.(), e());
+            }),
+            !document.querySelector(
+              `script[src="https://www.youtube.com/iframe_api"]`,
+            ))
+          ) {
+            let e = document.createElement(`script`);
+            ((e.src = `https://www.youtube.com/iframe_api`),
+              (e.async = !0),
+              document.head.appendChild(e));
+          }
+        })),
+        c);
+}
+function z({ platform: e }) {
+  let [t, n] = (0, o.useState)(``);
+  if (
+    ((0, o.useEffect)(() => {
+      n(window.location.hostname);
+    }, []),
+    e.id === `twitch`)
+  ) {
+    if (!t) return (0, s.jsx)(B, { platformName: e.name });
+    let n = new URL(`https://player.twitch.tv/`);
+    return (
+      n.searchParams.set(`channel`, `zendigo_playz`),
+      n.searchParams.set(`parent`, t),
+      n.searchParams.set(`autoplay`, `true`),
+      (0, s.jsx)(`div`, {
+        className: `broadcast-player-frame`,
+        children: (0, s.jsx)(`iframe`, {
+          src: n.toString(),
+          title: `Zendigo live on Twitch`,
+          allow: `autoplay; encrypted-media; picture-in-picture; fullscreen`,
+          allowFullScreen: !0,
+        }),
+      })
+    );
+  }
+  if (e.id === `youtube`) {
+    let t = H(e.url);
+    return t
+      ? (0, s.jsx)(`div`, {
+          className: `broadcast-player-frame`,
+          children: (0, s.jsx)(`iframe`, {
+            src: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(t)}?autoplay=1&playsinline=1&rel=0`,
+            title: `Zendigo live on YouTube`,
+            allow: `autoplay; encrypted-media; picture-in-picture; fullscreen`,
+            allowFullScreen: !0,
+          }),
+        })
+      : (0, s.jsx)(V, { platform: e });
+  }
+  if (e.id === `kick`)
+    return (0, s.jsx)(`div`, {
+      className: `broadcast-player-frame`,
+      children: (0, s.jsx)(`iframe`, {
+        src: `https://player.kick.com/zendigo-playz?autoplay=true`,
+        title: `Zendigo live on Kick`,
+        allow: `autoplay; encrypted-media; picture-in-picture; fullscreen`,
+        allowFullScreen: !0,
+      }),
+    });
+  let r = U(e.url);
+  return r
+    ? (0, s.jsx)(`div`, {
+        className: `broadcast-player-frame broadcast-player-x`,
+        children: (0, s.jsx)(`iframe`, {
+          src: `https://platform.twitter.com/embed/Tweet.html?id=${encodeURIComponent(r)}&theme=dark&dnt=true&hideCard=false&hideThread=true`,
+          title: `Zendigo live broadcast on X`,
+          allow: `autoplay; encrypted-media; picture-in-picture; fullscreen`,
+          allowFullScreen: !0,
+        }),
+      })
+    : (0, s.jsx)(V, { platform: e });
+}
+function B({ platformName: e }) {
+  return (0, s.jsxs)(`div`, {
+    className: `broadcast-player-frame broadcast-player-message`,
+    children: [
+      (0, s.jsx)(`span`, {
+        className: `broadcast-loader`,
+        "aria-hidden": `true`,
+      }),
+      (0, s.jsxs)(`p`, { children: [`Locking onto `, e, ` signal…`] }),
+    ],
+  });
+}
+function V({ platform: e }) {
+  return (0, s.jsxs)(`div`, {
+    className: `broadcast-player-frame broadcast-player-message`,
+    children: [
+      (0, s.jsx)(`span`, {
+        className: `broadcast-fallback-mark`,
+        children: e.shortName,
+      }),
+      (0, s.jsxs)(`p`, {
+        children: [`This signal needs to finish opening on `, e.name, `.`],
+      }),
+      (0, s.jsxs)(`a`, {
+        href: e.url,
+        target: `_blank`,
+        rel: `noreferrer`,
+        children: [
+          `Continue to `,
+          e.name,
+          ` `,
+          (0, s.jsx)(`span`, { "aria-hidden": `true`, children: `↗` }),
+        ],
+      }),
+    ],
+  });
+}
+function H(e) {
+  try {
+    let t = new URL(e);
+    return t.hostname === `youtu.be`
+      ? t.pathname.slice(1) || null
+      : t.pathname.startsWith(`/embed/`)
+        ? t.pathname.split(`/`)[2] || null
+        : t.searchParams.get(`v`);
+  } catch {
+    return null;
+  }
+}
+function U(e) {
+  try {
+    return new URL(e).pathname.match(/\/status\/(\d+)/)?.[1] ?? null;
+  } catch {
+    return null;
+  }
+}
+export {
+  k as BroadcastPlatformDeck,
+  T as BroadcastProvider,
+  j as CassettePlaylistDeck,
+  D as HeaderBroadcastControl,
+  O as HeroBroadcastControl,
+  A as MissionBroadcastTuner,
+};
