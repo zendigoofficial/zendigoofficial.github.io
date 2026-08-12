@@ -4,6 +4,8 @@ Technics RS-B605 photograph by Retired electrician, dedicated to the public
 domain under CC0 1.0.
 Source: https://commons.wikimedia.org/wiki/File:Technics_RS-B605_01.jpg
 The photograph was cropped to the deck face for the Zendigo cassette player.
+The cassette bay, meter, chassis and control-key component crops were
+reconstructed from the same photograph for the accessible player layout.
 
 AudioMagnetics Super 90 cassette photograph by Stuart Childs, licensed CC BY 2.0.
 Modified to create the transferable cassette faces.
