@@ -9,7 +9,7 @@
   isolation: isolate;
   background:
     linear-gradient(#ffffff0d, #0000 18%, #0005),
-    url("/assets/deck-chassis-texture.webp?v=deck-components-15") center / 100% 100% no-repeat !important;
+    url("/assets/deck-chassis-texture.webp?v=deck-components-16") center / 100% 100% no-repeat !important;
   border: 1px solid #947a64 !important;
   border-radius: 2px;
   box-shadow: 0 2px #d4bea0, 0 15px 28px #000a !important;
@@ -50,7 +50,7 @@
   box-sizing: border-box !important;
   contain: layout paint;
   pointer-events: none;
-  background: #100c0b url("/assets/deck-module-cassette.webp?v=deck-components-15") center / 100% 100% no-repeat !important;
+  background: #100c0b url("/assets/deck-module-cassette.webp?v=deck-components-16") center / 100% 100% no-repeat !important;
   border: 1px solid #8f755e !important;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #160f0c, 0 2px 5px #0008 !important;
@@ -132,7 +132,7 @@
   height: 60%;
   overflow: hidden;
   pointer-events: none;
-  background: #100c0b url("/assets/deck-instrument-cluster.webp?v=deck-components-15") center / 100% 100% no-repeat;
+  background: #100c0b url("/assets/deck-instrument-cluster.webp?v=deck-components-16") center / 100% 100% no-repeat;
   border: 1px solid #8f755e;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #160f0c, 0 2px 5px #0008;
@@ -337,7 +337,7 @@
   text-shadow: 0 1px 2px #000;
   background:
     linear-gradient(#ffffff0d, transparent 30%, #0003),
-    #211a18 url("/assets/deck-control-key-v2.webp?v=deck-components-15") center / 100% 100% no-repeat !important;
+    #211a18 url("/assets/deck-control-key-v2.webp?v=deck-components-16") center / 100% 100% no-repeat !important;
   border: 1px solid #0b0807 !important;
   border-top-color: #756254 !important;
   border-radius: 2px 2px 1px 1px;
@@ -376,7 +376,7 @@
   border-top: 3px solid #d82333 !important;
   background:
     linear-gradient(#e22b3b18, transparent 34%, #0003),
-    #241a19 url("/assets/deck-control-key-v2.webp?v=deck-components-15") center / 100% 100% no-repeat !important;
+    #241a19 url("/assets/deck-control-key-v2.webp?v=deck-components-16") center / 100% 100% no-repeat !important;
   box-shadow:
     0 4px 0 #090605,
     0 6px 8px #000a,
@@ -481,7 +481,7 @@
   pointer-events: none;
   background:
     linear-gradient(90deg, #080706 0 8px, transparent 14px calc(100% - 14px), #080706 calc(100% - 8px)),
-    url("/assets/cassette-rack-slot.webp?v=deck-components-15") center top / 100% 62px repeat-y;
+    url("/assets/cassette-rack-slot.webp?v=deck-components-16") center top / 100% 62px repeat-y;
   border: 1px solid #28201a;
   box-shadow: inset 0 0 17px #000d;
 }
@@ -611,7 +611,7 @@
   color: #d6c7b6;
   background:
     linear-gradient(108deg, #ffffff0c, transparent 22% 76%, #0007),
-    #15100e url("/assets/deck-chassis-texture.webp?v=deck-components-15") center / 100% 100% no-repeat;
+    #15100e url("/assets/deck-chassis-texture.webp?v=deck-components-16") center / 100% 100% no-repeat;
   border: 1px solid #947a64;
   border-radius: 2px;
   box-shadow:
@@ -810,7 +810,7 @@
   background:
     linear-gradient(112deg, #ffffff0d, transparent 24% 72%, #0008),
     linear-gradient(#251a16 0 4%, #120e0c 7% 92%, #050403),
-    url("/assets/deck-chassis-texture.webp?v=deck-components-15") center / 100% 100% no-repeat;
+    url("/assets/deck-chassis-texture.webp?v=deck-components-16") center / 100% 100% no-repeat;
   border: 1px solid #806953;
   border-radius: 3px 3px 8px 8px;
   box-shadow: 0 2px #c1a98b, 0 12px 25px #000a, inset 0 1px #efd5b32b, inset 0 -10px 18px #000a;
@@ -1095,4 +1095,296 @@ button.game-storage-case { cursor: pointer; transition: transform .16s ease, fil
   .game-controller-ports small { font-size: 4.5px; }
   .game-storage-cabinet { padding-inline: 15px; }
   .game-storage-grid { gap: 12px 10px; }
+}
+
+/* Final console faceplate pass: deeper top-loading bay, readable hardware
+   legends and a restrained late-80s signal stripe without borrowed branding. */
+.game-system-console {
+  min-height: 156px;
+  grid-template-columns: 86px minmax(150px, 1fr) 122px;
+  grid-template-rows: 96px 42px;
+  gap: 8px 13px;
+  padding: 10px 14px 12px;
+  background:
+    linear-gradient(112deg, #ffffff10, transparent 22% 74%, #0009),
+    repeating-linear-gradient(90deg, #ffffff07 0 1px, transparent 1px 5px),
+    linear-gradient(#2a1d17 0 4%, #120e0c 8% 91%, #050403),
+    url("/assets/deck-chassis-texture.webp?v=deck-components-16") center / 100% 100% no-repeat;
+  border-color: #94785e;
+  box-shadow:
+    0 2px #d0b99a,
+    0 13px 27px #000b,
+    inset 0 1px #f2d6b43d,
+    inset 0 -12px 20px #000b;
+}
+
+.game-system-console::before {
+  inset: 6px;
+  border-color: #4d3a2d;
+  box-shadow: inset 0 0 0 1px #a1846838, inset 0 -2px #050403;
+}
+
+.game-system-console::after {
+  top: 9px;
+  right: 13px;
+  bottom: auto;
+  left: 95px;
+  height: 4px;
+  background: linear-gradient(90deg, #d32636 0 34%, #d68c3f 34% 55%, #c7b28a 55% 72%, #2d241f 72%);
+  box-shadow: 0 1px #050403, 0 2px #ffffff12;
+}
+
+.game-console-switches {
+  position: relative;
+  gap: 12px;
+  padding: 24px 8px 8px;
+  background:
+    linear-gradient(#ffffff0d, transparent 38%, #0007),
+    #0d0a09;
+  border-color: #514033;
+  box-shadow: inset 0 0 0 2px #070504, inset 0 0 13px #000e, 0 1px #9a795d30;
+}
+
+.game-console-switches::before {
+  content: "SYSTEM";
+  position: absolute;
+  top: 9px;
+  right: 7px;
+  left: 7px;
+  color: #ab9581;
+  letter-spacing: .18em;
+  text-align: center;
+  font: 700 6px/1 Consolas, "Courier New", monospace;
+}
+
+.game-console-switches i {
+  width: 24px;
+  height: 32px;
+  background:
+    linear-gradient(#d92a3a 0 3px, transparent 3px),
+    linear-gradient(90deg, #413630, #a89587 46%, #443731 55%, #17120f);
+  border-color: #070504;
+  box-shadow: inset 0 2px #d7c0b04f, 0 3px 4px #000d;
+}
+
+.game-console-switches small,
+.game-controller-ports small {
+  color: #b7a28e;
+  font-size: 6px;
+  letter-spacing: .1em;
+}
+
+.game-console-bay {
+  align-self: stretch;
+  height: auto;
+  margin-top: 7px;
+  border-color: #9b795d;
+  border-radius: 3px 3px 13px 13px;
+  background:
+    linear-gradient(108deg, #ffffff0b, transparent 22% 77%, #000c),
+    linear-gradient(#211711 0 18%, #080605 20% 80%, #1b130f 82% 100%);
+  box-shadow:
+    inset 0 0 0 3px #080605,
+    inset 0 12px 17px #000e,
+    inset 0 -8px 12px #000a,
+    0 2px #c09b7740;
+}
+
+.game-console-bay::before {
+  content: "PROGRAM BAY";
+  position: absolute;
+  top: 9px;
+  right: 12px;
+  left: 12px;
+  color: #b09a84;
+  letter-spacing: .16em;
+  text-align: center;
+  font: 700 6px/1 Consolas, "Courier New", monospace;
+  text-shadow: 0 1px #000;
+}
+
+.game-console-bay::after {
+  content: "";
+  position: absolute;
+  right: 14%;
+  bottom: 9px;
+  left: 14%;
+  height: 7px;
+  opacity: .7;
+  background: repeating-linear-gradient(90deg, #554034 0 2px, #080605 2px 8px);
+  border-top: 1px solid #080605;
+  box-shadow: 0 1px #6f53403b;
+}
+
+.game-console-bay span {
+  top: 29px;
+  right: 8%;
+  left: 8%;
+  height: 22px;
+  border-color: #48362b;
+  background: linear-gradient(#020101, #17100c 44%, #060403 52%, #120d0a);
+  box-shadow: inset 0 5px 8px #000, 0 1px #9a75583d, 0 0 0 3px #090605;
+}
+
+.game-console-bay i {
+  right: 24%;
+  bottom: 23px;
+  left: 24%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #8f6b50 18% 82%, transparent);
+  box-shadow: 0 1px #000;
+}
+
+.game-system-status {
+  position: relative;
+  align-self: stretch;
+  grid-template-columns: 8px minmax(0, 1fr);
+  grid-template-rows: 18px 1fr;
+  gap: 3px 8px;
+  margin-top: 7px;
+  padding: 8px 10px 10px;
+  background:
+    repeating-linear-gradient(0deg, #ffffff07 0 1px, transparent 1px 4px),
+    radial-gradient(ellipse at 45% 55%, #37100e70, transparent 72%),
+    #080605;
+  border-color: #684d3a;
+  box-shadow: inset 0 0 12px #000, 0 1px #a27c5a38;
+}
+
+.game-system-status::before {
+  content: "SYSTEM STATUS";
+  grid-column: 1 / -1;
+  align-self: center;
+  color: #8e7967;
+  letter-spacing: .14em;
+  font: 700 5.5px/1 Consolas, "Courier New", monospace;
+}
+
+.game-system-status i {
+  width: 7px;
+  height: 7px;
+  background: #7a1b21;
+  box-shadow: inset 0 0 0 1px #1c0709, 0 0 4px #9a252c73;
+}
+
+.game-system-status strong {
+  color: #e37967;
+  letter-spacing: .075em;
+  font-size: 9px;
+  text-shadow: 0 0 6px #d3443575;
+}
+
+.game-controller-ports {
+  position: relative;
+  grid-column: 1 / 4;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 26px;
+  padding: 16px 74px 0;
+  border-top: 1px solid #5d4738;
+  box-shadow: inset 0 1px #090605;
+}
+
+.game-controller-ports::before {
+  content: "CONTROLLER INPUT";
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  color: #715e4f;
+  letter-spacing: .16em;
+  transform: translateX(-50%);
+  font: 700 5px/1 Consolas, "Courier New", monospace;
+  white-space: nowrap;
+}
+
+.game-controller-ports span {
+  grid-template-columns: 35px minmax(0, 1fr);
+  gap: 9px;
+}
+
+.game-controller-ports i {
+  width: 35px;
+  height: 18px;
+  border-color: #725844;
+  border-radius: 2px 2px 7px 7px;
+  background:
+    radial-gradient(circle at 35% 50%, #4e3c30 0 1px, transparent 2px),
+    radial-gradient(circle at 65% 50%, #4e3c30 0 1px, transparent 2px),
+    radial-gradient(ellipse at 50% 45%, #030202 0 38%, #2f241e 42% 55%, #070504 58%);
+  box-shadow: inset 0 0 5px #000, 0 1px #b28d6b45;
+}
+
+@media (max-width: 760px) {
+  .game-system-console { grid-template-columns: 78px minmax(125px, 1fr) 110px; }
+  .game-controller-ports { padding-inline: 48px; }
+}
+
+@media (max-width: 430px) {
+  .game-system-console {
+    min-height: 148px;
+    grid-template-columns: 68px minmax(96px, 1fr) 94px;
+    grid-template-rows: 90px 40px;
+    gap: 7px;
+  }
+  .game-system-console::after { left: 78px; }
+  .game-console-switches { gap: 7px; padding-inline: 4px; }
+  .game-console-switches i { width: 20px; }
+  .game-system-status { padding-inline: 6px; }
+  .game-system-status strong { font-size: 7px; }
+  .game-controller-ports { gap: 14px; padding-inline: 22px; }
+}
+
+/* Temporary diagonal work tape across the CRT. */
+.media-tuner-slot {
+  position: relative;
+  overflow: hidden;
+}
+
+.tv-construction-tape {
+  position: absolute;
+  z-index: 40;
+  top: 5%;
+  left: -12%;
+  width: 136%;
+  height: 28px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 0 18px;
+  pointer-events: none;
+  color: #171000;
+  background:
+    linear-gradient(#ffffff75, transparent 23%, transparent 76%, #5b43004f),
+    repeating-linear-gradient(135deg, #f6d335 0 16px, #e9bd18 16px 32px);
+  border: 1px solid #3d2e00;
+  box-shadow: 0 4px 8px #000a, inset 0 1px #fff8, inset 0 -1px #735600;
+  transform: rotate(37deg);
+  transform-origin: left center;
+}
+
+.tv-construction-tape::before,
+.tv-construction-tape::after {
+  content: "";
+  flex: 0 0 24px;
+  align-self: stretch;
+  background: repeating-linear-gradient(135deg, #171000 0 6px, transparent 6px 12px);
+  opacity: .88;
+}
+
+.tv-construction-tape span {
+  flex: 0 0 auto;
+  letter-spacing: .075em;
+  white-space: nowrap;
+  font: 900 10px/1 "Arial Narrow", Arial, sans-serif;
+  text-shadow: 0 1px #fff4;
+}
+
+@media (max-width: 520px) {
+  .tv-construction-tape {
+    height: 24px;
+    transform: rotate(39deg);
+  }
+  .tv-construction-tape span { font-size: 8px; }
 }

@@ -584,6 +584,23 @@
     return system;
   }
 
+  function ensureTvConstructionTape() {
+    const tunerSlot = document.querySelector(".media-tuner-slot");
+    if (!tunerSlot) return null;
+    let tape = tunerSlot.querySelector(".tv-construction-tape");
+    if (!tape) {
+      tape = document.createElement("div");
+      tape.className = "tv-construction-tape";
+      tape.setAttribute("aria-hidden", "true");
+      tape.innerHTML = `
+        <span>UNDER CONSTRUCTION</span>
+        <span>UNDER CONSTRUCTION</span>
+        <span>UNDER CONSTRUCTION</span>`;
+      tunerSlot.appendChild(tape);
+    }
+    return tape;
+  }
+
   function connect() {
     const nextMachine = document.querySelector(SELECTOR);
     if (!nextMachine) return;
@@ -593,6 +610,7 @@
     labelControls(machine);
     ensureReadout();
     ensureGameSystem();
+    ensureTvConstructionTape();
     paintReadout();
     machine.dataset.photoDeck = "ready";
   }
@@ -649,6 +667,7 @@
     labelControls(machine);
     ensureReadout();
     ensureGameSystem();
+    ensureTvConstructionTape();
     syncReadoutFromDeck();
     routeVideoToTv();
 
