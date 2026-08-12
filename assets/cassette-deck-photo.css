@@ -9,7 +9,7 @@
   isolation: isolate;
   background:
     linear-gradient(#ffffff0d, #0000 18%, #0005),
-    url("/assets/deck-chassis-texture.webp?v=deck-components-2") center / 100% 100% no-repeat !important;
+    url("/assets/deck-chassis-texture.webp?v=deck-components-3") center / 100% 100% no-repeat !important;
   border: 1px solid #947a64 !important;
   border-radius: 2px;
   box-shadow: 0 2px #d4bea0, 0 15px 28px #000a !important;
@@ -46,9 +46,11 @@
   height: 60%;
   min-height: 0 !important;
   display: block !important;
-  overflow: hidden;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  contain: layout paint;
   pointer-events: none;
-  background: #100c0b url("/assets/deck-module-cassette.webp?v=deck-components-2") center / 100% 100% no-repeat !important;
+  background: #100c0b url("/assets/deck-module-cassette.webp?v=deck-components-3") center / 100% 100% no-repeat !important;
   border: 1px solid #8f755e !important;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #160f0c, 0 2px 5px #0008 !important;
@@ -88,18 +90,19 @@
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
+  box-sizing: border-box !important;
 }
 
 .cassette-component .inserted-tape {
   background: #040505 !important;
-  filter: brightness(.61) contrast(.95) saturate(.78);
+  filter: brightness(.68) contrast(.96) saturate(.68);
 }
 
 .inserted-tape-art {
   width: 100% !important;
   height: 100% !important;
-  object-fit: fill !important;
-  object-position: center !important;
+  object-fit: cover !important;
+  object-position: center 18% !important;
 }
 
 .inserted-tape-title { display: none !important; }
@@ -107,10 +110,13 @@
 .cassette-component .cassette-bay-empty {
   display: grid !important;
   place-items: center;
-  color: #6f625a !important;
-  letter-spacing: .12em;
-  background: radial-gradient(#171414, #050505 72%) !important;
-  font: 700 clamp(5px, .65vw, 9px)/1 Consolas, monospace !important;
+  color: transparent !important;
+  background: linear-gradient(112deg, #ffffff08, #0000005c 68%, #00000078) !important;
+  font-size: 0 !important;
+}
+
+.cassette-component .cassette-bay-empty > * {
+  display: none !important;
 }
 
 /* Center photographed module with two readable, vertical live meters. */
@@ -119,16 +125,18 @@
   z-index: 2;
   top: 2.5%;
   left: 49.4%;
-  width: 33%;
+  width: 32.5%;
   height: 60%;
   min-height: 0 !important;
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 11% !important;
   padding: 9.4% 31.2% 12% !important;
-  overflow: hidden;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  contain: layout paint;
   pointer-events: none;
-  background: #100c0b url("/assets/deck-module-meters.webp?v=deck-components-2") center / 100% 100% no-repeat !important;
+  background: #100c0b url("/assets/deck-module-meters.webp?v=deck-components-3") center / 100% 100% no-repeat !important;
   border: 1px solid #8f755e !important;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #160f0c, 0 2px 5px #0008 !important;
@@ -137,31 +145,8 @@
 .vu-bank > small,
 .vu-meter span { display: none !important; }
 
-.vu-bank::before {
-  content: "L   PEAK LEVEL   R";
-  position: absolute;
-  z-index: 3;
-  top: 4.5%;
-  left: 0;
-  width: 100%;
-  color: #e7d9ca;
-  letter-spacing: .08em;
-  text-align: center;
-  text-shadow: 0 1px 2px #000;
-  font: 700 clamp(5px, .72vw, 10px)/1 "Arial Narrow", Arial, sans-serif;
-}
-
-.vu-bank::after {
-  content: "-40    -20    -10     0    +6";
-  position: absolute;
-  z-index: 3;
-  bottom: 3.5%;
-  left: 0;
-  width: 100%;
-  color: #aa9b8e;
-  text-align: center;
-  font: 600 clamp(4px, .56vw, 8px)/1 Consolas, monospace;
-}
+.vu-bank::before,
+.vu-bank::after { display: none !important; }
 
 .vu-meter {
   position: relative;
@@ -211,14 +196,16 @@
   position: absolute !important;
   z-index: 4;
   top: 2.5%;
-  left: 83.6%;
-  width: 14.7%;
+  left: 83%;
+  width: 15.7%;
   height: 60%;
   display: block !important;
-  overflow: hidden;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  contain: layout paint;
   padding: 0 !important;
   pointer-events: auto;
-  background: #100c0b url("/assets/deck-module-volume.webp?v=deck-components-2") center / 100% 100% no-repeat !important;
+  background: #100c0b url("/assets/deck-module-volume.webp?v=deck-components-3") center / 100% 100% no-repeat !important;
   border: 1px solid #8f755e !important;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #160f0c, 0 2px 5px #0008 !important;
@@ -228,32 +215,8 @@
 .cassette-volume-panel output,
 .cassette-volume-knob { display: none !important; }
 
-.cassette-volume-panel::before {
-  content: "OUTPUT";
-  position: absolute;
-  z-index: 2;
-  top: 5%;
-  left: 0;
-  width: 100%;
-  color: #e7d9ca;
-  letter-spacing: .08em;
-  text-align: center;
-  text-shadow: 0 1px 2px #000;
-  font: 700 clamp(5px, .68vw, 9px)/1 "Arial Narrow", Arial, sans-serif;
-}
-
-.cassette-volume-panel::after {
-  content: "10\A 8\A 6\A 4\A 2\A 0";
-  position: absolute;
-  z-index: 2;
-  top: 19%;
-  bottom: 11%;
-  left: 13%;
-  color: #aa9b8e;
-  white-space: pre;
-  text-align: right;
-  font: 600 clamp(4px, .55vw, 8px)/1.6 Consolas, monospace;
-}
+.cassette-volume-panel::before,
+.cassette-volume-panel::after { display: none !important; }
 
 .cassette-volume-panel input[type="range"] {
   position: absolute;
@@ -342,7 +305,7 @@
   cursor: pointer;
   color: #f5eee5 !important;
   text-shadow: 0 1px 2px #000;
-  background: #554258 url("/assets/deck-control-key.webp?v=deck-components-2") center / 100% 100% no-repeat !important;
+  background: #554258 url("/assets/deck-control-key.webp?v=deck-components-3") center / 100% 100% no-repeat !important;
   border: 1px solid #1b1315 !important;
   border-radius: 2px;
   box-shadow: 0 4px 0 #120c0e, 0 6px 8px #0009, inset 0 1px #c4aec055 !important;
@@ -393,9 +356,22 @@
   filter: grayscale(.65) brightness(.62);
 }
 
-.cassette-player-engine { pointer-events: none; }
+.cassette-player-engine,
+.cassette-player-engine.is-stowed {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.cassette-player-backdrop,
+.cassette-player-close {
+  display: none !important;
+}
 
 .cassette-player-engine.is-open {
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: fixed !important;
   z-index: 1002 !important;
   top: var(--tv-top, 50%) !important;
   left: var(--tv-left, 50%) !important;
@@ -410,6 +386,11 @@
   border: 0 !important;
   border-radius: 2.2% / 3.8%;
   box-shadow: none !important;
+}
+
+.cassette-player-engine.is-open:not([data-routed-to="broadcast-tv"]) {
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
 
 .cassette-player-engine.is-open iframe {

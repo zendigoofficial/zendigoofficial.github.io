@@ -48,6 +48,7 @@
     engine.style.setProperty("--tv-height", `${Math.max(113, rect.height - insetY * 2)}px`);
     engine.style.setProperty("--tv-ratio", "auto");
     engine.dataset.routedTo = "broadcast-tv";
+    engine.setAttribute("aria-hidden", "false");
   }
 
   function tick() {
@@ -299,6 +300,9 @@
     videoOpen = !videoOpen;
     engine()?.classList.toggle("is-open", videoOpen);
     machine()?.classList.toggle("is-player-open", videoOpen);
+    if (!videoOpen) engine()?.setAttribute("aria-hidden", "true");
+    const videoLabel = controls()[4]?.querySelector("small");
+    if (videoLabel) videoLabel.textContent = videoOpen ? "CLOSE" : "VIDEO";
   }
 
   function handleClick(event) {
