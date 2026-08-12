@@ -1,9 +1,9 @@
 Photo asset credits
 
-Technics RS-M216 front view by Vogler, licensed CC BY-SA 4.0.
-Source: https://commons.wikimedia.org/wiki/File:Technics_RS-M216_front_view.jpg
-Modified for the Zendigo cassette deck interface. The derivative deck artwork
-is distributed under CC BY-SA 4.0.
+Technics RS-B605 photograph by Retired electrician, dedicated to the public
+domain under CC0 1.0.
+Source: https://commons.wikimedia.org/wiki/File:Technics_RS-B605_01.jpg
+The photograph was cropped to the deck face for the Zendigo cassette player.
 
 AudioMagnetics Super 90 cassette photograph by Stuart Childs, licensed CC BY 2.0.
 Modified to create the transferable cassette faces.
