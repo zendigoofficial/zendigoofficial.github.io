@@ -40,6 +40,7 @@
     const screen = document.querySelector("#broadcast-tuner .console-screen");
     if (!engine || !screen) return;
     const rect = screen.getBoundingClientRect();
+    if (rect.width < 40 || rect.height < 40) return;
     const insetX = Math.max(3, rect.width * 0.022);
     const insetY = Math.max(3, rect.height * 0.035);
     engine.style.setProperty("--tv-left", `${rect.left + insetX}px`);
@@ -91,6 +92,13 @@
   function start() {
     connect();
     observer.observe(document.body, { childList: true, subtree: true });
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest?.(".cassette-transport button:nth-child(5)")) return;
+      window.requestAnimationFrame(() => window.requestAnimationFrame(routeVideoToTv));
+      window.setTimeout(routeVideoToTv, 120);
+    });
+    window.addEventListener("resize", routeVideoToTv);
+    window.addEventListener("scroll", routeVideoToTv, { passive: true });
     window.setInterval(tick, 90);
   }
 
