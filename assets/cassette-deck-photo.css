@@ -9,7 +9,7 @@
   isolation: isolate;
   background:
     linear-gradient(#ffffff0d, #0000 18%, #0005),
-    url("/assets/deck-chassis-texture.webp?v=deck-components-7") center / 100% 100% no-repeat !important;
+    url("/assets/deck-chassis-texture.webp?v=deck-components-8") center / 100% 100% no-repeat !important;
   border: 1px solid #947a64 !important;
   border-radius: 2px;
   box-shadow: 0 2px #d4bea0, 0 15px 28px #000a !important;
@@ -50,7 +50,7 @@
   box-sizing: border-box !important;
   contain: layout paint;
   pointer-events: none;
-  background: #100c0b url("/assets/deck-module-cassette.webp?v=deck-components-7") center / 100% 100% no-repeat !important;
+  background: #100c0b url("/assets/deck-module-cassette.webp?v=deck-components-8") center / 100% 100% no-repeat !important;
   border: 1px solid #8f755e !important;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #160f0c, 0 2px 5px #0008 !important;
@@ -132,7 +132,7 @@
   height: 60%;
   overflow: hidden;
   pointer-events: none;
-  background: #100c0b url("/assets/deck-instrument-cluster.webp?v=deck-components-7") center / 100% 100% no-repeat;
+  background: #100c0b url("/assets/deck-instrument-cluster.webp?v=deck-components-8") center / 100% 100% no-repeat;
   border: 1px solid #8f755e;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #160f0c, 0 2px 5px #0008;
@@ -246,10 +246,10 @@
 .cassette-volume-panel input[type="range"] {
   position: absolute;
   z-index: 3;
-  top: 19%;
+  top: 20.5%;
   left: 42%;
   width: 24% !important;
-  height: 68%;
+  height: 70.5%;
   margin: 0;
   cursor: ns-resize;
   opacity: 1;
@@ -330,7 +330,7 @@
   cursor: pointer;
   color: #f5eee5 !important;
   text-shadow: 0 1px 2px #000;
-  background: #554258 url("/assets/deck-control-key.webp?v=deck-components-7") center / 100% 100% no-repeat !important;
+  background: #554258 url("/assets/deck-control-key.webp?v=deck-components-8") center / 100% 100% no-repeat !important;
   border: 1px solid #1b1315 !important;
   border-radius: 2px;
   box-shadow: 0 4px 0 #120c0e, 0 6px 8px #0009, inset 0 1px #c4aec055 !important;
@@ -428,6 +428,107 @@
   position: relative !important;
   z-index: 12 !important;
   pointer-events: auto !important;
+  min-height: 520px !important;
+  gap: 0 !important;
+  padding: 0 12px 15px !important;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(90deg, #ffffff0b, transparent 13%, transparent 87%, #0009),
+    linear-gradient(#241914, #0a0807 18%, #0b0908) !important;
+  border: 1px solid #806953 !important;
+  border-radius: 2px 2px 5px 5px;
+  box-shadow:
+    inset 0 1px #d0b18b55,
+    inset 0 0 0 3px #0a0807,
+    7px 8px #080706,
+    0 18px 32px #0009 !important;
+}
+
+/* A photographed single-column storage bay forms the reusable empty slots. */
+.cassette-component > .cassette-case-stack::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 48px;
+  right: 9px;
+  bottom: 12px;
+  left: 9px;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #080706 0 8px, transparent 14px calc(100% - 14px), #080706 calc(100% - 8px)),
+    url("/assets/cassette-rack-slot.webp?v=deck-components-8") center top / 100% 62px repeat-y;
+  border: 1px solid #28201a;
+  box-shadow: inset 0 0 17px #000d;
+}
+
+.cassette-component > .cassette-case-stack::after {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  top: 47px;
+  right: 8px;
+  bottom: 10px;
+  left: 8px;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    #090706 0 7px,
+    #47372b 8px,
+    #17110e 11px,
+    transparent 14px calc(100% - 14px),
+    #17110e calc(100% - 11px),
+    #47372b calc(100% - 8px),
+    #090706 calc(100% - 7px));
+  border-top: 2px solid #836b52;
+  border-bottom: 3px solid #090706;
+  box-shadow: inset 0 1px #d1b18b2b;
+}
+
+.cassette-component > .cassette-case-stack .cassette-stack-heading {
+  position: relative;
+  z-index: 7;
+  min-height: 47px;
+  margin: 0 -12px 8px;
+  padding: 11px 14px 9px !important;
+  justify-content: center;
+  gap: 4px;
+  color: #e8ddd0;
+  text-shadow: 0 1px 2px #000;
+  background:
+    linear-gradient(#ffffff0f, transparent 38%, #0006),
+    #1a1210;
+  border-bottom: 1px solid #8a7058;
+  box-shadow: inset 0 -4px 7px #0008, 0 3px 5px #0009;
+}
+
+.cassette-component > .cassette-case-stack .cassette-stack-heading::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 14px;
+  width: 42px;
+  height: 2px;
+  background: #df1828;
+  box-shadow: 0 0 7px #df182888;
+}
+
+.cassette-component > .cassette-case-stack .cassette-stack-heading span {
+  font-size: 0;
+  letter-spacing: .13em;
+  font-family: "Arial Narrow", Arial, sans-serif;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cassette-component > .cassette-case-stack .cassette-stack-heading span::before {
+  content: "CASSETTE STORAGE";
+  font-size: 8px;
+}
+
+.cassette-component > .cassette-case-stack .cassette-stack-heading b {
+  color: #df2635;
+  letter-spacing: .11em;
+  font: 700 7px/1 Consolas, "Courier New", monospace;
 }
 
 .cassette-component .cassette-case-pile,
@@ -438,24 +539,68 @@
 
 .cassette-component .cassette-case-pile {
   align-items: stretch !important;
+  position: relative;
+  z-index: 3;
+  gap: 10px !important;
+  padding: 7px 11px 185px !important;
 }
 
 .cassette-component .cassette-case-pile .cassette-case {
   width: 100% !important;
   margin: 0 !important;
   transform: translateX(0) !important;
+  border-radius: 2px 4px 4px 2px;
+  filter: saturate(.92) contrast(1.04);
+}
+
+.cassette-component .cassette-case-pile .cassette-case::after {
+  content: "" !important;
+  position: absolute;
+  z-index: 3;
+  right: -10px;
+  bottom: -7px;
+  left: -10px;
+  height: 8px;
+  pointer-events: none;
+  background: linear-gradient(#675242, #18120f 35%, #050403 72%);
+  border-top: 1px solid #9a7d61;
+  box-shadow: 0 3px 5px #000d;
+}
+
+.cassette-component .cassette-case-pile .cassette-case-shell {
+  border-color: #61564c !important;
+  box-shadow:
+    0 2px 0 #050403,
+    0 5px 8px #000c,
+    inset 0 1px #ffffff24 !important;
 }
 
 .cassette-component .cassette-case-pile .cassette-case:hover,
 .cassette-component .cassette-case-pile .cassette-case:focus-visible,
 .cassette-component .cassette-case-pile .cassette-case.is-loaded {
-  transform: translateX(-5px) !important;
+  transform: translateX(-7px) !important;
+}
+
+.cassette-component .cassette-case-pile .cassette-case.is-loaded .cassette-case-shell {
+  border-color: #e6ded4 !important;
+  box-shadow:
+    0 2px 0 #050403,
+    0 5px 8px #000c,
+    0 0 0 2px var(--case-accent),
+    0 0 14px color-mix(in srgb, var(--case-accent) 32%, transparent),
+    inset 0 1px #ffffff24 !important;
 }
 
 @media (max-width: 760px) {
   .cassette-component > .cassette-machine { min-height: 174px; }
   .cassette-transport { padding: 1.6% !important; }
   .cassette-transport button { gap: 4%; }
+  .cassette-component > .cassette-case-stack {
+    min-height: 410px !important;
+  }
+  .cassette-component .cassette-case-pile {
+    padding-bottom: 135px !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
