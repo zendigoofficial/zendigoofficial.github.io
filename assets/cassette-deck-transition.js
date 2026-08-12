@@ -471,6 +471,74 @@
     }
   }
 
+  function syncGameSystem() {
+    const system = document.querySelector(".game-system-section");
+    if (!system) return;
+    const modalOpen = Boolean(document.querySelector(".game-modal-backdrop"));
+    const display = system.querySelector(".game-system-status strong");
+    const caseButton = system.querySelector(".game-storage-case");
+    system.classList.toggle("is-running", modalOpen);
+    const displayText = modalOpen ? "FLAPPY FACE" : "GAME READY";
+    const expanded = String(modalOpen);
+    if (display && display.textContent !== displayText) display.textContent = displayText;
+    if (caseButton && caseButton.getAttribute("aria-expanded") !== expanded) {
+      caseButton.setAttribute("aria-expanded", expanded);
+    }
+  }
+
+  function ensureGameSystem() {
+    const component = document.querySelector(".cassette-component");
+    const deck = component?.querySelector(SELECTOR);
+    if (!component || !deck) return null;
+    let system = component.querySelector(".game-system-section");
+    if (!system) {
+      system = document.createElement("section");
+      system.className = "game-system-section";
+      system.setAttribute("aria-label", "Game console and game case cabinet");
+      system.innerHTML = `
+        <div class="game-system-console" aria-label="Decorative late 1980s style game console">
+          <span class="game-system-screw game-system-screw-one" aria-hidden="true"></span>
+          <span class="game-system-screw game-system-screw-two" aria-hidden="true"></span>
+          <div class="game-console-switches" aria-hidden="true">
+            <span><i></i><small>POWER</small></span>
+            <span><i></i><small>RESET</small></span>
+          </div>
+          <div class="game-console-bay" aria-hidden="true"><span></span><i></i></div>
+          <div class="game-system-status" aria-live="polite"><i aria-hidden="true"></i><strong>GAME READY</strong></div>
+          <div class="game-controller-ports" aria-hidden="true">
+            <span><i></i><small>CONTROLLER 1</small></span>
+            <span><i></i><small>CONTROLLER 2</small></span>
+          </div>
+        </div>
+        <div class="game-storage-cabinet" aria-label="Game case storage">
+          <span class="game-cabinet-rail game-cabinet-rail-left" aria-hidden="true"></span>
+          <span class="game-cabinet-rail game-cabinet-rail-right" aria-hidden="true"></span>
+          <div class="game-storage-grid">
+            <button class="game-storage-slot game-storage-case" type="button" aria-label="Play Flappy Face full screen" aria-haspopup="dialog" aria-expanded="false">
+              <img src="/games/flappy-face/assets/flappy_face_game_case.webp" alt="Flappy Face game case" width="1178" height="296">
+            </button>
+            <span class="game-storage-slot is-empty" aria-hidden="true"></span>
+            <span class="game-storage-slot is-empty" aria-hidden="true"></span>
+            <span class="game-storage-slot is-empty" aria-hidden="true"></span>
+            <span class="game-storage-slot is-empty" aria-hidden="true"></span>
+            <span class="game-storage-slot is-empty" aria-hidden="true"></span>
+            <span class="game-storage-slot is-empty" aria-hidden="true"></span>
+            <span class="game-storage-slot is-empty" aria-hidden="true"></span>
+          </div>
+        </div>`;
+      deck.insertAdjacentElement("afterend", system);
+      system.querySelector(".game-storage-case")?.addEventListener("click", () => {
+        const originalLauncher = component.querySelector(".media-game-library [data-flappy-launcher='true']");
+        if (!originalLauncher) return;
+        originalLauncher.click();
+        window.requestAnimationFrame(syncGameSystem);
+        window.setTimeout(syncGameSystem, 40);
+      });
+    }
+    syncGameSystem();
+    return system;
+  }
+
   function connect() {
     const nextMachine = document.querySelector(SELECTOR);
     if (!nextMachine) return;
@@ -479,6 +547,7 @@
     volumeInput = machine.querySelector('.cassette-volume-panel input[type="range"]');
     labelControls(machine);
     ensureReadout();
+    ensureGameSystem();
     paintReadout();
     machine.dataset.photoDeck = "ready";
   }
@@ -534,6 +603,7 @@
     if (!machine || meters.length !== 2) return;
     labelControls(machine);
     ensureReadout();
+    ensureGameSystem();
     syncReadoutFromDeck();
     routeVideoToTv();
 
@@ -565,6 +635,7 @@
 
   const observer = new MutationObserver(() => {
     connect();
+    syncGameSystem();
     if (machine) labelControls(machine);
   });
 
