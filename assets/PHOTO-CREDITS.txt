@@ -1,0 +1,15 @@
+Photo asset credits
+
+Technics RS-M216 front view by Vogler, licensed CC BY-SA 4.0.
+Source: https://commons.wikimedia.org/wiki/File:Technics_RS-M216_front_view.jpg
+Modified for the Zendigo cassette deck interface. The derivative deck artwork
+is distributed under CC BY-SA 4.0.
+
+AudioMagnetics Super 90 cassette photograph by Stuart Childs, licensed CC BY 2.0.
+Modified to create the transferable cassette faces.
+
+Noname blank compact cassette photograph by Tim Reckmann, licensed CC BY 2.0.
+Modified portions of the photographed paper and shell textures are used in the
+cassette labels and deck service labels.
+
+Permanent Marker by Font Diner, SIL Open Font License 1.1.
