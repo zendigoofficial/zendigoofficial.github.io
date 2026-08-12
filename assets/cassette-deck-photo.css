@@ -9,7 +9,7 @@
   isolation: isolate;
   background:
     linear-gradient(#ffffff0d, #0000 18%, #0005),
-    url("/assets/deck-chassis-texture.webp?v=deck-components-10") center / 100% 100% no-repeat !important;
+    url("/assets/deck-chassis-texture.webp?v=deck-components-11") center / 100% 100% no-repeat !important;
   border: 1px solid #947a64 !important;
   border-radius: 2px;
   box-shadow: 0 2px #d4bea0, 0 15px 28px #000a !important;
@@ -50,7 +50,7 @@
   box-sizing: border-box !important;
   contain: layout paint;
   pointer-events: none;
-  background: #100c0b url("/assets/deck-module-cassette.webp?v=deck-components-10") center / 100% 100% no-repeat !important;
+  background: #100c0b url("/assets/deck-module-cassette.webp?v=deck-components-11") center / 100% 100% no-repeat !important;
   border: 1px solid #8f755e !important;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #160f0c, 0 2px 5px #0008 !important;
@@ -132,7 +132,7 @@
   height: 60%;
   overflow: hidden;
   pointer-events: none;
-  background: #100c0b url("/assets/deck-instrument-cluster.webp?v=deck-components-10") center / 100% 100% no-repeat;
+  background: #100c0b url("/assets/deck-instrument-cluster.webp?v=deck-components-11") center / 100% 100% no-repeat;
   border: 1px solid #8f755e;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #160f0c, 0 2px 5px #0008;
@@ -337,7 +337,7 @@
   text-shadow: 0 1px 2px #000;
   background:
     linear-gradient(#ffffff0d, transparent 30%, #0003),
-    #211a18 url("/assets/deck-control-key-v2.webp?v=deck-components-10") center / 100% 100% no-repeat !important;
+    #211a18 url("/assets/deck-control-key-v2.webp?v=deck-components-11") center / 100% 100% no-repeat !important;
   border: 1px solid #0b0807 !important;
   border-top-color: #756254 !important;
   border-radius: 2px 2px 1px 1px;
@@ -376,7 +376,7 @@
   border-top: 3px solid #d82333 !important;
   background:
     linear-gradient(#e22b3b18, transparent 34%, #0003),
-    #241a19 url("/assets/deck-control-key-v2.webp?v=deck-components-10") center / 100% 100% no-repeat !important;
+    #241a19 url("/assets/deck-control-key-v2.webp?v=deck-components-11") center / 100% 100% no-repeat !important;
   box-shadow:
     0 4px 0 #090605,
     0 6px 8px #000a,
@@ -481,7 +481,7 @@
   pointer-events: none;
   background:
     linear-gradient(90deg, #080706 0 8px, transparent 14px calc(100% - 14px), #080706 calc(100% - 8px)),
-    url("/assets/cassette-rack-slot.webp?v=deck-components-10") center top / 100% 62px repeat-y;
+    url("/assets/cassette-rack-slot.webp?v=deck-components-11") center top / 100% 62px repeat-y;
   border: 1px solid #28201a;
   box-shadow: inset 0 0 17px #000d;
 }
@@ -588,4 +588,260 @@
   .vu-meter i,
   .vu-meter::after,
   .cassette-transport button { transition: none !important; }
+}
+
+/* Companion fluorescent track display. The photographed VFD glass is used as
+   the optical base; the live type remains selectable and accessible. */
+@media (min-width: 761px) {
+  .cassette-component {
+    grid-template-areas:
+      "tuner game"
+      "deck tapes"
+      "readout tapes" !important;
+  }
+}
+
+.cassette-readout-unit {
+  --readout-overflow: 0px;
+  grid-area: readout;
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  min-height: 88px;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 10px;
+  padding: 9px 11px;
+  color: #d6c7b6;
+  background:
+    linear-gradient(108deg, #ffffff0c, transparent 22% 76%, #0007),
+    #15100e url("/assets/deck-chassis-texture.webp?v=deck-components-11") center / 100% 100% no-repeat;
+  border: 1px solid #947a64;
+  border-radius: 2px;
+  box-shadow:
+    0 2px #d4bea0,
+    0 13px 24px #0009,
+    inset 0 1px #efd5b334,
+    inset 0 -8px 14px #0008;
+}
+
+.cassette-readout-unit::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 5px;
+  pointer-events: none;
+  border: 1px solid #33251f;
+  box-shadow: inset 0 0 0 1px #8a715a32;
+}
+
+.readout-screw {
+  position: absolute;
+  z-index: 4;
+  top: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #c6b7a6 0 12%, #5e554d 26%, #211a17 72%);
+  box-shadow: 0 1px 2px #000;
+}
+
+.readout-screw::after {
+  content: "";
+  position: absolute;
+  top: 2.5px;
+  left: 1px;
+  width: 4px;
+  height: 1px;
+  background: #171310;
+  transform: rotate(-18deg);
+}
+
+.readout-screw-one { left: 4px; }
+.readout-screw-two { right: 4px; }
+
+.readout-id {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px 10px 5px 7px;
+  border-right: 1px solid #5f493b;
+  box-shadow: 5px 0 10px #0005;
+  font-family: Consolas, "Courier New", monospace;
+  text-transform: uppercase;
+}
+
+.readout-id small {
+  color: #9d8976;
+  letter-spacing: .1em;
+  font-size: 6px;
+  line-height: 1.1;
+}
+
+.readout-id strong {
+  margin: 4px 0 5px;
+  color: #dbc6b1;
+  letter-spacing: .08em;
+  font: 800 14px/.9 "Arial Narrow", Arial, sans-serif;
+}
+
+.readout-id span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #8e7e70;
+  letter-spacing: .09em;
+  font-size: 6px;
+}
+
+.readout-id i {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: #561019;
+  box-shadow: 0 0 0 1px #13090a, inset 0 1px #ffffff1f;
+}
+
+.cassette-readout-unit.has-tape .readout-id i {
+  background: #df2435;
+  box-shadow: 0 0 0 1px #21090c, 0 0 7px #df18288c, inset 0 1px #fff6;
+}
+
+.readout-glass {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding: 10px 13px 8px;
+  color: #73e2bd;
+  background:
+    linear-gradient(111deg, #ffffff0c 0 9%, transparent 24% 76%, #ffffff07 91%),
+    linear-gradient(#020b08a3, #000706b8),
+    url("/assets/readout-vfd-glass.webp?v=deck-components-11") center / cover no-repeat,
+    #010705;
+  border: 1px solid #6e5948;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 2px #020403,
+    inset 0 0 17px #000,
+    0 1px #a4896d45;
+}
+
+.readout-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .22;
+  background: repeating-linear-gradient(0deg, transparent 0 2px, #001711 2px 3px);
+  mix-blend-mode: multiply;
+}
+
+.readout-title-window {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #5fe0b72c;
+}
+
+.readout-title {
+  display: block;
+  min-width: max-content;
+  max-width: none;
+  color: #86f4cf;
+  white-space: nowrap;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+  font: 700 clamp(12px, 1.25vw, 17px)/1 Consolas, "Courier New", monospace;
+  text-shadow: 0 0 3px #49dfad, 0 0 9px #0ad79988;
+  transform: translateX(0);
+}
+
+.cassette-readout-unit.is-scrolling .readout-title {
+  animation: readout-title-pan 8s ease-in-out 1s infinite alternate;
+}
+
+@keyframes readout-title-pan {
+  0%, 18% { transform: translateX(0); }
+  82%, 100% { transform: translateX(calc(-1 * var(--readout-overflow))); }
+}
+
+.readout-meta {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: end;
+  gap: 12px;
+  padding-top: 6px;
+  text-transform: uppercase;
+  font: 700 7px/1 Consolas, "Courier New", monospace;
+  letter-spacing: .08em;
+}
+
+.readout-mixtape {
+  min-width: 0;
+  overflow: hidden;
+  color: #55b697;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.readout-track { color: #cdbd9e; }
+
+.readout-status {
+  min-width: 43px;
+  color: #d02d3b;
+  text-align: right;
+  font-style: normal;
+}
+
+.cassette-readout-unit.has-tape .readout-status { color: #74dab8; }
+.cassette-readout-unit.is-playing .readout-status {
+  color: #8bffd6;
+  text-shadow: 0 0 6px #34d9a48c;
+}
+
+@media (max-width: 760px) {
+  .cassette-component {
+    grid-template-areas: "tuner" "game" "deck" "readout" "tapes" !important;
+  }
+
+  .cassette-readout-unit {
+    width: 100%;
+    min-height: 82px;
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 7px;
+    padding: 8px 9px;
+  }
+
+  .readout-id { padding-inline: 5px 7px; }
+  .readout-id strong { font-size: 12px; }
+  .readout-glass { padding: 9px 9px 7px; }
+  .readout-meta { gap: 7px; font-size: 6px; }
+}
+
+@media (max-width: 430px) {
+  .cassette-readout-unit { grid-template-columns: 72px minmax(0, 1fr); }
+  .readout-id small { letter-spacing: .04em; }
+  .readout-track { display: none; }
+  .readout-meta { grid-template-columns: minmax(0, 1fr) auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cassette-readout-unit.is-scrolling .readout-title {
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    animation: none !important;
+  }
 }

@@ -6,6 +6,112 @@
   let levels = [0, 0];
   let peaks = [0, 0];
   let holds = [0, 0];
+  let readoutState = {
+    cassetteId: null,
+    mixtape: "SELECT A MIXTAPE",
+    title: "NO TAPE LOADED",
+    index: 0,
+    total: 0,
+    playerState: -1
+  };
+
+  const MIXTAPE_NAMES = {
+    rush: "ALL RUSH MIXTAPE",
+    "college-rock": "90S COLLEGE ROCK",
+    "neon-vice": "NEON VICE: SUNSET DRIVE",
+    "last-life": "LAST LIFE",
+    "secret-level": "SECRET LEVEL"
+  };
+
+  function ensureReadout() {
+    const deck = document.querySelector(SELECTOR);
+    if (!deck) return null;
+    const component = deck.closest(".cassette-component");
+    if (!component) return null;
+    let readout = Array.from(component.children).find(child => child.classList?.contains("cassette-readout-unit"));
+    if (!readout) {
+      readout = document.createElement("section");
+      readout.className = "cassette-readout-unit";
+      readout.setAttribute("aria-label", "Cassette now playing display");
+      readout.innerHTML = `
+        <span class="readout-screw readout-screw-one" aria-hidden="true"></span>
+        <span class="readout-screw readout-screw-two" aria-hidden="true"></span>
+        <div class="readout-id" aria-hidden="true">
+          <small>PROGRAM MONITOR</small>
+          <strong>CX-82</strong>
+          <span><i></i> SIGNAL</span>
+        </div>
+        <div class="readout-glass" aria-live="polite" aria-atomic="true">
+          <div class="readout-title-window"><strong class="readout-title"></strong></div>
+          <div class="readout-meta">
+            <span class="readout-mixtape"></span>
+            <b class="readout-track"></b>
+            <i class="readout-status"></i>
+          </div>
+        </div>`;
+      deck.insertAdjacentElement("afterend", readout);
+    }
+    return readout;
+  }
+
+  function playerStatus(state) {
+    if (!readoutState.cassetteId) return "STANDBY";
+    if (state === 1) return "PLAY";
+    if (state === 2) return "PAUSE";
+    if (state === 3) return "BUFFER";
+    if (state === 0) return "END";
+    return "READY";
+  }
+
+  function paintReadout() {
+    const readout = ensureReadout();
+    if (!readout) return;
+    const title = String(readoutState.title || "NO TAPE LOADED").trim();
+    const mixtape = String(readoutState.mixtape || "SELECT A MIXTAPE").trim();
+    const titleNode = readout.querySelector(".readout-title");
+    const mixtapeNode = readout.querySelector(".readout-mixtape");
+    const trackNode = readout.querySelector(".readout-track");
+    const statusNode = readout.querySelector(".readout-status");
+    if (titleNode && titleNode.textContent !== title) titleNode.textContent = title;
+    if (mixtapeNode && mixtapeNode.textContent !== mixtape) mixtapeNode.textContent = mixtape;
+    if (trackNode) {
+      const current = readoutState.index > 0 ? String(readoutState.index).padStart(2, "0") : "--";
+      const total = readoutState.total > 0 ? String(readoutState.total).padStart(2, "0") : "--";
+      const trackText = `TRACK ${current} / ${total}`;
+      if (trackNode.textContent !== trackText) trackNode.textContent = trackText;
+    }
+    if (statusNode) {
+      const status = playerStatus(readoutState.playerState);
+      if (statusNode.textContent !== status) statusNode.textContent = status;
+    }
+    readout.classList.toggle("has-tape", Boolean(readoutState.cassetteId));
+    readout.classList.toggle("is-playing", readoutState.playerState === 1);
+    window.requestAnimationFrame(() => {
+      const windowNode = readout.querySelector(".readout-title-window");
+      if (!windowNode || !titleNode) return;
+      const overflow = Math.max(0, titleNode.scrollWidth - windowNode.clientWidth);
+      readout.style.setProperty("--readout-overflow", `${overflow}px`);
+      readout.classList.toggle("is-scrolling", overflow > 4);
+    });
+  }
+
+  function updateReadout(next = {}) {
+    readoutState = { ...readoutState, ...next };
+    if (next.cassetteId !== undefined) {
+      readoutState.mixtape = next.cassetteId
+        ? (next.mixtape || MIXTAPE_NAMES[next.cassetteId] || readoutState.mixtape)
+        : "SELECT A MIXTAPE";
+      if (!next.cassetteId) {
+        readoutState.title = "NO TAPE LOADED";
+        readoutState.index = 0;
+        readoutState.total = 0;
+        readoutState.playerState = -1;
+      }
+    }
+    paintReadout();
+  }
+
+  window.__zendigoUpdateCassetteReadout = updateReadout;
 
   function labelControls(root) {
     const controls = root.querySelectorAll(".cassette-transport button");
@@ -32,6 +138,8 @@
     meters = Array.from(machine.querySelectorAll(".vu-meter"));
     volumeInput = machine.querySelector('.cassette-volume-panel input[type="range"]');
     labelControls(machine);
+    ensureReadout();
+    paintReadout();
     machine.dataset.photoDeck = "ready";
   }
 
@@ -52,10 +160,41 @@
     engine.setAttribute("aria-hidden", "false");
   }
 
+  function syncReadoutFromDeck() {
+    if (!machine) return;
+    const inserted = machine.querySelector(".inserted-tape");
+    if (!inserted) {
+      if (readoutState.cassetteId) updateReadout({ cassetteId: null });
+      return;
+    }
+
+    const selectedCase = document.querySelector(".cassette-case.is-loaded");
+    const caseWords = `${selectedCase?.getAttribute("aria-label") || ""} ${selectedCase?.textContent || ""}`.toLowerCase();
+    const cassetteId = Object.keys(MIXTAPE_NAMES).find(id => {
+      const name = MIXTAPE_NAMES[id].toLowerCase();
+      return caseWords.includes(name) || (id === "rush" && caseWords.includes("all rush"));
+    }) || readoutState.cassetteId;
+    const hiddenTitle = machine.querySelector(".cassette-machine-display strong")?.textContent?.trim();
+    const hiddenTrack = machine.querySelector(".cassette-machine-display small")?.textContent || "";
+    const trackMatch = hiddenTrack.match(/TRACK\s+(\d+)\s*\/\s*(\d+)/i);
+    const next = {};
+    if (cassetteId && cassetteId !== readoutState.cassetteId) next.cassetteId = cassetteId;
+    if (hiddenTitle && !/no cassette|select a case/i.test(hiddenTitle) && hiddenTitle !== readoutState.title) {
+      next.title = hiddenTitle;
+    }
+    if (trackMatch) {
+      next.index = Number(trackMatch[1]);
+      next.total = Number(trackMatch[2]);
+    }
+    if (Object.keys(next).length) updateReadout(next);
+  }
+
   function tick() {
     if (!machine || !machine.isConnected) connect();
     if (!machine || meters.length !== 2) return;
     labelControls(machine);
+    ensureReadout();
+    syncReadoutFromDeck();
     routeVideoToTv();
 
     const active = meters.some((meter) => meter.querySelector("i.is-active"));
@@ -99,6 +238,23 @@
     });
     window.addEventListener("resize", routeVideoToTv);
     window.addEventListener("scroll", routeVideoToTv, { passive: true });
+    window.addEventListener("message", (event) => {
+      if (event.origin !== "https://zendigo-redline-82.zendigo-playz.chatgpt.site" || !event.data) return;
+      if (event.data.type === "zendigo-cassette:state") {
+        const cassetteId = event.data.cassetteId || readoutState.cassetteId;
+        updateReadout({
+          cassetteId,
+          mixtape: MIXTAPE_NAMES[cassetteId] || readoutState.mixtape,
+          title: event.data.title?.trim() || readoutState.title,
+          index: Number.isFinite(event.data.index) ? event.data.index + 1 : readoutState.index,
+          total: Number.isFinite(event.data.total) ? event.data.total : readoutState.total,
+          playerState: Number.isFinite(event.data.state) ? event.data.state : readoutState.playerState
+        });
+      }
+      if (event.data.type === "zendigo-cassette:error") {
+        updateReadout({ title: "TRACK UNAVAILABLE", playerState: -1 });
+      }
+    });
     window.setInterval(tick, 90);
   }
 
@@ -250,12 +406,29 @@
     if (symbol) symbol.textContent = playing ? "Ⅱ" : "▶";
     if (label) label.textContent = playing ? "PAUSE" : "PLAY";
     machine()?.querySelector(".inserted-tape")?.classList.toggle("is-playing", playing);
+    if (selected) {
+      window.__zendigoUpdateCassetteReadout?.({
+        cassetteId: selected.id,
+        mixtape: selected.label,
+        index: index + 1,
+        total: selected.tracks.length,
+        playerState: playing ? 1 : 2
+      });
+    }
   }
 
   function loadTape(tape, nextIndex = 0) {
     selected = tape;
     index = Math.max(0, Math.min(tape.tracks.length - 1, nextIndex));
     playing = true;
+    window.__zendigoUpdateCassetteReadout?.({
+      cassetteId: tape.id,
+      mixtape: tape.label,
+      title: `LOADING TRACK ${String(index + 1).padStart(2, "0")}`,
+      index: index + 1,
+      total: tape.tracks.length,
+      playerState: 3
+    });
     paintTape(tape);
     updatePlayButton();
     post({
@@ -273,6 +446,14 @@
     if (!selected) return;
     index = (index + amount + selected.tracks.length) % selected.tracks.length;
     playing = true;
+    window.__zendigoUpdateCassetteReadout?.({
+      cassetteId: selected.id,
+      mixtape: selected.label,
+      title: `LOADING TRACK ${String(index + 1).padStart(2, "0")}`,
+      index: index + 1,
+      total: selected.tracks.length,
+      playerState: 3
+    });
     post({ type: "zendigo-cassette:play-at", index });
     updatePlayButton();
   }
@@ -283,6 +464,7 @@
     index = 0;
     playing = false;
     videoOpen = false;
+    window.__zendigoUpdateCassetteReadout?.({ cassetteId: null });
     const bay = machine()?.querySelector(".cassette-bay");
     bay?.querySelector(".inserted-tape")?.remove();
     if (bay && !bay.querySelector(".cassette-bay-empty")) {
@@ -356,6 +538,14 @@
     if (event.data.type === "zendigo-cassette:state" && selected) {
       playing = event.data.state === 1;
       if (Number.isFinite(event.data.index)) index = event.data.index;
+      window.__zendigoUpdateCassetteReadout?.({
+        cassetteId: selected.id,
+        mixtape: selected.label,
+        title: event.data.title?.trim() || `TRACK ${String(index + 1).padStart(2, "0")}`,
+        index: index + 1,
+        total: event.data.total || selected.tracks.length,
+        playerState: Number.isFinite(event.data.state) ? event.data.state : (playing ? 1 : 2)
+      });
       updatePlayButton();
     }
   }

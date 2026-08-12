@@ -15,3 +15,8 @@ Modified portions of the photographed paper and shell textures are used in the
 cassette labels and deck service labels.
 
 Permanent Marker by Font Diner, SIL Open Font License 1.1.
+
+Sony MDS-S37 MiniDisc deck VFD photograph by Retired electrician, dedicated to
+the public domain under CC0 1.0. Modified to create the now-playing display
+glass texture.
+Source: https://commons.wikimedia.org/wiki/File:Sony_MDS-S37_minidisc_deck_05_crop.jpg
