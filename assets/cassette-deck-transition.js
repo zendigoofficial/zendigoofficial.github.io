@@ -28,20 +28,30 @@
     if (!deck) return null;
     const component = deck.closest(".cassette-component");
     if (!component) return null;
-    let readout = Array.from(component.children).find(child => child.classList?.contains("cassette-readout-unit"));
+    let readout = component.querySelector(".cassette-readout-unit");
     if (!readout) {
       readout = document.createElement("section");
       readout.className = "cassette-readout-unit";
       readout.setAttribute("aria-label", "Cassette now playing display");
       readout.innerHTML = `
-        <span class="readout-screw readout-screw-one" aria-hidden="true"></span>
-        <span class="readout-screw readout-screw-two" aria-hidden="true"></span>
-        <div class="readout-id" aria-hidden="true">
-          <small>PROGRAM MONITOR</small>
-          <strong>CX-82</strong>
-          <span><i></i> SIGNAL</span>
-        </div>
         <div class="readout-glass" aria-live="polite" aria-atomic="true">
+          <svg class="readout-asteroid-field" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true">
+            <g class="readout-stars">
+              <circle cx="24" cy="19" r=".8"/><circle cx="81" cy="68" r=".65"/>
+              <circle cx="147" cy="13" r=".55"/><circle cx="205" cy="52" r=".75"/>
+              <circle cx="278" cy="25" r=".55"/><circle cx="336" cy="74" r=".7"/>
+              <circle cx="411" cy="14" r=".7"/><circle cx="468" cy="58" r=".55"/>
+              <circle cx="548" cy="29" r=".8"/><circle cx="585" cy="76" r=".6"/>
+            </g>
+            <path class="readout-rock readout-rock-one" d="M8 18l7-9 12 2 6 9-5 11-13 3-9-7z"/>
+            <path class="readout-rock readout-rock-two" d="M4 10l9-7 10 5 2 11-8 8-12-4-3-7z"/>
+            <path class="readout-rock readout-rock-three" d="M5 15l4-10 13-2 8 8-2 12-11 5-12-6z"/>
+            <g class="readout-ship">
+              <path d="M0 10L27 1 18 11 27 20 0 10z"/>
+              <path class="readout-thrust" d="M3 8l-9-4m9 8l-9 4"/>
+            </g>
+            <path class="readout-shot" d="M0 0h24"/>
+          </svg>
           <div class="readout-title-window"><strong class="readout-title"></strong></div>
           <div class="readout-meta">
             <span class="readout-mixtape"></span>
@@ -49,8 +59,8 @@
             <i class="readout-status"></i>
           </div>
         </div>`;
-      deck.insertAdjacentElement("afterend", readout);
     }
+    if (readout.parentElement !== deck) deck.appendChild(readout);
     return readout;
   }
 
