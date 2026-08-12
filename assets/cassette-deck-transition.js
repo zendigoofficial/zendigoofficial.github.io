@@ -6,6 +6,9 @@
   let levels = [0, 0];
   let peaks = [0, 0];
   let holds = [0, 0];
+  let gameModal = null;
+  let gameReturnFocus = null;
+  let gameBodyOverflow = "";
   let readoutState = {
     cassetteId: null,
     mixtape: "SELECT A MIXTAPE",
@@ -486,6 +489,52 @@
     }
   }
 
+  function closeGameModal() {
+    if (!gameModal) return;
+    const escapeHandler = gameModal._escapeHandler;
+    if (escapeHandler) window.removeEventListener("keydown", escapeHandler);
+    gameModal.remove();
+    gameModal = null;
+    document.body.style.overflow = gameBodyOverflow;
+    gameReturnFocus?.focus?.();
+    gameReturnFocus = null;
+    syncGameSystem();
+  }
+
+  function openGameModal(trigger) {
+    if (gameModal?.isConnected) {
+      gameModal.querySelector(".game-modal-header button")?.focus();
+      return;
+    }
+    gameReturnFocus = trigger || document.activeElement;
+    gameBodyOverflow = document.body.style.overflow;
+    gameModal = document.createElement("div");
+    gameModal.className = "game-modal-backdrop";
+    gameModal.dataset.gameSystemModal = "true";
+    gameModal.innerHTML = `
+      <section class="game-modal" role="dialog" aria-modal="true" aria-labelledby="game-system-flappy-title">
+        <header class="game-modal-header">
+          <div><span>FULL SCREEN GAME</span><h2 id="game-system-flappy-title">Flappy Face</h2></div>
+          <button type="button" aria-label="Close Flappy Face and return to the homepage">Close <span aria-hidden="true">×</span></button>
+        </header>
+        <div class="game-modal-frame">
+          <iframe src="/games/flappy-face/?embed=1" title="Play Flappy Face" allow="autoplay; gamepad" loading="eager"></iframe>
+        </div>
+      </section>`;
+    gameModal.querySelector(".game-modal-header button")?.addEventListener("click", closeGameModal);
+    gameModal.addEventListener("mousedown", event => {
+      if (event.target === gameModal) closeGameModal();
+    });
+    gameModal._escapeHandler = event => {
+      if (event.key === "Escape") closeGameModal();
+    };
+    window.addEventListener("keydown", gameModal._escapeHandler);
+    document.body.style.overflow = "hidden";
+    document.body.appendChild(gameModal);
+    syncGameSystem();
+    gameModal.querySelector(".game-modal-header button")?.focus();
+  }
+
   function ensureGameSystem() {
     const component = document.querySelector(".cassette-component");
     const deck = component?.querySelector(SELECTOR);
@@ -527,12 +576,8 @@
           </div>
         </div>`;
       deck.insertAdjacentElement("afterend", system);
-      system.querySelector(".game-storage-case")?.addEventListener("click", () => {
-        const originalLauncher = component.querySelector(".media-game-library [data-flappy-launcher='true']");
-        if (!originalLauncher) return;
-        originalLauncher.click();
-        window.requestAnimationFrame(syncGameSystem);
-        window.setTimeout(syncGameSystem, 40);
+      system.querySelector(".game-storage-case")?.addEventListener("click", event => {
+        openGameModal(event.currentTarget);
       });
     }
     syncGameSystem();
