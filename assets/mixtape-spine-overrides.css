@@ -1,0 +1,25 @@
+.cassette-case-pile {
+  gap: 6px !important;
+}
+
+.cassette-case-pile .cassette-case {
+  aspect-ratio: auto !important;
+  height: 42px !important;
+}
+
+.cassette-case-shell {
+  background: #0c0e0f !important;
+  border-color: #34393c !important;
+  padding: 0 !important;
+}
+
+.cassette-case-shell::after,
+.cassette-case-title {
+  display: none !important;
+}
+
+.cassette-case-art {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+}
