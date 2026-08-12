@@ -23,6 +23,351 @@
     "secret-level": "SECRET LEVEL"
   };
 
+  function installAsteroidGame(readout) {
+    const canvas = readout.querySelector(".readout-asteroid-field");
+    if (!canvas || canvas.dataset.gameReady) return;
+    canvas.dataset.gameReady = "true";
+
+    let context = null;
+    try {
+      context = canvas.getContext("2d");
+    } catch (_) {
+      return;
+    }
+    if (!context) return;
+
+    const random = (minimum, maximum) => minimum + Math.random() * (maximum - minimum);
+    const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches || false;
+    let width = 600;
+    let height = 90;
+    let lastFrame = performance.now();
+    let fireDelay = .35;
+    let respawnDelay = 0;
+    let rocks = [];
+    let bullets = [];
+    let particles = [];
+    let stars = [];
+    const ship = { x: 390, y: 45, vx: 0, vy: 0, angle: Math.PI, alive: true, thrusting: false };
+
+    function rockRadius(size) {
+      return size === 3 ? 12 : size === 2 ? 8 : 4.7;
+    }
+
+    function makeRock(size, x, y, vx, vy) {
+      const radius = rockRadius(size);
+      const vertices = Array.from({ length: 9 }, (_, index) => ({
+        angle: (Math.PI * 2 * index) / 9,
+        radius: radius * random(.68, 1.18)
+      }));
+      return {
+        size,
+        x,
+        y,
+        vx,
+        vy,
+        angle: random(0, Math.PI * 2),
+        spin: random(-1.15, 1.15),
+        radius,
+        vertices
+      };
+    }
+
+    function spawnRock(size = Math.random() > .3 ? 3 : 2) {
+      const radius = rockRadius(size);
+      const edge = Math.floor(random(0, 4));
+      let x = random(0, width);
+      let y = random(0, height);
+      if (edge === 0) x = -radius;
+      if (edge === 1) x = width + radius;
+      if (edge === 2) y = -radius;
+      if (edge === 3) y = height + radius;
+      const targetX = random(width * .2, width * .8);
+      const targetY = random(height * .2, height * .8);
+      const direction = Math.atan2(targetY - y, targetX - x) + random(-.38, .38);
+      const speed = random(8, 15) + (3 - size) * 4;
+      rocks.push(makeRock(size, x, y, Math.cos(direction) * speed, Math.sin(direction) * speed));
+    }
+
+    function resetScene() {
+      rocks = [];
+      bullets = [];
+      particles = [];
+      stars = Array.from({ length: 24 }, () => ({
+        x: random(0, width),
+        y: random(0, height),
+        size: random(.35, 1),
+        alpha: random(.15, .5)
+      }));
+      ship.x = width * .66;
+      ship.y = height * .52;
+      ship.vx = 0;
+      ship.vy = 0;
+      ship.angle = Math.PI;
+      ship.alive = true;
+      respawnDelay = 0;
+      for (let index = 0; index < 5; index += 1) spawnRock(index < 3 ? 3 : 2);
+    }
+
+    function resize() {
+      const bounds = canvas.getBoundingClientRect();
+      const nextWidth = Math.max(240, Math.round(bounds.width || 600));
+      const nextHeight = Math.max(54, Math.round(bounds.height || 90));
+      if (nextWidth === width && nextHeight === height && canvas.width) return;
+      width = nextWidth;
+      height = nextHeight;
+      const pixelRatio = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = Math.round(width * pixelRatio);
+      canvas.height = Math.round(height * pixelRatio);
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      resetScene();
+    }
+
+    function wrap(body, margin = 0) {
+      if (body.x < -margin) body.x = width + margin;
+      if (body.x > width + margin) body.x = -margin;
+      if (body.y < -margin) body.y = height + margin;
+      if (body.y > height + margin) body.y = -margin;
+    }
+
+    function burst(x, y, amount, speed = 22) {
+      for (let index = 0; index < amount; index += 1) {
+        const direction = random(0, Math.PI * 2);
+        const velocity = random(speed * .35, speed);
+        particles.push({
+          x,
+          y,
+          vx: Math.cos(direction) * velocity,
+          vy: Math.sin(direction) * velocity,
+          life: random(.22, .62),
+          length: random(1.5, 4)
+        });
+      }
+    }
+
+    function breakRock(rockIndex) {
+      const rock = rocks[rockIndex];
+      rocks.splice(rockIndex, 1);
+      burst(rock.x, rock.y, rock.size === 3 ? 10 : 7, 29);
+      if (rock.size > 1) {
+        for (let index = 0; index < 2; index += 1) {
+          const direction = Math.atan2(rock.vy, rock.vx) + (index ? .9 : -.9) + random(-.25, .25);
+          const speed = Math.hypot(rock.vx, rock.vy) * 1.15 + random(5, 10);
+          rocks.push(makeRock(
+            rock.size - 1,
+            rock.x,
+            rock.y,
+            Math.cos(direction) * speed,
+            Math.sin(direction) * speed
+          ));
+        }
+      }
+    }
+
+    function wrappedDistance(first, second) {
+      let dx = second.x - first.x;
+      let dy = second.y - first.y;
+      if (Math.abs(dx) > width / 2) dx -= Math.sign(dx) * width;
+      if (Math.abs(dy) > height / 2) dy -= Math.sign(dy) * height;
+      return { dx, dy, distance: Math.hypot(dx, dy) };
+    }
+
+    function updateShip(delta) {
+      if (!ship.alive) {
+        respawnDelay -= delta;
+        if (respawnDelay <= 0) {
+          ship.x = width * .64;
+          ship.y = height * .5;
+          ship.vx = 0;
+          ship.vy = 0;
+          ship.angle = Math.PI;
+          ship.alive = true;
+        }
+        return;
+      }
+
+      let target = null;
+      for (const rock of rocks) {
+        const position = wrappedDistance(ship, rock);
+        if (!target || position.distance < target.distance) target = { rock, ...position };
+      }
+      if (!target) return;
+
+      const avoiding = target.distance < 27;
+      const desiredAngle = Math.atan2(target.dy, target.dx) + (avoiding ? Math.PI : 0);
+      const angleDifference = Math.atan2(Math.sin(desiredAngle - ship.angle), Math.cos(desiredAngle - ship.angle));
+      ship.angle += clamp(angleDifference, -2.8 * delta, 2.8 * delta);
+      ship.thrusting = avoiding || Math.abs(angleDifference) > .42 || Math.sin(performance.now() / 640) > .44;
+
+      if (ship.thrusting) {
+        ship.vx += Math.cos(ship.angle) * 15 * delta;
+        ship.vy += Math.sin(ship.angle) * 15 * delta;
+      }
+      const drag = Math.pow(.986, delta * 60);
+      ship.vx *= drag;
+      ship.vy *= drag;
+      const speed = Math.hypot(ship.vx, ship.vy);
+      if (speed > 22) {
+        ship.vx = (ship.vx / speed) * 22;
+        ship.vy = (ship.vy / speed) * 22;
+      }
+      ship.x += ship.vx * delta;
+      ship.y += ship.vy * delta;
+      wrap(ship, 7);
+
+      fireDelay -= delta;
+      if (!avoiding && Math.abs(angleDifference) < .16 && fireDelay <= 0) {
+        const noseX = ship.x + Math.cos(ship.angle) * 8;
+        const noseY = ship.y + Math.sin(ship.angle) * 8;
+        bullets.push({
+          x: noseX,
+          y: noseY,
+          vx: ship.vx + Math.cos(ship.angle) * 112,
+          vy: ship.vy + Math.sin(ship.angle) * 112,
+          life: 1.25
+        });
+        fireDelay = random(.32, .62);
+      }
+    }
+
+    function update(delta) {
+      updateShip(delta);
+      rocks.forEach(rock => {
+        rock.x += rock.vx * delta;
+        rock.y += rock.vy * delta;
+        rock.angle += rock.spin * delta;
+        wrap(rock, rock.radius);
+      });
+
+      bullets.forEach(bullet => {
+        bullet.x += bullet.vx * delta;
+        bullet.y += bullet.vy * delta;
+        bullet.life -= delta;
+        wrap(bullet, 1);
+      });
+      bullets = bullets.filter(bullet => bullet.life > 0);
+
+      for (let bulletIndex = bullets.length - 1; bulletIndex >= 0; bulletIndex -= 1) {
+        for (let rockIndex = rocks.length - 1; rockIndex >= 0; rockIndex -= 1) {
+          if (wrappedDistance(bullets[bulletIndex], rocks[rockIndex]).distance > rocks[rockIndex].radius) continue;
+          bullets.splice(bulletIndex, 1);
+          breakRock(rockIndex);
+          break;
+        }
+      }
+
+      if (ship.alive) {
+        for (let rockIndex = rocks.length - 1; rockIndex >= 0; rockIndex -= 1) {
+          if (wrappedDistance(ship, rocks[rockIndex]).distance > rocks[rockIndex].radius + 4.5) continue;
+          burst(ship.x, ship.y, 15, 36);
+          ship.alive = false;
+          ship.thrusting = false;
+          respawnDelay = .85;
+          breakRock(rockIndex);
+          break;
+        }
+      }
+
+      particles.forEach(particle => {
+        particle.x += particle.vx * delta;
+        particle.y += particle.vy * delta;
+        particle.life -= delta;
+      });
+      particles = particles.filter(particle => particle.life > 0);
+      while (rocks.length < 5) spawnRock();
+      if (rocks.length > 13) rocks.splice(0, rocks.length - 13);
+    }
+
+    function drawRock(rock) {
+      context.save();
+      context.translate(rock.x, rock.y);
+      context.rotate(rock.angle);
+      context.beginPath();
+      rock.vertices.forEach((vertex, index) => {
+        const x = Math.cos(vertex.angle) * vertex.radius;
+        const y = Math.sin(vertex.angle) * vertex.radius;
+        if (index === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      });
+      context.closePath();
+      context.stroke();
+      context.restore();
+    }
+
+    function drawShip() {
+      if (!ship.alive) return;
+      context.save();
+      context.translate(ship.x, ship.y);
+      context.rotate(ship.angle);
+      context.beginPath();
+      context.moveTo(8, 0);
+      context.lineTo(-6, -5);
+      context.lineTo(-3, 0);
+      context.lineTo(-6, 5);
+      context.closePath();
+      context.stroke();
+      if (ship.thrusting) {
+        context.beginPath();
+        context.moveTo(-4, -2.5);
+        context.lineTo(-random(8, 13), 0);
+        context.lineTo(-4, 2.5);
+        context.stroke();
+      }
+      context.restore();
+    }
+
+    function draw() {
+      context.clearRect(0, 0, width, height);
+      context.save();
+      context.globalCompositeOperation = "lighter";
+      stars.forEach(star => {
+        context.globalAlpha = star.alpha;
+        context.fillStyle = "#75e7c2";
+        context.fillRect(star.x, star.y, star.size, star.size);
+      });
+      context.globalAlpha = .78;
+      context.strokeStyle = "#74efc5";
+      context.fillStyle = "#8bffd6";
+      context.lineWidth = .85;
+      context.lineJoin = "round";
+      context.shadowColor = "#32d9a4";
+      context.shadowBlur = 2.2;
+      rocks.forEach(drawRock);
+      drawShip();
+      bullets.forEach(bullet => {
+        context.beginPath();
+        context.arc(bullet.x, bullet.y, 1.05, 0, Math.PI * 2);
+        context.fill();
+      });
+      particles.forEach(particle => {
+        context.globalAlpha = clamp(particle.life * 2.4, 0, .9);
+        const speed = Math.hypot(particle.vx, particle.vy) || 1;
+        context.beginPath();
+        context.moveTo(particle.x, particle.y);
+        context.lineTo(
+          particle.x - (particle.vx / speed) * particle.length,
+          particle.y - (particle.vy / speed) * particle.length
+        );
+        context.stroke();
+      });
+      context.restore();
+    }
+
+    function frame(now) {
+      if (!canvas.isConnected) return;
+      resize();
+      const delta = clamp((now - lastFrame) / 1000, 0, .04);
+      lastFrame = now;
+      if (!reduceMotion && !document.hidden && readout.classList.contains("is-playing")) update(delta);
+      draw();
+      window.requestAnimationFrame(frame);
+    }
+
+    if (typeof ResizeObserver !== "undefined") new ResizeObserver(resize).observe(canvas);
+    resize();
+    window.requestAnimationFrame(frame);
+  }
+
   function ensureReadout() {
     const deck = document.querySelector(SELECTOR);
     if (!deck) return null;
@@ -35,23 +380,7 @@
       readout.setAttribute("aria-label", "Cassette now playing display");
       readout.innerHTML = `
         <div class="readout-glass" aria-live="polite" aria-atomic="true">
-          <svg class="readout-asteroid-field" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true">
-            <g class="readout-stars">
-              <circle cx="24" cy="19" r=".8"/><circle cx="81" cy="68" r=".65"/>
-              <circle cx="147" cy="13" r=".55"/><circle cx="205" cy="52" r=".75"/>
-              <circle cx="278" cy="25" r=".55"/><circle cx="336" cy="74" r=".7"/>
-              <circle cx="411" cy="14" r=".7"/><circle cx="468" cy="58" r=".55"/>
-              <circle cx="548" cy="29" r=".8"/><circle cx="585" cy="76" r=".6"/>
-            </g>
-            <path class="readout-rock readout-rock-one" d="M8 18l7-9 12 2 6 9-5 11-13 3-9-7z"/>
-            <path class="readout-rock readout-rock-two" d="M4 10l9-7 10 5 2 11-8 8-12-4-3-7z"/>
-            <path class="readout-rock readout-rock-three" d="M5 15l4-10 13-2 8 8-2 12-11 5-12-6z"/>
-            <g class="readout-ship">
-              <path d="M0 10L27 1 18 11 27 20 0 10z"/>
-              <path class="readout-thrust" d="M3 8l-9-4m9 8l-9 4"/>
-            </g>
-            <path class="readout-shot" d="M0 0h24"/>
-          </svg>
+          <canvas class="readout-asteroid-field" aria-hidden="true"></canvas>
           <div class="readout-title-window"><strong class="readout-title"></strong></div>
           <div class="readout-meta">
             <span class="readout-mixtape"></span>
@@ -61,6 +390,7 @@
         </div>`;
     }
     if (readout.parentElement !== deck) deck.appendChild(readout);
+    installAsteroidGame(readout);
     return readout;
   }
 
