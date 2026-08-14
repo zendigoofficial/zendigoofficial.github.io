@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080708">
+  <meta name="description" content="Automated Asteroids: watch PiXeL learn to survive an original vector asteroid field in Zendigo AI Labs.">
+  <title>Automated Asteroids // Zendigo AI Labs</title>
+  <link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="./style.css?v=ai-lab-1">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Zendigo homepage">
+      <strong>ZENDIGO</strong><span>Codenamed PiXeL</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="/#broadcast-deck">Broadcast</a>
+      <a href="/#runs">Records</a>
+      <a href="/#work">Work</a>
+      <a href="/#tools">Tools</a>
+      <a href="/#contact">Contact</a>
+      <a class="active" href="/ai-lab/" aria-current="page">AI Labs</a>
+    </nav>
+    <a class="return-home" href="/">Return Home</a>
+  </header>
+
+  <main>
+    <section class="lab-intro">
+      <p class="eyebrow"><span>EXPERIMENT 01</span> BROWSER LEARNING SYSTEM</p>
+      <h1>Automated<br>Asteroids.</h1>
+      <p class="summary">A small neural agent learning to fly, aim and survive inside an original vector asteroid field. Every generation keeps the strongest pilots and mutates the next group.</p>
+    </section>
+
+    <section class="lab-rig" aria-labelledby="lab-heading">
+      <div class="monitor-shell">
+        <div class="monitor-topline">
+          <span id="lab-heading">LIVE TRAINING FEED</span>
+          <b><i></i><span id="signalText">SIGNAL ACTIVE</span></b>
+        </div>
+        <div class="screen-frame">
+          <canvas id="arena" width="960" height="600" aria-label="PiXeL AI asteroid training arena"></canvas>
+          <div class="scanlines" aria-hidden="true"></div>
+          <div class="screen-osd" aria-hidden="true">
+            <span>PiXeL // PILOT <b id="pilotNumber">01</b></span>
+            <span id="screenScore">SCORE 00000</span>
+          </div>
+        </div>
+        <div class="monitor-controls">
+          <button id="powerButton" class="primary" type="button"><span>Ⅱ</span><b>PAUSE</b></button>
+          <div class="speed-bank" aria-label="Training speed">
+            <button type="button" data-speed="1">1×</button>
+            <button class="active" type="button" data-speed="4">4×</button>
+            <button type="button" data-speed="12">12×</button>
+          </div>
+          <button id="resetButton" type="button"><span>↺</span><b>RESET BRAIN</b></button>
+        </div>
+      </div>
+
+      <aside class="telemetry" aria-label="AI training telemetry">
+        <div class="telemetry-heading"><span>LEARNING STATUS</span><b id="modeValue">TRAINING</b></div>
+        <dl>
+          <div><dt>Generation</dt><dd id="generationValue">001</dd></div>
+          <div><dt>Pilot</dt><dd id="pilotValue">01 / 24</dd></div>
+          <div><dt>Current score</dt><dd id="scoreValue">00000</dd></div>
+          <div><dt>Best score</dt><dd id="bestScoreValue">00000</dd></div>
+          <div><dt>Survival</dt><dd id="survivalValue">00.0 SEC</dd></div>
+          <div><dt>Asteroids hit</dt><dd id="hitsValue">000</dd></div>
+        </dl>
+        <div class="fitness-panel">
+          <span>GENERATION FITNESS</span>
+          <div class="fitness-track"><i id="fitnessBar"></i></div>
+          <small id="fitnessText">Establishing baseline…</small>
+        </div>
+        <div class="decision-panel">
+          <span>CURRENT DECISION</span>
+          <strong id="decisionValue">OBSERVING</strong>
+          <small id="actionDetail">Scanning nearest threat</small>
+        </div>
+      </aside>
+    </section>
+
+    <section class="explanation">
+      <article><span>01</span><h2>It sees</h2><p>Distance and angle to nearby hazards, its direction, momentum, remaining lives and weapon timing.</p></article>
+      <article><span>02</span><h2>It decides</h2><p>A compact neural network chooses when to turn, thrust or fire. Nothing is directly scripted for each asteroid.</p></article>
+      <article><span>03</span><h2>It improves</h2><p>The best pilots survive each generation. Their networks are copied, mutated and tested again on a new field.</p></article>
+    </section>
+
+    <aside class="rom-note">
+      <strong>PRIVATE TRAINING PATH</strong>
+      <p>The public lab uses original code and artwork. Zendigo’s legally owned Atari ROM remains local and will be used separately to train and test the authentic-game agent.</p>
+    </aside>
+  </main>
+
+  <script src="./ai.js?v=ai-lab-1" defer></script>
+</body>
+</html>
