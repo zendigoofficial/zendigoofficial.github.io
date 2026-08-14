@@ -5,7 +5,7 @@
   const W = canvas.width, H = canvas.height, TAU = Math.PI * 2;
   const POPULATION = 24, ELITES = 4, INPUTS = 10, HIDDEN = 14, OUTPUTS = 4;
   const SIM_HZ = 30, TICK_MS = 1000 / SIM_HZ;
-  const MAX_STEPS = 1800, STORAGE_KEY = "zendigo-pixel-asteroids-brain-v2";
+  const MAX_STEPS = 1800, STORAGE_KEY = "zendigo-pixel-asteroids-brain-v3", LEGACY_STORAGE_KEY = "zendigo-pixel-asteroids-brain-v2";
   const ui = Object.fromEntries(["generationValue","pilotValue","scoreValue","generationScoreValue","bestScoreValue","survivalValue","hitsValue","fitnessBar","fitnessText","decisionValue","actionDetail","modeValue","signalText","pilotNumber","screenScore"].map(id => [id, document.getElementById(id)]));
 
   class RNG {
@@ -72,7 +72,8 @@
 
   let generation=1,paused=false,holdPilot=false,generationHighScore=0,bestScore=0,bestFitness=-Infinity,bestBrain=null,generationHistory=[],population=[],worlds=[],last=performance.now(),accumulator=0,displayPilotIndex=0;
   const rng=new RNG(82);
-  try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(saved){bestScore=saved.bestScore||0;bestFitness=Number.isFinite(saved.bestFitness)?saved.bestFitness:-Infinity;generation=saved.generation||1;generationHistory=Array.isArray(saved.history)?saved.history:[];if(saved.brain)bestBrain=new Brain(rng,saved.brain);}}catch{}
+  let archiveReset=false;
+  try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(saved){bestScore=saved.bestScore||0;bestFitness=Number.isFinite(saved.bestFitness)?saved.bestFitness:-Infinity;generation=saved.generation||1;generationHistory=Array.isArray(saved.history)?saved.history:[];if(saved.brain)bestBrain=new Brain(rng,saved.brain);}else{const legacy=JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY)||"null");if(legacy?.brain)bestBrain=new Brain(rng,legacy.brain);archiveReset=true;}}catch{}
   function saveProgress(){localStorage.setItem(STORAGE_KEY,JSON.stringify({generation,bestScore,bestFitness:Number.isFinite(bestFitness)?bestFitness:0,brain:bestBrain?.toJSON()||null,history:generationHistory}));}
   function syncScores(){const currentHigh=worlds.reduce((high,w)=>Math.max(high,w.score),0);generationHighScore=Math.max(generationHighScore,currentHigh);if(generationHighScore>bestScore){bestScore=generationHighScore;saveProgress();}}
   function seedPopulation(){population=[];if(bestBrain)population.push(new Brain(rng,bestBrain.toJSON()));while(population.length<POPULATION)population.push(bestBrain?bestBrain.child(rng,.18,.4):new Brain(rng));startGeneration();}
@@ -112,5 +113,5 @@
   document.getElementById("pilotPrev").addEventListener("click",()=>selectPilot(-1));
   document.getElementById("pilotNext").addEventListener("click",()=>selectPilot(1));
   document.getElementById("pilotHold").addEventListener("click",()=>{holdPilot=!holdPilot;updatePilotControls();});
-  seedPopulation();requestAnimationFrame(loop);
+  if(archiveReset)saveProgress();seedPopulation();requestAnimationFrame(loop);
 })();
