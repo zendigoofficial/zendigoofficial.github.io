@@ -47,20 +47,10 @@
           </div>
         </div>
         <div class="monitor-controls">
+          <button id="pilotPrev" type="button" aria-label="Previous pilot"><span>◀</span><b>PREV</b></button>
           <button id="powerButton" class="primary" type="button"><span>Ⅱ</span><b>PAUSE</b></button>
-          <div class="speed-bank" aria-label="Training speed">
-            <button class="active" type="button" data-speed="1">1×</button>
-            <button type="button" data-speed="4">4×</button>
-            <button type="button" data-speed="12">12×</button>
-          </div>
-          <button id="resetButton" type="button"><span>↺</span><b>RESET BRAIN</b></button>
-        </div>
-        <div class="pilot-controls" aria-label="Displayed pilot controls">
-          <span>DISPLAY PILOT</span>
-          <button id="pilotPrev" type="button" aria-label="Previous pilot">◀ <b>PREV</b></button>
-          <strong id="pilotDisplayMode">AUTO // 01</strong>
-          <button id="pilotHold" type="button" aria-pressed="false"><i></i><b>HOLD</b></button>
-          <button id="pilotNext" type="button" aria-label="Next pilot"><b>NEXT</b> ▶</button>
+          <button id="pilotNext" type="button" aria-label="Next pilot"><span>▶</span><b>NEXT</b></button>
+          <button id="pilotHold" type="button" aria-pressed="false"><span>●</span><b>HOLD</b></button>
         </div>
       </div>
 
@@ -69,8 +59,9 @@
         <dl>
           <div><dt>Generation</dt><dd id="generationValue">001</dd></div>
           <div><dt>Pilot</dt><dd id="pilotValue">01 / 24</dd></div>
-          <div><dt>Current score</dt><dd id="scoreValue">00000</dd></div>
-          <div><dt>Best score</dt><dd id="bestScoreValue">00000</dd></div>
+          <div><dt>Pilot score</dt><dd id="scoreValue">00000</dd></div>
+          <div><dt>Generation high</dt><dd id="generationScoreValue">00000</dd></div>
+          <div><dt>All-time high</dt><dd id="bestScoreValue">00000</dd></div>
           <div><dt>Survival</dt><dd id="survivalValue">00.0 SEC</dd></div>
           <div><dt>Asteroids hit</dt><dd id="hitsValue">000</dd></div>
         </dl>
@@ -95,6 +86,6 @@
 
   </main>
 
-  <script src="./ai.js?v=ai-lab-4" defer></script>
+  <script src="./ai.js?v=ai-lab-6" defer></script>
 </body>
 </html>
