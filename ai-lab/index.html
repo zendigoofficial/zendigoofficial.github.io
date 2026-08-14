@@ -7,7 +7,7 @@
   <meta name="description" content="Automated Asteroids: watch PiXeL learn to survive an original vector asteroid field in Zendigo AI Labs.">
   <title>Automated Asteroids // Zendigo AI Labs</title>
   <link rel="icon" href="/favicon.svg">
-  <link rel="stylesheet" href="./style.css?v=ai-lab-3">
+  <link rel="stylesheet" href="./style.css?v=ai-lab-4">
 </head>
 <body>
   <header class="site-header">
@@ -27,7 +27,6 @@
 
   <main>
     <section class="lab-intro">
-      <p class="eyebrow"><span>EXPERIMENT 01</span> BROWSER LEARNING SYSTEM</p>
       <h1>Automated<br>Asteroids.</h1>
       <p class="summary">We're teaching PiXeL to play Asteroids, one life at a time. Every generation gets one shot to put up a score. The best pilots shape the next group, then it all starts again.</p>
     </section>
@@ -78,14 +77,16 @@
       </aside>
     </section>
 
-    <section class="explanation">
-      <article><span>01</span><h2>It sees</h2><p>Distance and angle to nearby hazards, its direction, momentum, threat count and weapon timing.</p></article>
-      <article><span>02</span><h2>It decides</h2><p>A compact neural network chooses when to turn, thrust or fire. Nothing is directly scripted for each asteroid.</p></article>
-      <article><span>03</span><h2>It improves</h2><p>The best pilots survive each generation. Their networks are copied, mutated and tested again on a new field.</p></article>
+    <section class="generation-record" aria-labelledby="generation-record-title">
+      <header>
+        <div><span>TRAINING ARCHIVE</span><h2 id="generation-record-title">Generation Record</h2></div>
+        <strong id="generationLogStatus">GEN 001 RUNNING</strong>
+      </header>
+      <div id="generationLog" class="generation-log" aria-live="polite"></div>
     </section>
 
   </main>
 
-  <script src="./ai.js?v=ai-lab-6" defer></script>
+  <script src="./ai.js?v=ai-lab-7" defer></script>
 </body>
 </html>
