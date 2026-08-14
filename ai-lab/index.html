@@ -7,7 +7,7 @@
   <meta name="description" content="Automated Asteroids: watch PiXeL learn to survive an original vector asteroid field in Zendigo AI Labs.">
   <title>Automated Asteroids // Zendigo AI Labs</title>
   <link rel="icon" href="/favicon.svg">
-  <link rel="stylesheet" href="./style.css?v=ai-lab-1">
+  <link rel="stylesheet" href="./style.css?v=ai-lab-2">
 </head>
 <body>
   <header class="site-header">
@@ -55,6 +55,13 @@
           </div>
           <button id="resetButton" type="button"><span>↺</span><b>RESET BRAIN</b></button>
         </div>
+        <div class="pilot-controls" aria-label="Displayed pilot controls">
+          <span>DISPLAY PILOT</span>
+          <button id="pilotPrev" type="button" aria-label="Previous pilot">◀ <b>PREV</b></button>
+          <strong id="pilotDisplayMode">AUTO // 01</strong>
+          <button id="pilotHold" type="button" aria-pressed="false"><i></i><b>HOLD</b></button>
+          <button id="pilotNext" type="button" aria-label="Next pilot"><b>NEXT</b> ▶</button>
+        </div>
       </div>
 
       <aside class="telemetry" aria-label="AI training telemetry">
@@ -81,13 +88,13 @@
     </section>
 
     <section class="explanation">
-      <article><span>01</span><h2>It sees</h2><p>Distance and angle to nearby hazards, its direction, momentum, remaining lives and weapon timing.</p></article>
+      <article><span>01</span><h2>It sees</h2><p>Distance and angle to nearby hazards, its direction, momentum, threat count and weapon timing.</p></article>
       <article><span>02</span><h2>It decides</h2><p>A compact neural network chooses when to turn, thrust or fire. Nothing is directly scripted for each asteroid.</p></article>
       <article><span>03</span><h2>It improves</h2><p>The best pilots survive each generation. Their networks are copied, mutated and tested again on a new field.</p></article>
     </section>
 
   </main>
 
-  <script src="./ai.js?v=ai-lab-3" defer></script>
+  <script src="./ai.js?v=ai-lab-4" defer></script>
 </body>
 </html>
