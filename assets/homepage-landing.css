@@ -1,2 +1,298 @@
 .records-section,.work-section,.tools-section,.contact-section{display:none!important}
 .wordmark-model{display:none!important}
+
+/* Landing page entertainment cabinet. The working React players remain intact;
+   these rules only arrange and skin their existing controls. */
+.hero.shell{
+  width:min(1500px,calc(100% - 48px));
+  max-width:none;
+  grid-template-columns:minmax(330px,.62fr) minmax(720px,1.38fr);
+  align-items:start;
+  gap:clamp(38px,4vw,70px);
+  padding-block:64px 84px;
+}
+.hero-copy{padding-top:32px}
+.hero-media-stack{width:100%;max-width:none;min-width:0}
+
+.cassette-component.entertainment-cabinet{
+  --cabinet-side:76px;
+  position:relative;
+  isolation:isolate;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 238px;
+  grid-template-areas:
+    "tuner tuner"
+    "deck tapes"
+    "games tapes" !important;
+  align-items:start;
+  gap:15px 17px;
+  padding:18px calc(var(--cabinet-side) + 16px) 28px;
+  background:
+    linear-gradient(90deg,#ffffff09,transparent 7% 93%,#0009),
+    repeating-linear-gradient(90deg,#ffffff04 0 1px,transparent 1px 7px),
+    linear-gradient(#251812,#100b09 4% 96%,#050303);
+  border:1px solid #6d513d;
+  border-radius:3px 3px 8px 8px;
+  box-shadow:
+    0 2px #c0a17d,
+    0 24px 48px #000b,
+    inset 0 0 0 5px #080504,
+    inset 0 0 0 6px #8b6b50,
+    inset 0 16px 22px #0008;
+}
+.cassette-component.entertainment-cabinet::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  right:10px;
+  bottom:9px;
+  left:10px;
+  height:9px;
+  background:linear-gradient(#7a5b43,#140d0a 42%,#050303);
+  border-top:1px solid #b28e69;
+  box-shadow:0 5px 9px #000b;
+}
+.cassette-component.entertainment-cabinet::after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  top:8px;
+  right:calc(var(--cabinet-side) + 9px);
+  left:calc(var(--cabinet-side) + 9px);
+  height:5px;
+  background:linear-gradient(90deg,#d52638 0 26%,#bd7b3d 26% 43%,#baa27e 43% 60%,#2a1d17 60%);
+  border-bottom:1px solid #050303;
+  box-shadow:0 1px #ffffff12;
+}
+.cassette-component.entertainment-cabinet>.media-tuner-slot,
+.cassette-component.entertainment-cabinet>.cassette-machine,
+.cassette-component.entertainment-cabinet>.cassette-case-stack,
+.cassette-component.entertainment-cabinet>.game-system-section{position:relative;z-index:3}
+.cassette-component.entertainment-cabinet>.media-tuner-slot{grid-area:tuner;overflow:visible}
+.cassette-component.entertainment-cabinet>.cassette-machine{grid-area:deck}
+.cassette-component.entertainment-cabinet>.cassette-case-stack{grid-area:tapes;width:238px;height:100%;min-height:100%;place-self:stretch}
+.cassette-component.entertainment-cabinet>.game-system-section{grid-area:games}
+.tv-construction-tape{display:none!important}
+
+/* Full-height VHS expansion towers. Empty bays are real elements so future
+   run/video cases can be added without rebuilding the cabinet. */
+.vhs-tower{
+  position:absolute;
+  z-index:2;
+  top:17px;
+  bottom:27px;
+  width:var(--cabinet-side);
+  display:grid;
+  grid-template-rows:repeat(14,minmax(0,1fr));
+  gap:7px;
+  padding:11px 10px;
+  background:
+    linear-gradient(90deg,#0009,#ffffff08 18%,transparent 50%,#000a),
+    #0b0706;
+  border:1px solid #624936;
+  box-shadow:inset 0 0 0 3px #050303,inset 0 0 18px #000,0 1px #af8b6642;
+}
+.vhs-tower-left{left:10px}
+.vhs-tower-right{right:10px}
+.vhs-storage-bay{
+  position:relative;
+  min-height:0;
+  border:1px solid #34261e;
+  border-radius:1px 3px 3px 1px;
+  background:
+    linear-gradient(106deg,#ffffff08,transparent 24% 76%,#000b),
+    linear-gradient(#18100c,#070504 46%,#17100d 51%,#050303);
+  box-shadow:inset 0 5px 8px #000d,0 3px #030202,0 5px 6px #0009;
+}
+.vhs-storage-bay::after{
+  content:"";
+  position:absolute;
+  right:7px;
+  bottom:-5px;
+  left:7px;
+  height:4px;
+  background:linear-gradient(#795b43,#160f0b 52%,#040303);
+  border-top:1px solid #9a7759;
+}
+
+/* A late-80s/early-90s 4:3 CRT built into the same warm component cabinet. */
+.media-tuner-slot .mission-console{perspective:none}
+.media-tuner-slot .mission-console::before{display:none}
+.media-tuner-slot .console-hardware{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 104px;
+  grid-template-areas:"label label" "screen controls";
+  gap:10px 12px;
+  padding:16px 17px 18px;
+  transform:none;
+  overflow:hidden;
+  background:
+    linear-gradient(112deg,#ffffff0c,transparent 24% 75%,#000a),
+    repeating-linear-gradient(90deg,#ffffff05 0 1px,transparent 1px 6px),
+    linear-gradient(#2b1d17,#110c0a 9% 92%,#050303);
+  border:1px solid #96775b;
+  border-radius:4px 4px 9px 9px;
+  box-shadow:0 2px #ccb08c,0 17px 34px #000b,inset 0 0 0 5px #070504,inset 0 1px #ead1af52;
+}
+.media-tuner-slot .console-hardware::before{
+  content:"";
+  position:absolute;
+  inset:7px;
+  pointer-events:none;
+  border:1px solid #4d392c;
+  box-shadow:inset 0 0 0 1px #b18a6630;
+}
+.media-tuner-slot .console-hardware::after{display:none}
+.media-tuner-slot .console-label{
+  grid-area:label;
+  min-height:18px;
+  justify-content:flex-start;
+  padding:0 8px;
+  color:#b9a58e;
+  background:transparent;
+  border-bottom:1px solid #5f4838;
+  font:700 7px/1 Consolas,"Courier New",monospace;
+  letter-spacing:.18em;
+}
+.media-tuner-slot .console-label::after{
+  content:"COLOR TELEVISION RECEIVER";
+  margin-left:auto;
+  color:#786657;
+  font-size:6px;
+  letter-spacing:.13em;
+}
+.media-tuner-slot .console-screen,
+.media-tuner-slot .tuner-screen,
+.media-tuner-slot .console-screen.powered-off-screen{
+  grid-area:screen;
+  aspect-ratio:4/3;
+  min-height:0;
+  width:100%;
+  padding:0;
+  overflow:hidden;
+  border:14px solid #080706;
+  border-radius:11% / 8%;
+  background:#020303;
+  box-shadow:
+    inset 0 0 48px #000,
+    inset 0 0 0 2px #273033,
+    0 0 0 1px #5a4638,
+    0 3px 9px #000d;
+}
+.media-tuner-slot .console-screen::after{
+  content:"";
+  position:absolute;
+  z-index:12;
+  inset:0;
+  pointer-events:none;
+  border-radius:8% / 6%;
+  background:linear-gradient(112deg,#ffffff0b,transparent 23% 72%,#0005),radial-gradient(ellipse at center,transparent 58%,#0008 100%);
+  box-shadow:inset 0 0 22px #000a;
+}
+.media-tuner-slot .console-controls{
+  grid-area:controls;
+  position:relative;
+  min-width:0;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:9px;
+  margin:0;
+  padding:22px 9px 56px;
+  color:#c6b49f;
+  background:
+    repeating-linear-gradient(0deg,#ffffff08 0 1px,transparent 1px 5px),
+    linear-gradient(#15100d,#080605);
+  border:1px solid #4d392d;
+  box-shadow:inset 0 0 13px #000d,0 1px #9d79573b;
+}
+.media-tuner-slot .console-controls::before{
+  content:"TUNING";
+  position:absolute;
+  top:9px;
+  right:0;
+  left:0;
+  color:#817061;
+  text-align:center;
+  font:700 6px/1 Consolas,"Courier New",monospace;
+  letter-spacing:.18em;
+}
+.media-tuner-slot .console-controls::after{
+  content:"";
+  position:absolute;
+  right:12px;
+  bottom:13px;
+  left:12px;
+  height:30px;
+  background:repeating-linear-gradient(0deg,#2f251f 0 2px,#070504 2px 5px);
+  border:1px solid #33261f;
+  box-shadow:inset 0 0 6px #000;
+}
+.media-tuner-slot .console-controls .toggle.console-power{
+  flex:0 0 auto;
+  min-width:0;
+  min-height:35px;
+  width:100%;
+  margin:0;
+  padding:6px;
+  color:#bca994;
+  background:linear-gradient(#332923,#100c0a);
+  border-color:#594335;
+  box-shadow:inset 0 1px #ffffff1f,0 3px #050303;
+}
+.media-tuner-slot .console-controls .toggle.console-power i{width:12px;height:16px}
+.media-tuner-slot .console-channel-controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  min-width:0;
+}
+.media-tuner-slot .console-channel-controls button{
+  min-width:0;
+  min-height:32px;
+  padding:5px 3px;
+  color:#c2b09d;
+  background:linear-gradient(#332923,#100c0a);
+  border-color:#594335;
+  box-shadow:inset 0 1px #ffffff1f,0 3px #050303;
+  font-size:7px;
+}
+.media-tuner-slot .console-channel-controls .hold-channel{
+  grid-column:1/-1;
+  min-width:0;
+  margin:0;
+  border-color:#6d3434;
+}
+.media-tuner-slot .screw{background:radial-gradient(circle at 35% 30%,#b9a996 0 10%,#574b40 48%,#17120f 100%);border-color:#3d3027}
+.media-tuner-slot .tuner-program .broadcast-player-frame{background:#000}
+.media-tuner-slot .archive-player iframe{object-fit:contain}
+
+@media(max-width:1180px){
+  .hero.shell{grid-template-columns:1fr;width:min(940px,calc(100% - 40px));gap:48px}
+  .hero-copy{max-width:720px;padding-top:0}
+  .hero-media-stack{max-width:940px}
+}
+@media(max-width:760px){
+  .hero.shell{width:min(100% - 24px,620px);padding-block:44px 62px}
+  .cassette-component.entertainment-cabinet{
+    --cabinet-side:0px;
+    grid-template-columns:1fr;
+    grid-template-areas:"tuner" "deck" "tapes" "games" !important;
+    padding:14px 13px 24px;
+  }
+  .vhs-tower{display:none}
+  .cassette-component.entertainment-cabinet::after{right:13px;left:13px}
+  .cassette-component.entertainment-cabinet>.cassette-case-stack{width:min(100%,360px);place-self:start center}
+  .media-tuner-slot .console-hardware{grid-template-columns:minmax(0,1fr) 82px;padding:13px;gap:8px}
+  .media-tuner-slot .console-label::after{display:none}
+  .media-tuner-slot .console-screen,.media-tuner-slot .tuner-screen,.media-tuner-slot .console-screen.powered-off-screen{border-width:9px}
+  .media-tuner-slot .console-controls{padding-inline:6px}
+}
+@media(max-width:430px){
+  .media-tuner-slot .console-hardware{grid-template-columns:1fr;grid-template-areas:"label" "screen" "controls"}
+  .media-tuner-slot .console-controls{display:grid;grid-template-columns:78px 1fr;padding:22px 8px 10px}
+  .media-tuner-slot .console-controls::after{display:none}
+  .media-tuner-slot .console-channel-controls{grid-template-columns:1fr 1fr 1.4fr}
+  .media-tuner-slot .console-channel-controls .hold-channel{grid-column:auto}
+}
