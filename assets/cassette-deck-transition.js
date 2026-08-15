@@ -545,19 +545,14 @@
       system.className = "game-system-section";
       system.setAttribute("aria-label", "Game console and game case cabinet");
       system.innerHTML = `
-        <div class="game-system-console" aria-label="Decorative late 1980s style game console">
+        <div class="game-system-console" aria-label="Decorative late 1980s style front-loading game console">
           <span class="game-system-screw game-system-screw-one" aria-hidden="true"></span>
           <span class="game-system-screw game-system-screw-two" aria-hidden="true"></span>
           <div class="game-console-switches" aria-hidden="true">
             <span><i></i><small>POWER</small></span>
-            <span><i></i><small>RESET</small></span>
           </div>
-          <div class="game-console-bay" aria-hidden="true"><span></span><i></i></div>
+          <div class="game-console-bay" aria-hidden="true"><span class="game-cartridge"></span><i></i></div>
           <div class="game-system-status" aria-live="polite"><i aria-hidden="true"></i><strong>GAME READY</strong></div>
-          <div class="game-controller-ports" aria-hidden="true">
-            <span><i></i><small>CONTROLLER 1</small></span>
-            <span><i></i><small>CONTROLLER 2</small></span>
-          </div>
         </div>
         <div class="game-storage-cabinet" aria-label="Game case storage">
           <span class="game-cabinet-rail game-cabinet-rail-left" aria-hidden="true"></span>
@@ -584,21 +579,26 @@
     return system;
   }
 
-  function ensureTvConstructionTape() {
-    const tunerSlot = document.querySelector(".media-tuner-slot");
-    if (!tunerSlot) return null;
-    let tape = tunerSlot.querySelector(".tv-construction-tape");
-    if (!tape) {
-      tape = document.createElement("div");
-      tape.className = "tv-construction-tape";
-      tape.setAttribute("aria-hidden", "true");
-      tape.innerHTML = `
-        <span>UNDER CONSTRUCTION</span>
-        <span>UNDER CONSTRUCTION</span>
-        <span>UNDER CONSTRUCTION</span>`;
-      tunerSlot.appendChild(tape);
-    }
-    return tape;
+  function ensureEntertainmentCabinet() {
+    const component = document.querySelector(".cassette-component");
+    if (!component) return null;
+
+    component.querySelectorAll(".tv-construction-tape").forEach(tape => tape.remove());
+    component.classList.add("entertainment-cabinet");
+
+    ["left", "right"].forEach(side => {
+      let tower = component.querySelector(`.vhs-tower-${side}`);
+      if (tower) return;
+      tower = document.createElement("div");
+      tower.className = `vhs-tower vhs-tower-${side}`;
+      tower.setAttribute("aria-label", `${side === "left" ? "Left" : "Right"} video archive tower — future expansion`);
+      tower.innerHTML = Array.from({ length: 14 }, (_, index) =>
+        `<span class="vhs-storage-bay is-empty" data-vhs-bay="${String(index + 1).padStart(2, "0")}" aria-hidden="true"></span>`
+      ).join("");
+      component.appendChild(tower);
+    });
+
+    return component;
   }
 
   function connect() {
@@ -610,7 +610,7 @@
     labelControls(machine);
     ensureReadout();
     ensureGameSystem();
-    ensureTvConstructionTape();
+    ensureEntertainmentCabinet();
     paintReadout();
     machine.dataset.photoDeck = "ready";
   }
