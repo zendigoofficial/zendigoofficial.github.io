@@ -7,7 +7,7 @@
   <meta name="description" content="Watch Zendigo live on Twitch, YouTube, Kick or X, or tune into the latest video archive.">
   <title>Broadcast // Zendigo</title>
   <link rel="icon" href="/favicon.svg">
-  <link rel="stylesheet" href="/assets/subpage-shell.css?v=subpages-2">
+  <link rel="stylesheet" href="/assets/subpage-shell.css?v=subpages-3">
 </head>
 <body class="broadcast-page">
   <div class="top-rule" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -92,10 +92,29 @@
       </aside>
     </section>
 
-    <section class="broadcast-notes">
-      <article><span>01</span><div><strong>Live takes priority.</strong><p>Any active Twitch, YouTube, Kick or X signal moves ahead of the archive.</p></div></article>
-      <article><span>02</span><div><strong>The archive stays useful.</strong><p>Recent uploads remain available here between streams instead of leaving a dead screen.</p></div></article>
-      <article><span>03</span><div><strong>One player. One source.</strong><p>Changing channels stops the previous feed so two broadcasts never compete for audio.</p></div></article>
+    <section class="stream-archives" aria-labelledby="stream-archives-title">
+      <header>
+        <div><span>STREAM ARCHIVE</span><h2 id="stream-archives-title">Catch what you missed.</h2></div>
+        <p>The stream may be over, but I’m keeping the full runs here instead of letting them disappear.</p>
+      </header>
+      <div class="archive-playlist-grid">
+        <a class="archive-playlist" href="https://www.youtube.com/playlist?list=PLMJ6qQESMJ2M" target="_blank" rel="noreferrer">
+          <span class="archive-thumbnail"><img src="https://i.ytimg.com/vi/zPtjab3dlaQ/hqdefault.jpg" alt="Twitch Gaming VODs playlist thumbnail"><i>TWITCH</i></span>
+          <span class="archive-copy"><small>02 VIDEOS</small><strong>Twitch Gaming VODs</strong><p>Full Twitch streams, saved here after the live part is over.</p><b>OPEN PLAYLIST ↗</b></span>
+        </a>
+        <a class="archive-playlist" href="https://www.youtube.com/playlist?list=PLPTaVyP2dBYY" target="_blank" rel="noreferrer">
+          <span class="archive-thumbnail"><img src="https://i.ytimg.com/vi/ieUXaVLD92w/hqdefault.jpg" alt="Kick Gaming VODs playlist thumbnail"><i>KICK</i></span>
+          <span class="archive-copy"><small>01 VIDEO</small><strong>Kick Gaming VODs</strong><p>Kick streams I wanted to keep around after signing off.</p><b>OPEN PLAYLIST ↗</b></span>
+        </a>
+        <a class="archive-playlist" href="https://www.youtube.com/playlist?list=PLW_wSdWC1-2M" target="_blank" rel="noreferrer">
+          <span class="archive-thumbnail"><img src="https://i.ytimg.com/vi/Yc_0pN52Nmw/hqdefault.jpg" alt="X Gaming VODs playlist thumbnail"><i>X</i></span>
+          <span class="archive-copy"><small>02 VIDEOS</small><strong>X Gaming VODs</strong><p>The X streams and longer attempts I’ve moved over to YouTube.</p><b>OPEN PLAYLIST ↗</b></span>
+        </a>
+        <article class="archive-playlist is-pending">
+          <span class="archive-thumbnail archive-placeholder"><i>SPEEDRUN</i><strong>00:00.000</strong></span>
+          <span class="archive-copy"><small>COMING NEXT</small><strong>Speedrun Videos</strong><p>Full attempts and submission videos will be linked here once the playlist is ready.</p><b>PLAYLIST IN PROGRESS</b></span>
+        </article>
+      </div>
     </section>
   </main>
 
