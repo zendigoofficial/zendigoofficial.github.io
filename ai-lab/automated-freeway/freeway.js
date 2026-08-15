@@ -35,7 +35,7 @@
   }
   function laneCenter(lane){return ROAD_BOTTOM-(lane+.5)*((ROAD_BOTTOM-ROAD_TOP)/10);}
   function laneForY(y){return clamp(Math.floor((ROAD_BOTTOM-y)/((ROAD_BOTTOM-ROAD_TOP)/10)),0,9);}
-  function carPositions(lane,step,seed){const c=laneConfig(lane,seed),lead=wrap(c.phase+step*c.speed*c.direction,c.spacing),cars=[];for(let i=-1;i<c.count;i++){const x=lead+i*c.spacing;if(x>-c.width&&x<W)cars.push({x,y:laneCenter(lane),width:c.width,direction:c.direction,speed:c.speed});}return cars;}
+  function carPositions(lane,step,seed){const c=laneConfig(lane,seed),lead=wrap(c.phase+step*c.speed*c.direction,c.spacing),cars=[];for(let i=0;i<c.count;i++){const x=wrap(lead+i*c.spacing,W);cars.push({x,y:laneCenter(lane),width:c.width,direction:c.direction,speed:c.speed});}return cars;}
   function nearestCarInfo(lane,step,seed){let best=null,dist=Infinity;for(const car of carPositions(clamp(lane,0,9),step,seed)){const dx=(car.x+car.width/2)-CHICKEN_X;if(Math.abs(dx)<dist){dist=Math.abs(dx);best={dx,speed:car.speed*car.direction,width:car.width};}}return best||{dx:W,speed:0,width:70};}
 
   class World {
@@ -49,7 +49,10 @@
       if(this.completed)return;this.steps++;
       if(this.freeze>0){this.freeze--;this.recoverySteps++;this.decision="RECOVER";this.fitness+=.001;if(this.steps>=MATCH_STEPS)this.completed=true;return;}
       const out=this.brain.think(this.inputs());let action=0;if(out[1]>out[action])action=1;if(out[2]>out[action])action=2;
-      if(this.y>=ROAD_BOTTOM+8&&action!==1)action=1;
+      // Keep a new run moving toward traffic until the chicken has fully
+      // cleared the starting shoulder. Once it reaches the road, the network
+      // regains all three choices and must learn when to advance or retreat.
+      if(this.y>ROAD_BOTTOM&&action!==1)action=1;
       if(action===this.lastAction)this.actionStreak++;else this.actionStreak=1;this.lastAction=action;
       const oldY=this.y;
       if(action===0){this.waitSteps++;this.decision="WAIT";}
