@@ -1,5 +1,6 @@
 .records-section,.work-section,.tools-section,.contact-section{display:none!important}
 .wordmark-model{display:none!important}
+html,body{overflow-x:hidden}
 main#top .site-header{grid-template-columns:auto minmax(0,1fr)!important}
 main#top .site-header .main-nav{justify-self:end;gap:20px}
 
