@@ -2,7 +2,7 @@
 .wordmark-model{display:none!important}
 html,body{overflow-x:hidden}
 main#top .site-header{grid-template-columns:auto minmax(0,1fr)!important}
-main#top .site-header .main-nav{justify-self:end;gap:20px}
+main#top .site-header .main-nav{justify-self:center;gap:20px}
 
 /* Landing page entertainment cabinet. The working React players remain intact;
    these rules only arrange and skin their existing controls. */
