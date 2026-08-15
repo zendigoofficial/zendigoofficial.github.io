@@ -244,7 +244,36 @@ main#top .site-header .main-nav{justify-self:center;gap:20px}
   border-color:#594335;
   box-shadow:inset 0 1px #ffffff1f,0 3px #050303;
 }
-.media-tuner-slot .console-controls .toggle.console-power i{width:12px;height:16px}
+.media-tuner-slot .console-controls .toggle.console-power:not(.is-on),
+.media-tuner-slot .console-controls .toggle.console-power:not(.is-on):hover,
+.media-tuner-slot .console-controls .toggle.console-power:not(.is-on):focus-visible{
+  color:#bca994;
+  background:linear-gradient(#332923,#100c0a);
+  border-color:#594335;
+  box-shadow:inset 0 1px #ffffff1f,0 3px #050303;
+}
+.media-tuner-slot .console-controls .toggle.console-power.is-on,
+.media-tuner-slot .console-controls .toggle.console-power.is-on:hover,
+.media-tuner-slot .console-controls .toggle.console-power.is-on:focus-visible{
+  color:#fff8f2;
+  background:linear-gradient(#f22b3b,#b60817 72%,#7f0711);
+  border-color:#ff6570;
+  box-shadow:inset 0 1px #ff9ba3,0 0 13px #df18287a,0 3px #050303;
+}
+.media-tuner-slot .console-controls .toggle.console-power i{
+  width:12px;
+  height:16px;
+  background:#080605;
+  border-color:#674f3d;
+  border-bottom-color:#030202;
+  box-shadow:none;
+}
+.media-tuner-slot .console-controls .toggle.console-power.is-on i{
+  background:#ff4a58;
+  border-color:#ffc2c7;
+  border-bottom-color:#850710;
+  box-shadow:0 0 8px #ff2536;
+}
 .media-tuner-slot .console-channel-controls{
   display:grid;
   grid-template-columns:1fr 1fr;
