@@ -6,6 +6,8 @@
   let levels = [0, 0];
   let peaks = [0, 0];
   let holds = [0, 0];
+  let tvVolumeInput = null;
+  const knownTvFrames = new WeakSet();
   let gameModal = null;
   let gameReturnFocus = null;
   let gameBodyOverflow = "";
@@ -598,7 +600,66 @@
       component.appendChild(tower);
     });
 
+    ensureTvVolumeControl();
     return component;
+  }
+
+  function sendTvVolume(frame, volume) {
+    if (!frame?.contentWindow) return;
+    const muted = volume === 0;
+    const command = (func, args = []) => frame.contentWindow.postMessage(
+      JSON.stringify({ event: "command", func, args }),
+      "*"
+    );
+    command("setVolume", [volume]);
+    command(muted ? "mute" : "unMute");
+    frame.contentWindow.postMessage({ type: "zendigo-tv:volume", volume, muted }, "*");
+  }
+
+  function applyTvVolume(nextVolume, persist = true) {
+    const volume = Math.max(0, Math.min(100, Number(nextVolume) || 0));
+    if (tvVolumeInput && Number(tvVolumeInput.value) !== volume) tvVolumeInput.value = String(volume);
+    const panel = tvVolumeInput?.closest(".tv-volume-panel");
+    const output = panel?.querySelector("output");
+    if (output) output.textContent = volume === 0 ? "MUTE" : String(volume).padStart(2, "0");
+    panel?.style.setProperty("--tv-volume", `${volume}%`);
+    if (persist) window.localStorage.setItem("zendigo-tv-volume", String(volume));
+    window.dispatchEvent(new CustomEvent("zendigo:tv-volume", { detail: { volume, muted: volume === 0 } }));
+    document.querySelectorAll("#broadcast-tuner iframe").forEach(frame => sendTvVolume(frame, volume));
+  }
+
+  function syncTvFrames() {
+    const volume = Math.max(0, Math.min(100, Number(tvVolumeInput?.value ?? 72)));
+    document.querySelectorAll("#broadcast-tuner iframe").forEach(frame => {
+      if (knownTvFrames.has(frame)) return;
+      knownTvFrames.add(frame);
+      window.setTimeout(() => sendTvVolume(frame, volume), 350);
+      window.setTimeout(() => sendTvVolume(frame, volume), 1200);
+    });
+  }
+
+  function ensureTvVolumeControl() {
+    const controls = document.querySelector("#broadcast-tuner .console-controls");
+    if (!controls) return null;
+    let panel = controls.querySelector(".tv-volume-panel");
+    if (!panel) {
+      const stored = Number(window.localStorage.getItem("zendigo-tv-volume"));
+      const initial = Number.isFinite(stored) && stored >= 0 && stored <= 100 ? stored : 72;
+      panel = document.createElement("label");
+      panel.className = "tv-volume-panel";
+      panel.innerHTML = `
+        <span>VOLUME</span>
+        <input type="range" min="0" max="100" step="1" value="${initial}" aria-label="Television volume">
+        <output>${String(initial).padStart(2, "0")}</output>`;
+      controls.appendChild(panel);
+      panel.querySelector("input")?.addEventListener("input", event => applyTvVolume(event.currentTarget.value));
+      tvVolumeInput = panel.querySelector("input");
+      applyTvVolume(initial, false);
+    } else {
+      tvVolumeInput = panel.querySelector("input");
+    }
+    syncTvFrames();
+    return panel;
   }
 
   function connect() {
@@ -611,6 +672,7 @@
     ensureReadout();
     ensureGameSystem();
     ensureEntertainmentCabinet();
+    syncTvFrames();
     paintReadout();
     machine.dataset.photoDeck = "ready";
   }
@@ -667,7 +729,7 @@
     labelControls(machine);
     ensureReadout();
     ensureGameSystem();
-    ensureTvConstructionTape();
+    ensureEntertainmentCabinet();
     syncReadoutFromDeck();
     routeVideoToTv();
 
