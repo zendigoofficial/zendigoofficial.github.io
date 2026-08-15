@@ -1,0 +1,6 @@
+body{background:radial-gradient(circle at 70% 28%,#11284466,transparent 38%),linear-gradient(120deg,#070809 0 48%,#13090b 100%)}
+.freeway-frame{background:#102d51}.freeway-frame canvas{background:#3d6fa3;filter:saturate(.9) contrast(1.04)}
+.telemetry dl div{min-height:43px}
+.chicken-records{padding:8px 25px 18px;background:#08090a}.chicken-record-row{display:grid;grid-template-columns:60px 75px repeat(4,1fr);align-items:center;min-height:36px;border-bottom:1px solid #242123;color:#aaa3a0;font:700 9px/1 Consolas,monospace}.chicken-record-row:last-child{border-bottom:0}.chicken-record-row.header{min-height:27px;color:#6f6a68;text-transform:uppercase;letter-spacing:.1em;font-size:6px}.chicken-record-row .rank{color:var(--red)}.chicken-record-row .chicken-score{color:#7af0ca}
+@media(max-width:920px){.chicken-record-row{grid-template-columns:48px 58px repeat(4,1fr);font-size:8px}}
+@media(max-width:520px){.chicken-records{padding-inline:12px;overflow-x:auto}.chicken-record-row{min-width:570px}}

@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#080708">
-  <meta name="description" content="Automated Asteroids: watch PiXeL learn to survive an original vector asteroid field in Zendigo AI Labs.">
-  <title>Automated Asteroids // Zendigo AI Labs</title>
+  <meta name="description" content="Zendigo AI Labs: small learning systems taking on classic game problems one generation at a time.">
+  <title>AI Labs // Zendigo</title>
   <link rel="icon" href="/favicon.svg">
-  <link rel="stylesheet" href="./style.css?v=ai-lab-5">
+  <link rel="stylesheet" href="./style.css?v=ai-labs-hub-1">
   <link rel="stylesheet" href="/assets/site-header.css?v=subpages-4">
 </head>
 <body>
@@ -16,84 +16,57 @@
     <header class="site-header">
       <a class="wordmark" href="/" aria-label="Zendigo homepage"><span class="wordmark-main">ZENDIGO</span></a>
       <nav class="main-nav" aria-label="Primary navigation">
-        <a href="/">Home</a>
-        <a href="/broadcast/">Broadcast</a>
-        <a href="/records/">Records</a>
-        <a href="/work/">Work</a>
-        <a href="/tools/">Tools</a>
-        <a href="https://overtakegg.com/" target="_blank" rel="noreferrer">Overtake Sector</a>
-        <a href="/partners/">Partners</a>
-        <a class="active" href="/ai-lab/" aria-current="page">AI Labs</a>
-        <a href="/contact/">Contact</a>
+        <a href="/">Home</a><a href="/broadcast/">Broadcast</a><a href="/records/">Records</a><a href="/work/">Work</a><a href="/tools/">Tools</a><a href="https://overtakegg.com/" target="_blank" rel="noreferrer">Overtake Sector</a><a href="/partners/">Partners</a><a class="active" href="/ai-lab/" aria-current="page">AI Labs</a><a href="/contact/">Contact</a>
       </nav>
-      <div class="status-control is-live"><span class="status-lamp" aria-hidden="true"></span><span><small>AI Labs</small><strong>Training Active</strong></span></div>
+      <div class="status-control is-live"><span class="status-lamp" aria-hidden="true"></span><span><small>AI Labs</small><strong>Systems Learning</strong></span></div>
     </header>
   </div>
 
   <main>
-    <section class="lab-intro">
-      <h1>Automated<br>Asteroids.</h1>
-      <p class="summary">We're teaching PiXeL to play Asteroids, one life at a time. Every generation gets one shot to put up a score. The best pilots shape the next group, then it all starts again.</p>
+    <section class="labs-intro">
+      <span class="eyebrow">Independent Learning Systems</span>
+      <h1>AI<br>Labs.</h1>
+      <p>PiXeL is learning games the hard way: one attempt, one score and one generation at a time. Pick an experiment and watch the next run happen live.</p>
     </section>
 
-    <section class="lab-rig" aria-labelledby="lab-heading">
-      <div class="monitor-shell">
-        <div class="monitor-topline">
-          <span id="lab-heading">LIVE TRAINING FEED</span>
-          <b><i></i><span id="signalText">SIGNAL ACTIVE</span></b>
-        </div>
-        <div class="screen-frame">
-          <canvas id="arena" width="960" height="600" aria-label="PiXeL AI asteroid training arena"></canvas>
-          <div class="scanlines" aria-hidden="true"></div>
-          <div class="screen-osd" aria-hidden="true">
-            <span>PiXeL // PILOT <b id="pilotNumber">01</b></span>
-            <span id="screenScore">SCORE 00000</span>
-          </div>
-        </div>
-        <div class="monitor-controls">
-          <button id="pilotPrev" type="button" aria-label="Previous pilot"><span>◀</span><b>PREV</b></button>
-          <button id="pilotNext" type="button" aria-label="Next pilot"><span>▶</span><b>NEXT</b></button>
-          <button id="pilotHold" type="button" aria-pressed="false"><span>●</span><b>HOLD</b></button>
-        </div>
-      </div>
-
-      <aside class="telemetry" aria-label="AI training telemetry">
-        <div class="telemetry-heading"><span>LEARNING STATUS</span><b id="modeValue">TRAINING</b></div>
-        <dl>
-          <div><dt>Generation</dt><dd id="generationValue">001</dd></div>
-          <div><dt>Pilot</dt><dd id="pilotValue">01 / 24</dd></div>
-          <div><dt>Pilots remaining</dt><dd id="remainingValue">24</dd></div>
-          <div><dt>Pilot score</dt><dd id="scoreValue">00000</dd></div>
-          <div><dt>Generation high</dt><dd id="generationScoreValue">00000</dd></div>
-          <div><dt>Survival</dt><dd id="survivalValue">00.0 SEC</dd></div>
-          <div><dt>Asteroids hit</dt><dd id="hitsValue">000</dd></div>
-        </dl>
-        <div class="fitness-panel">
-          <span>GENERATION FITNESS</span>
-          <div class="fitness-track"><i id="fitnessBar"></i></div>
-          <small id="fitnessText">Establishing baseline…</small>
-        </div>
-        <div class="decision-panel">
-          <span>CURRENT DECISION</span>
-          <strong id="decisionValue">OBSERVING</strong>
-          <small id="actionDetail">Scanning nearest threat</small>
-        </div>
-      </aside>
-    </section>
-
-    <section class="generation-record" aria-labelledby="generation-record-title">
-      <header>
-        <div><span>TRAINING ARCHIVE</span><h2 id="generation-record-title">Generation Record</h2></div>
-        <strong id="generationLogStatus">GEN 001 RUNNING</strong>
+    <section class="experiment-bank" aria-labelledby="experiments-title">
+      <header class="bank-heading">
+        <div><span>ACTIVE PROGRAMS</span><h2 id="experiments-title">Choose an experiment</h2></div>
+        <strong>02 SYSTEMS</strong>
       </header>
-      <div id="generationLog" class="generation-log" aria-live="polite"></div>
-    </section>
+      <div class="experiment-grid">
+        <article class="experiment-card asteroids-card">
+          <div class="experiment-screen" aria-hidden="true">
+            <div class="vector-field"><i></i><i></i><i></i><b></b><span></span><span></span><span></span></div>
+            <em>TRAINING ACTIVE</em>
+          </div>
+          <div class="experiment-copy">
+            <span>EXPERIMENT 01</span>
+            <h3>Automated<br>Asteroids.</h3>
+            <p>One life per pilot. Score comes first, but they still have to learn how to aim, move and stay alive long enough to earn it.</p>
+            <dl><div><dt>Agents</dt><dd>24 Pilots</dd></div><div><dt>Focus</dt><dd>Score + Survival</dd></div></dl>
+            <a href="./automated-asteroids/">Watch the pilots <b>↗</b></a>
+          </div>
+        </article>
 
+        <article class="experiment-card freeway-card">
+          <div class="experiment-screen" aria-hidden="true">
+            <div class="road-field"><i></i><i></i><i></i><i></i><b></b><span></span><span></span></div>
+            <em>PRIVATE BUILD READY</em>
+          </div>
+          <div class="experiment-copy">
+            <span>EXPERIMENT 02</span>
+            <h3>Automated<br>Freeway.</h3>
+            <p>Twenty-four chickens get the same clock and the same traffic. Crossings matter most. Timing, movement and recovery decide what survives.</p>
+            <dl><div><dt>Agents</dt><dd>24 Chickens</dd></div><div><dt>Focus</dt><dd>Crossings + Timing</dd></div></dl>
+            <a href="./automated-freeway/">Watch the chickens <b>↗</b></a>
+          </div>
+        </article>
+      </div>
+    </section>
   </main>
 
   <div class="footer-signal-strip" aria-label="Zendigo focus areas"><div><span>Speedrunning</span><i>◆</i><span>Retro Gaming</span><i>◆</i><span>Live Broadcasts</span><i>◆</i><span>Game Development</span><i>◆</i><span>Competitive Coverage</span><i>◆</i><span>AI Experiments</span></div></div>
   <footer class="site-footer"><a class="footer-wordmark" href="/"><strong>ZENDIGO</strong><span>Independent creator system</span></a><div><a href="/">Home</a><a href="/broadcast/">Broadcast</a><a href="/records/">Records</a><a href="/work/">Work</a><a href="/tools/">Tools</a><a href="https://overtakegg.com/" target="_blank" rel="noreferrer">Overtake Sector</a><a href="/partners/">Partners</a><a href="/ai-lab/">AI Labs</a><a href="/contact/">Contact</a></div><p>© 2026 ZENDIGO</p></footer>
-
-  <script src="./ai.js?v=ai-lab-15" defer></script>
 </body>
 </html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080708">
+  <meta name="description" content="Automated Asteroids: watch PiXeL learn to survive an original vector asteroid field in Zendigo AI Labs.">
+  <title>Automated Asteroids // Zendigo AI Labs</title>
+  <link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="./style.css?v=ai-lab-5">
+  <link rel="stylesheet" href="/assets/site-header.css?v=subpages-4">
+</head>
+<body>
+  <div class="site-header-dock">
+    <div class="top-rule" aria-hidden="true"><span></span><span></span><span></span></div>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Zendigo homepage"><span class="wordmark-main">ZENDIGO</span></a>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/broadcast/">Broadcast</a>
+        <a href="/records/">Records</a>
+        <a href="/work/">Work</a>
+        <a href="/tools/">Tools</a>
+        <a href="https://overtakegg.com/" target="_blank" rel="noreferrer">Overtake Sector</a>
+        <a href="/partners/">Partners</a>
+        <a class="active" href="/ai-lab/" aria-current="page">AI Labs</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+      <div class="status-control is-live"><span class="status-lamp" aria-hidden="true"></span><span><small>AI Labs</small><strong>Training Active</strong></span></div>
+    </header>
+  </div>
+
+  <main>
+    <section class="lab-intro">
+      <a class="lab-return" href="/ai-lab/">AI Labs / Experiment 01</a>
+      <h1>Automated<br>Asteroids.</h1>
+      <p class="summary">We're teaching PiXeL to play Asteroids, one life at a time. Every generation gets one shot to put up a score. The best pilots shape the next group, then it all starts again.</p>
+    </section>
+
+    <section class="lab-rig" aria-labelledby="lab-heading">
+      <div class="monitor-shell">
+        <div class="monitor-topline">
+          <span id="lab-heading">LIVE TRAINING FEED</span>
+          <b><i></i><span id="signalText">SIGNAL ACTIVE</span></b>
+        </div>
+        <div class="screen-frame">
+          <canvas id="arena" width="960" height="600" aria-label="PiXeL AI asteroid training arena"></canvas>
+          <div class="scanlines" aria-hidden="true"></div>
+          <div class="screen-osd" aria-hidden="true">
+            <span>PiXeL // PILOT <b id="pilotNumber">01</b></span>
+            <span id="screenScore">SCORE 00000</span>
+          </div>
+        </div>
+        <div class="monitor-controls">
+          <button id="pilotPrev" type="button" aria-label="Previous pilot"><span>◀</span><b>PREV</b></button>
+          <button id="pilotNext" type="button" aria-label="Next pilot"><span>▶</span><b>NEXT</b></button>
+          <button id="pilotHold" type="button" aria-pressed="false"><span>●</span><b>HOLD</b></button>
+        </div>
+      </div>
+
+      <aside class="telemetry" aria-label="AI training telemetry">
+        <div class="telemetry-heading"><span>LEARNING STATUS</span><b id="modeValue">TRAINING</b></div>
+        <dl>
+          <div><dt>Generation</dt><dd id="generationValue">001</dd></div>
+          <div><dt>Pilot</dt><dd id="pilotValue">01 / 24</dd></div>
+          <div><dt>Pilots remaining</dt><dd id="remainingValue">24</dd></div>
+          <div><dt>Pilot score</dt><dd id="scoreValue">00000</dd></div>
+          <div><dt>Generation high</dt><dd id="generationScoreValue">00000</dd></div>
+          <div><dt>Survival</dt><dd id="survivalValue">00.0 SEC</dd></div>
+          <div><dt>Asteroids hit</dt><dd id="hitsValue">000</dd></div>
+        </dl>
+        <div class="fitness-panel">
+          <span>GENERATION FITNESS</span>
+          <div class="fitness-track"><i id="fitnessBar"></i></div>
+          <small id="fitnessText">Establishing baseline…</small>
+        </div>
+        <div class="decision-panel">
+          <span>CURRENT DECISION</span>
+          <strong id="decisionValue">OBSERVING</strong>
+          <small id="actionDetail">Scanning nearest threat</small>
+        </div>
+      </aside>
+    </section>
+
+    <section class="generation-record" aria-labelledby="generation-record-title">
+      <header>
+        <div><span>TRAINING ARCHIVE</span><h2 id="generation-record-title">Generation Record</h2></div>
+        <strong id="generationLogStatus">GEN 001 RUNNING</strong>
+      </header>
+      <div id="generationLog" class="generation-log" aria-live="polite"></div>
+    </section>
+
+  </main>
+
+  <div class="footer-signal-strip" aria-label="Zendigo focus areas"><div><span>Speedrunning</span><i>◆</i><span>Retro Gaming</span><i>◆</i><span>Live Broadcasts</span><i>◆</i><span>Game Development</span><i>◆</i><span>Competitive Coverage</span><i>◆</i><span>AI Experiments</span></div></div>
+  <footer class="site-footer"><a class="footer-wordmark" href="/"><strong>ZENDIGO</strong><span>Independent creator system</span></a><div><a href="/">Home</a><a href="/broadcast/">Broadcast</a><a href="/records/">Records</a><a href="/work/">Work</a><a href="/tools/">Tools</a><a href="https://overtakegg.com/" target="_blank" rel="noreferrer">Overtake Sector</a><a href="/partners/">Partners</a><a href="/ai-lab/">AI Labs</a><a href="/contact/">Contact</a></div><p>© 2026 ZENDIGO</p></footer>
+
+  <script src="./ai.js?v=asteroids-1" defer></script>
+</body>
+</html>
