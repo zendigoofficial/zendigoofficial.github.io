@@ -20,10 +20,10 @@ a{text-decoration:none}
 .header-signal.is-live>i{background:#55e6b5;box-shadow:0 0 9px #55e6b5}
 .header-signal span{display:flex;flex-direction:column;gap:5px}.header-signal small{color:#9aa1a4;font:8px/1 Orbitron,monospace;letter-spacing:.17em;text-transform:uppercase}.header-signal b{font:700 10px/1 Orbitron,monospace;letter-spacing:.08em;text-transform:uppercase}
 main{width:var(--shell);margin:0 auto;padding:82px 0 108px}
-.page-intro{display:grid;grid-template-columns:minmax(360px,.9fr) minmax(300px,.7fr);grid-template-areas:"meta meta" "title note";align-items:end;gap:22px 70px;margin-bottom:58px}
+.page-intro{display:grid;grid-template-columns:1fr;grid-template-areas:"meta" "title" "note";align-items:start;gap:22px;margin-bottom:58px}
 .page-intro>p{grid-area:meta;display:flex;align-items:center;gap:14px;margin:0;color:#9da3a6;text-transform:uppercase;font:700 9px/1 Orbitron,monospace;letter-spacing:.18em}.page-intro>p span{color:var(--red)}.page-intro>p:before{content:"";width:26px;height:2px;background:var(--red)}
-.page-intro h1{grid-area:title;margin:0;text-transform:uppercase;font:900 clamp(74px,9vw,138px)/.76 Arial Black,Impact,sans-serif;letter-spacing:-.08em}
-.intro-note{grid-area:note;max-width:510px;border-left:3px solid #60676b;padding:4px 0 4px 18px;color:#d8d9d6;font-size:16px;line-height:1.55}
+.page-intro h1{grid-area:title;max-width:100%;margin:0;text-transform:uppercase;font:900 clamp(70px,8.3vw,126px)/.78 Arial Black,Impact,sans-serif;letter-spacing:-.075em}
+.intro-note{grid-area:note;max-width:660px;border-left:3px solid #60676b;padding:4px 0 4px 18px;color:#d8d9d6;font-size:16px;line-height:1.55}
 .broadcast-layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;align-items:start;gap:22px}
 .television{position:relative;background:linear-gradient(90deg,#ffffff26,#0000 16% 84%,#ffffff14),repeating-linear-gradient(90deg,#0000 0 3px,#ffffff08 3px 4px),linear-gradient(145deg,#9ca2a4,#474d50 50%,#b4b8b7);border:1px solid #bec2c2;padding:18px;box-shadow:12px 15px #0c0e10,0 25px 55px #0009,inset 0 1px #fff}
 .television:before,.television:after{content:"×";position:absolute;top:8px;color:#32373a;font:12px/1 monospace}.television:before{left:8px}.television:after{right:8px}
