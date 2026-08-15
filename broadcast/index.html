@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07080a">
+  <meta name="description" content="Watch Zendigo live on Twitch, YouTube, Kick or X, or tune into the latest video archive.">
+  <title>Broadcast // Zendigo</title>
+  <link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="/assets/subpage-shell.css?v=subpages-1">
+</head>
+<body class="broadcast-page">
+  <div class="top-rule" aria-hidden="true"><i></i><i></i><i></i></div>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Zendigo homepage">
+      <strong>ZENDIGO</strong><span>Codenamed PiXeL</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a class="active" href="/broadcast/" aria-current="page">Broadcast</a>
+      <a href="/#runs">Records</a>
+      <a href="/#work">Work</a>
+      <a href="/#tools">Tools</a>
+      <a href="/#contact">Contact</a>
+      <a href="/ai-lab/">AI Labs</a>
+    </nav>
+    <div class="header-signal" id="headerSignal"><i></i><span><small>Broadcast</small><b>Checking signal</b></span></div>
+  </header>
+
+  <main>
+    <section class="page-intro">
+      <p><span>Live control room</span><b>Pennsylvania · 20XX</b></p>
+      <h1>The<br>Broadcast.</h1>
+      <div class="intro-note">If we're live, the signal opens here. If we're not, the archive takes over until the next stream.</div>
+    </section>
+
+    <section class="broadcast-layout" aria-label="Zendigo broadcast control room">
+      <div class="television" id="broadcastTelevision">
+        <div class="television-label">
+          <span>Zendigo Broadcast Network</span>
+          <b id="screenMode">STANDBY</b>
+        </div>
+        <div class="television-screen" id="televisionScreen" aria-live="polite">
+          <div class="screen-reflection" aria-hidden="true"></div>
+          <div class="screen-off" id="screenOff">
+            <span class="standby-mark">Z</span>
+            <strong>SIGNAL STANDBY</strong>
+            <small>PRESS POWER TO BEGIN</small>
+          </div>
+          <div class="screen-program" id="screenProgram" hidden></div>
+          <div class="screen-osd" id="screenOsd" hidden>
+            <span id="channelLabel">CH 01 · ARCHIVE</span>
+            <strong id="programTitle">Zendigo Archive Network</strong>
+          </div>
+          <div class="screen-static" id="screenStatic" hidden aria-hidden="true"><i></i></div>
+        </div>
+        <div class="television-controls">
+          <button class="power-button" id="powerButton" type="button" aria-pressed="false"><i></i><span>POWER</span></button>
+          <div class="channel-controls" aria-label="Broadcast controls">
+            <button id="previousChannel" type="button" disabled><span>◀</span><small>CH −</small></button>
+            <button id="nextChannel" type="button" disabled><span>▶</span><small>CH +</small></button>
+            <button id="holdChannel" type="button" disabled aria-pressed="false"><span>Ⅱ</span><small>HOLD</small></button>
+            <button id="fullscreenButton" type="button" disabled><span>□</span><small>FULLSCREEN</small></button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="channel-rack" aria-label="Broadcast channels">
+        <header><span>Broadcast Outputs</span><b id="activeSignalCount">AUTO SCAN</b></header>
+        <div class="channel-list" id="channelList">
+          <article class="channel-card" data-platform="twitch">
+            <button type="button"><span>TW</span><strong>Twitch<small>Zendigo</small></strong><em><i></i>CHECKING</em></button>
+            <a href="https://www.twitch.tv/zendigo_playz" target="_blank" rel="noreferrer" aria-label="Open Zendigo on Twitch">↗</a>
+          </article>
+          <article class="channel-card" data-platform="youtube">
+            <button type="button"><span>YT</span><strong>YouTube<small>Zendigo</small></strong><em><i></i>CHECKING</em></button>
+            <a href="https://www.youtube.com/@zendigoplayz/live" target="_blank" rel="noreferrer" aria-label="Open Zendigo on YouTube">↗</a>
+          </article>
+          <article class="channel-card" data-platform="kick">
+            <button type="button"><span>K</span><strong>Kick<small>Zendigo</small></strong><em><i></i>CHECKING</em></button>
+            <a href="https://kick.com/zendigo-playz" target="_blank" rel="noreferrer" aria-label="Open Zendigo on Kick">↗</a>
+          </article>
+          <article class="channel-card" data-platform="x">
+            <button type="button"><span>X</span><strong>X<small>@ZendigoPlayz</small></strong><em><i></i>CHECKING</em></button>
+            <a href="https://x.com/ZendigoPlayz" target="_blank" rel="noreferrer" aria-label="Open Zendigo on X">↗</a>
+          </article>
+        </div>
+        <div class="rack-readout">
+          <span>Current source</span>
+          <strong id="currentSource">SYSTEM OFFLINE</strong>
+          <small id="sourceDetail">No signal selected</small>
+        </div>
+      </aside>
+    </section>
+
+    <section class="broadcast-notes">
+      <article><span>01</span><div><strong>Live takes priority.</strong><p>Any active Twitch, YouTube, Kick or X signal moves ahead of the archive.</p></div></article>
+      <article><span>02</span><div><strong>The archive stays useful.</strong><p>Recent uploads remain available here between streams instead of leaving a dead screen.</p></div></article>
+      <article><span>03</span><div><strong>One player. One source.</strong><p>Changing channels stops the previous feed so two broadcasts never compete for audio.</p></div></article>
+    </section>
+  </main>
+
+  <footer>
+    <a class="footer-wordmark" href="/"><strong>ZENDIGO</strong><span>Independent creator system</span></a>
+    <div><a href="https://www.twitch.tv/zendigo_playz">Twitch</a><a href="https://www.youtube.com/@zendigoplayz">YouTube</a><a href="https://kick.com/zendigo-playz">Kick</a><a href="https://x.com/ZendigoPlayz">X</a></div>
+    <p>© 2026 ZENDIGO</p>
+  </footer>
+
+  <script src="/assets/broadcast-page.js?v=subpages-1" defer></script>
+</body>
+</html>
