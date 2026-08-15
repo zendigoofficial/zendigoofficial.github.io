@@ -8,7 +8,7 @@
 .site-header-dock .wordmark{display:flex;align-items:flex-end;gap:9px;width:auto;color:var(--header-white);white-space:nowrap;transform:skew(-7deg)}
 .site-header-dock .wordmark-main{padding:0;border:0;font:900 29px/1 "Arial Narrow",Roboto Condensed,Arial,sans-serif;letter-spacing:-.055em}
 .site-header-dock .wordmark-main:after{content:"";display:block;width:100%;height:4px;margin-top:4px;background:linear-gradient(90deg,var(--header-red) 0 74%,transparent 74%)}
-.site-header-dock .wordmark-model{margin:0 0 6px;padding:0;border:0;color:var(--header-steel);font:400 11px/1 Consolas,"Courier New",monospace;letter-spacing:.18em}
+.site-header-dock .wordmark-model{display:none}
 .site-header-dock .main-nav{height:auto;display:flex;align-items:center;justify-self:center;gap:20px}
 .site-header-dock .main-nav a{position:relative;display:block;padding:0;color:#c9ccce;text-transform:uppercase;font:800 12px/1 "Arial Narrow",Arial,sans-serif;letter-spacing:.16em}
 .site-header-dock .main-nav a:after{content:"";position:absolute;left:0;bottom:-9px;width:0;height:2px;background:var(--header-red);transition:width .16s}
