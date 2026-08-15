@@ -1,0 +1,25 @@
+:root{--header-shell:min(1240px,calc(100vw - 48px));--header-red:#df1828;--header-white:#f5f5f1;--header-steel:#92999e;--header-line:#f5f5f124}
+.site-header-dock{position:sticky;z-index:100;top:0;background:#08090af7;box-shadow:0 10px 28px #00000038;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.site-header-dock .top-rule{position:static;width:100%;height:7px;display:grid;grid-template-columns:16% 56% 28%}
+.site-header-dock .top-rule span:first-child{background:var(--header-white)}
+.site-header-dock .top-rule span:nth-child(2){background:var(--header-red)}
+.site-header-dock .top-rule span:last-child{background:linear-gradient(90deg,#d8dcde,#3f4448)}
+.site-header-dock .site-header{position:relative;top:auto;width:var(--header-shell);min-height:84px;margin:0 auto;padding:0;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:42px;border:0;border-bottom:1px solid var(--header-line);background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+.site-header-dock .wordmark{display:flex;align-items:flex-end;gap:9px;width:auto;color:var(--header-white);white-space:nowrap;transform:skew(-7deg)}
+.site-header-dock .wordmark-main{padding:0;border:0;font:900 29px/1 "Arial Narrow",Roboto Condensed,Arial,sans-serif;letter-spacing:-.055em}
+.site-header-dock .wordmark-main:after{content:"";display:block;width:100%;height:4px;margin-top:4px;background:linear-gradient(90deg,var(--header-red) 0 74%,transparent 74%)}
+.site-header-dock .wordmark-model{margin:0 0 6px;padding:0;border:0;color:var(--header-steel);font:400 11px/1 Consolas,"Courier New",monospace;letter-spacing:.18em}
+.site-header-dock .main-nav{height:auto;display:flex;align-items:center;justify-self:center;gap:28px}
+.site-header-dock .main-nav a{position:relative;display:block;padding:0;color:#c9ccce;text-transform:uppercase;font:800 12px/1 "Arial Narrow",Arial,sans-serif;letter-spacing:.16em}
+.site-header-dock .main-nav a:after{content:"";position:absolute;left:0;bottom:-9px;width:0;height:2px;background:var(--header-red);transition:width .16s}
+.site-header-dock .main-nav a:hover,.site-header-dock .main-nav a:focus-visible,.site-header-dock .main-nav a.active{color:var(--header-white)}
+.site-header-dock .main-nav a:hover:after,.site-header-dock .main-nav a:focus-visible:after,.site-header-dock .main-nav a.active:after{width:100%}
+.site-header-dock .status-control{justify-self:end;min-width:154px;min-height:0;display:flex;align-items:center;gap:11px;padding:10px 14px 10px 12px;color:inherit;text-align:left;background:linear-gradient(#ffffff1f,#0000 55%),#1a1c1f;border:1px solid #3f4549;box-shadow:inset 0 1px #ffffff1a}
+.site-header-dock .status-control:hover{border-color:var(--header-steel)}
+.site-header-dock .status-lamp{width:12px;height:12px;flex:0 0 auto;border-radius:50%;background:#697075;box-shadow:0 0 0 4px #ffffff0d}
+.site-header-dock .status-control.is-live .status-lamp{background:#55e6b5;box-shadow:0 0 9px #55e6b5}
+.site-header-dock .status-control>span:last-child{display:flex;flex-direction:column;gap:4px}
+.site-header-dock .status-control small{color:var(--header-steel);text-transform:uppercase;font:400 10px/1 Consolas,monospace;letter-spacing:.16em}
+.site-header-dock .status-control strong{color:var(--header-white);text-transform:uppercase;font:800 13px/1 "Arial Narrow",Arial,sans-serif;letter-spacing:.1em}
+@media(max-width:1100px){.site-header-dock .site-header{grid-template-columns:minmax(0,1fr) auto;padding:12px 0 10px}.site-header-dock .main-nav{grid-area:2/1/auto/-1;width:100%;padding:2px 2px 8px;overflow-x:auto;justify-content:space-between;justify-self:stretch;gap:18px;scrollbar-width:none}.site-header-dock .main-nav::-webkit-scrollbar{display:none}.site-header-dock .main-nav a{flex:none}.site-header-dock .status-control{grid-column:2}}
+@media(max-width:650px){:root{--header-shell:calc(100% - 24px)}.site-header-dock .top-rule{grid-template-columns:20% 60% 20%}.site-header-dock .site-header{gap:15px;min-height:106px}.site-header-dock .wordmark-model{display:none}.site-header-dock .wordmark-main{font-size:25px}.site-header-dock .main-nav{justify-content:flex-start;gap:24px}.site-header-dock .status-control{justify-content:center;min-width:45px;min-height:43px;padding:8px}.site-header-dock .status-control>span:last-child{display:none}}
