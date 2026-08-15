@@ -85,6 +85,8 @@
   function normalizeFooter() {
     const footer = document.querySelector("footer.site-footer, main > footer, body > footer");
     if (!footer) return;
+    // Remove the retired homepage focus strip if hydration restores it.
+    document.querySelectorAll(".signal-strip").forEach(strip => strip.remove());
     const expectedLinks = links.map(([href, label, external]) =>
       `<a href="${href}"${external ? ' target="_blank" rel="noreferrer"' : ""}>${label}</a>`
     ).join("");
