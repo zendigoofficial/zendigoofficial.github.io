@@ -4,7 +4,7 @@
   const W = canvas.width, H = canvas.height, POPULATION = 24, ELITES = 4;
   const INPUTS = 12, HIDDEN = 16, OUTPUTS = 3, SIM_HZ = 30;
   const MATCH_SECONDS = 136, MATCH_STEPS = MATCH_SECONDS * SIM_HZ, TICK_MS = 1000 / SIM_HZ;
-  const STORAGE_KEY = "zendigo-pixel-freeway-brain-v1", MAX_OFFLINE_SECONDS = 21600, CATCHUP_STEPS = 500;
+  const STORAGE_KEY = "zendigo-pixel-freeway-brain-v2", MAX_OFFLINE_SECONDS = 21600, CATCHUP_STEPS = 500;
   const ROAD_TOP = 55, ROAD_BOTTOM = 545, START_Y = 568, FINISH_Y = 32, CHICKEN_X = W / 2;
   const ui = Object.fromEntries(["generationValue","chickenValue","remainingValue","scoreValue","generationScoreValue","clockValue","collisionValue","fastestValue","fitnessBar","fitnessText","decisionValue","actionDetail","modeValue","signalText","chickenNumber","screenScore"].map(id => [id, document.getElementById(id)]));
   const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
@@ -22,7 +22,7 @@
       this.w1=data?.w1?.length===n1?Float32Array.from(data.w1):Float32Array.from({length:n1},()=>rng.gaussian()*.5);
       this.b1=data?.b1?.length===HIDDEN?Float32Array.from(data.b1):new Float32Array(HIDDEN);
       this.w2=data?.w2?.length===n2?Float32Array.from(data.w2):Float32Array.from({length:n2},()=>rng.gaussian()*.42);
-      this.b2=data?.b2?.length===OUTPUTS?Float32Array.from(data.b2):new Float32Array(OUTPUTS);
+      this.b2=data?.b2?.length===OUTPUTS?Float32Array.from(data.b2):Float32Array.from([-.05,.24,-.14]);
     }
     think(input){const h=new Float32Array(HIDDEN),out=new Float32Array(OUTPUTS);for(let j=0;j<HIDDEN;j++){let s=this.b1[j];for(let i=0;i<INPUTS;i++)s+=input[i]*this.w1[i*HIDDEN+j];h[j]=Math.tanh(s);}for(let o=0;o<OUTPUTS;o++){let s=this.b2[o];for(let j=0;j<HIDDEN;j++)s+=h[j]*this.w2[j*OUTPUTS+o];out[o]=Math.tanh(s);}return out;}
     child(rng,rate=.12,strength=.28){const child=new Brain(rng,this.toJSON());for(const a of [child.w1,child.b1,child.w2,child.b2])for(let i=0;i<a.length;i++)if(rng.next()<rate)a[i]+=rng.gaussian()*strength;return child;}
@@ -30,12 +30,12 @@
   }
 
   function laneConfig(lane,seed){
-    const direction=lane%2?1:-1, speed=(1.45+(lane%4)*.24)*(lane>5?1.08:1), spacing=205+(lane%3)*24;
-    return{direction,speed,spacing,width:66+(lane%2)*16,phase:wrap(seed*37+lane*113,W+spacing)};
+    const direction=lane%2?1:-1, speed=(1.45+(lane%4)*.24)*(lane>5?1.08:1), count=lane%3===0?2:3, spacing=W/count;
+    return{direction,speed,count,spacing,width:66+(lane%2)*16,phase:wrap(seed*37+lane*113,spacing)};
   }
   function laneCenter(lane){return ROAD_BOTTOM-(lane+.5)*((ROAD_BOTTOM-ROAD_TOP)/10);}
   function laneForY(y){return clamp(Math.floor((ROAD_BOTTOM-y)/((ROAD_BOTTOM-ROAD_TOP)/10)),0,9);}
-  function carPositions(lane,step,seed){const c=laneConfig(lane,seed),period=W+c.spacing;const lead=wrap(c.phase+step*c.speed*c.direction,period)-c.width;const cars=[];for(let x=lead-period;x<W+c.width;x+=c.spacing)cars.push({x,y:laneCenter(lane),width:c.width,direction:c.direction,speed:c.speed});return cars;}
+  function carPositions(lane,step,seed){const c=laneConfig(lane,seed),lead=wrap(c.phase+step*c.speed*c.direction,c.spacing),cars=[];for(let i=-1;i<c.count;i++){const x=lead+i*c.spacing;if(x>-c.width&&x<W)cars.push({x,y:laneCenter(lane),width:c.width,direction:c.direction,speed:c.speed});}return cars;}
   function nearestCarInfo(lane,step,seed){let best=null,dist=Infinity;for(const car of carPositions(clamp(lane,0,9),step,seed)){const dx=(car.x+car.width/2)-CHICKEN_X;if(Math.abs(dx)<dist){dist=Math.abs(dx);best={dx,speed:car.speed*car.direction,width:car.width};}}return best||{dx:W,speed:0,width:70};}
 
   class World {
@@ -49,6 +49,7 @@
       if(this.completed)return;this.steps++;
       if(this.freeze>0){this.freeze--;this.recoverySteps++;this.decision="RECOVER";this.fitness+=.001;if(this.steps>=MATCH_STEPS)this.completed=true;return;}
       const out=this.brain.think(this.inputs());let action=0;if(out[1]>out[action])action=1;if(out[2]>out[action])action=2;
+      if(this.y>=ROAD_BOTTOM+8&&action!==1)action=1;
       if(action===this.lastAction)this.actionStreak++;else this.actionStreak=1;this.lastAction=action;
       const oldY=this.y;
       if(action===0){this.waitSteps++;this.decision="WAIT";}
