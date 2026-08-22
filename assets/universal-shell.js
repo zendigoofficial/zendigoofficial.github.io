@@ -7,8 +7,6 @@
     ["/records/", "Records"],
     ["/work/", "Work"],
     ["/tools/", "Tools"],
-    ["https://overtakegg.com/", "Overtake Sector", true],
-    ["/partners/", "Partners"],
     ["/ai-lab/", "AI Labs"],
     ["/contact/", "Contact"]
   ];
