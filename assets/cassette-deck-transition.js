@@ -599,7 +599,8 @@
     return system;
   }
 
-  function closeVhs() {
+  function closeVhs(resumeBroadcast = true) {
+    const wasActive = Boolean(activeVhs);
     vhsPlayerStage?.remove();
     vhsPlayerStage = null;
     activeVhs = null;
@@ -607,6 +608,10 @@
       button.classList.remove("is-playing");
       button.setAttribute("aria-pressed", "false");
     });
+    if (wasActive && resumeBroadcast) {
+      window.setTimeout(resumeBroadcastFrames, 50);
+      window.setTimeout(resumeBroadcastFrames, 450);
+    }
   }
 
   function routeVhsToTv() {
@@ -630,12 +635,16 @@
       return;
     }
 
-    closeVhs();
+    closeVhs(false);
     activeVhs = tape;
-    window.dispatchEvent(new CustomEvent("zendigo:audio-owner", { detail: "tuner" }));
+    window.dispatchEvent(new CustomEvent("zendigo:audio-owner", { detail: "vhs" }));
 
     const power = document.querySelector("#broadcast-tuner .console-power");
     if (power && !power.classList.contains("is-on")) power.click();
+    suspendBroadcastFrames();
+    window.setTimeout(suspendBroadcastFrames, 100);
+    window.setTimeout(suspendBroadcastFrames, 600);
+    window.setTimeout(suspendBroadcastFrames, 1400);
 
     const origin = encodeURIComponent(window.location.origin);
     vhsPlayerStage = document.createElement("section");
@@ -699,15 +708,29 @@
     if (power && !power.dataset.vhsBound) {
       power.dataset.vhsBound = "true";
       power.addEventListener("click", () => {
-        if (activeVhs && power.classList.contains("is-on")) closeVhs();
+        if (activeVhs && power.classList.contains("is-on")) closeVhs(false);
       });
     }
     document.querySelectorAll("#broadcast-tuner .console-channel-controls button").forEach(button => {
       if (button.dataset.vhsBound) return;
       button.dataset.vhsBound = "true";
-      button.addEventListener("click", () => {
-        if (activeVhs) closeVhs();
-      });
+      button.addEventListener("click", event => {
+        if (!activeVhs) return;
+
+        /* A loaded VHS owns the CRT. Keep React's broadcast-channel handler
+           from replacing it, and treat the channel keys as playlist transport. */
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        if (button.classList.contains("hold-channel")) return;
+        const frame = vhsPlayerStage?.querySelector("iframe");
+        if (!frame?.contentWindow) return;
+        const command = button.textContent?.includes("−") ? "previousVideo" : "nextVideo";
+        frame.contentWindow.postMessage(
+          JSON.stringify({ event: "command", func: command, args: [] }),
+          "*"
+        );
+      }, true);
     });
   }
 
@@ -744,6 +767,31 @@
     frame.contentWindow.postMessage({ type: "zendigo-tv:volume", volume, muted }, "*");
   }
 
+  function sendYoutubeCommand(frame, func, args = []) {
+    if (!frame?.contentWindow) return;
+    frame.contentWindow.postMessage(
+      JSON.stringify({ event: "command", func, args }),
+      "*"
+    );
+  }
+
+  function suspendBroadcastFrame(frame) {
+    sendYoutubeCommand(frame, "pauseVideo");
+    sendYoutubeCommand(frame, "mute");
+  }
+
+  function suspendBroadcastFrames() {
+    document.querySelectorAll("#broadcast-tuner iframe").forEach(suspendBroadcastFrame);
+  }
+
+  function resumeBroadcastFrames() {
+    const volume = Math.max(0, Math.min(100, Number(tvVolumeInput?.value ?? 72)));
+    document.querySelectorAll("#broadcast-tuner iframe").forEach(frame => {
+      sendTvVolume(frame, volume);
+      sendYoutubeCommand(frame, "playVideo");
+    });
+  }
+
   function applyTvVolume(nextVolume, persist = true) {
     const volume = Math.max(0, Math.min(100, Number(nextVolume) || 0));
     if (tvVolumeInput && Number(tvVolumeInput.value) !== volume) tvVolumeInput.value = String(volume);
@@ -753,7 +801,13 @@
     panel?.style.setProperty("--tv-volume", `${volume}%`);
     if (persist) window.localStorage.setItem("zendigo-tv-volume", String(volume));
     window.dispatchEvent(new CustomEvent("zendigo:tv-volume", { detail: { volume, muted: volume === 0 } }));
-    document.querySelectorAll("#broadcast-tuner iframe").forEach(frame => sendTvVolume(frame, volume));
+    if (activeVhs) {
+      suspendBroadcastFrames();
+      const vhsFrame = vhsPlayerStage?.querySelector("iframe");
+      if (vhsFrame) sendTvVolume(vhsFrame, volume);
+    } else {
+      document.querySelectorAll("#broadcast-tuner iframe").forEach(frame => sendTvVolume(frame, volume));
+    }
   }
 
   function syncTvFrames() {
@@ -761,8 +815,13 @@
     document.querySelectorAll("#broadcast-tuner iframe").forEach(frame => {
       if (knownTvFrames.has(frame)) return;
       knownTvFrames.add(frame);
-      window.setTimeout(() => sendTvVolume(frame, volume), 350);
-      window.setTimeout(() => sendTvVolume(frame, volume), 1200);
+      if (activeVhs) {
+        window.setTimeout(() => suspendBroadcastFrame(frame), 350);
+        window.setTimeout(() => suspendBroadcastFrame(frame), 1200);
+      } else {
+        window.setTimeout(() => sendTvVolume(frame, volume), 350);
+        window.setTimeout(() => sendTvVolume(frame, volume), 1200);
+      }
     });
   }
 
@@ -904,7 +963,7 @@
     });
     document.addEventListener("click", event => {
       if (!activeVhs) return;
-      if (event.target.closest?.(".cassette-case, .cassette-transport")) closeVhs();
+      if (event.target.closest?.(".cassette-case, .cassette-transport")) closeVhs(false);
     }, true);
     window.addEventListener("keydown", event => {
       if (event.key === "Escape" && activeVhs) closeVhs();
