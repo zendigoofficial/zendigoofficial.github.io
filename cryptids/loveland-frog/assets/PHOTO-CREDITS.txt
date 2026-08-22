@@ -1,0 +1,28 @@
+LOVELAND FROG CASE 003 — IMAGE RIGHTS
+
+All files in this folder are non-AI assets. None depicts an actual Loveland Frogman.
+
+little-miami-river-hero.webp
+AndyHemmerCincinnati, 2019. CC BY-SA 4.0, via Wikimedia Commons.
+Source: https://commons.wikimedia.org/wiki/File:Little_miami_river_loveland_OH_foto_by_andy_hemmer_cincinnati.jpg
+Changes: resized, cropped by CSS, color-toned by CSS. Adaptation offered under CC BY-SA 4.0.
+
+little-miami-river-nisbet.webp
+Minh Nguyen, 2015. CC BY-SA 4.0, via Wikimedia Commons.
+Source: https://commons.wikimedia.org/wiki/File:Little_Miami_River_at_Nisbet_Park,_Loveland,_Ohio,_September_2015.jpg
+Changes: resized, cropped by CSS, color-toned by CSS. Adaptation offered under CC BY-SA 4.0.
+
+branch-hill-bridge.webp
+Hamilton County Engineer's Office, before 1922. Public domain in the United States.
+Source: https://commons.wikimedia.org/wiki/File:Branch_Hill_Bridge.jpg
+Context: historical geography only. This bridge predates the 1955 reports and is not presented as the exact encounter bridge.
+
+green-iguana.webp
+Lydia Hansen / U.S. Fish and Wildlife Service, 2026. Public domain.
+Source: https://commons.wikimedia.org/wiki/File:Green_iguana_profile_USFWS.jpg
+Context: representative animal; not the 1972 Loveland animal.
+
+american-bullfrog.webp
+U.S. Fish and Wildlife Service, 2004. Public domain.
+Source: https://www.fws.gov/media/american-bullfrog
+Context: representative animal.
