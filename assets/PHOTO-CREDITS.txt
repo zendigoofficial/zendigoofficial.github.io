@@ -20,3 +20,20 @@ Sony MDS-S37 MiniDisc deck VFD photograph by Retired electrician, dedicated to
 the public domain under CC0 1.0. Modified to create the now-playing display
 glass texture.
 Source: https://commons.wikimedia.org/wiki/File:Sony_MDS-S37_minidisc_deck_05_crop.jpg
+
+Black polypropylene VHS library case product photograph from Analogue Media
+Technologies. The photographed case, clear sleeve reflections and perspective
+were retained for the homepage VHS library cases. The shelf assets use the
+case's published 8 x 1.1875 inch spine proportions with a reconstructed black
+shell edge and clear-sleeve reflection.
+Source: https://www.duplication.com/vhs-black-plastic-library-case-1-piece.html
+
+Code Monkeys: Season One retail cover artwork from the Shout! Factory DVD
+release, sourced from the Walmart product listing and fitted to the photographed
+VHS sleeve and shelf spine without generative reconstruction.
+Source: https://www.walmart.com/ip/Code-Monkeys-Season-One-DVD-Shout-Factory-Animation/51527527
+
+Mobile Suit Gundam I original Japanese VHS cover artwork sourced from the
+TechRewinds archival product listing and fitted to the same photographed VHS
+sleeve and shelf spine.
+Source: https://www.techrewinds.com/products/mobile-suit-gundam-anime-japan-original-vhs-cover-art

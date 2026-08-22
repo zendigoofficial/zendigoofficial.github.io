@@ -11,6 +11,24 @@
   let gameModal = null;
   let gameReturnFocus = null;
   let gameBodyOverflow = "";
+  let activeVhs = null;
+  let vhsPlayerStage = null;
+  const VHS_TAPES = [
+    {
+      id: "code-monkeys",
+      title: "Code Monkeys",
+      subtitle: "Complete Series",
+      playlistId: "PL9UcZHgiOmSYH_0Vu1IhKxDDyfut7CZ60",
+      caseArt: "/vhs/code-monkeys-spine.webp"
+    },
+    {
+      id: "mobile-suit-gundam",
+      title: "Mobile Suit Gundam",
+      subtitle: "Original Series",
+      playlistId: "PLmNQWwGKGrqQdkrqa9dBzstwElDKyVJBm",
+      caseArt: "/vhs/mobile-suit-gundam-spine.webp"
+    }
+  ];
   let readoutState = {
     cassetteId: null,
     mixtape: "SELECT A MIXTAPE",
@@ -581,6 +599,118 @@
     return system;
   }
 
+  function closeVhs() {
+    vhsPlayerStage?.remove();
+    vhsPlayerStage = null;
+    activeVhs = null;
+    document.querySelectorAll(".vhs-case-button").forEach(button => {
+      button.classList.remove("is-playing");
+      button.setAttribute("aria-pressed", "false");
+    });
+  }
+
+  function routeVhsToTv() {
+    if (!activeVhs || !vhsPlayerStage?.isConnected) return;
+    const screen = document.querySelector("#broadcast-tuner .console-screen");
+    if (!screen) return;
+    const rect = screen.getBoundingClientRect();
+    if (rect.width < 40 || rect.height < 40) return;
+    const insetX = Math.max(3, rect.width * .018);
+    const insetY = Math.max(3, rect.height * .026);
+    vhsPlayerStage.style.setProperty("--vhs-left", `${rect.left + insetX}px`);
+    vhsPlayerStage.style.setProperty("--vhs-top", `${rect.top + insetY}px`);
+    vhsPlayerStage.style.setProperty("--vhs-width", `${Math.max(200, rect.width - insetX * 2)}px`);
+    vhsPlayerStage.style.setProperty("--vhs-height", `${Math.max(150, rect.height - insetY * 2)}px`);
+  }
+
+  function loadVhs(tape) {
+    if (!tape) return;
+    if (activeVhs?.id === tape.id) {
+      closeVhs();
+      return;
+    }
+
+    closeVhs();
+    activeVhs = tape;
+    window.dispatchEvent(new CustomEvent("zendigo:audio-owner", { detail: "tuner" }));
+
+    const power = document.querySelector("#broadcast-tuner .console-power");
+    if (power && !power.classList.contains("is-on")) power.click();
+
+    const origin = encodeURIComponent(window.location.origin);
+    vhsPlayerStage = document.createElement("section");
+    vhsPlayerStage.className = "vhs-player-stage";
+    vhsPlayerStage.setAttribute("aria-label", `${tape.title} video playlist playing on the television`);
+    vhsPlayerStage.innerHTML = `
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/videoseries?list=${encodeURIComponent(tape.playlistId)}&autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${origin}"
+        title="${tape.title} — ${tape.subtitle}"
+        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+        allowfullscreen></iframe>`;
+    document.body.appendChild(vhsPlayerStage);
+
+    document.querySelectorAll(".vhs-case-button").forEach(button => {
+      const playing = button.dataset.vhsId === tape.id;
+      button.classList.toggle("is-playing", playing);
+      button.setAttribute("aria-pressed", String(playing));
+    });
+
+    const frame = vhsPlayerStage.querySelector("iframe");
+    const volume = Math.max(0, Math.min(100, Number(tvVolumeInput?.value ?? 72)));
+    frame?.addEventListener("load", () => {
+      window.setTimeout(() => sendTvVolume(frame, volume), 250);
+      window.setTimeout(() => sendTvVolume(frame, volume), 950);
+    }, { once: true });
+    routeVhsToTv();
+  }
+
+  function buildVhsTower(side) {
+    const tower = document.createElement("div");
+    tower.className = `vhs-tower vhs-tower-${side}`;
+    tower.setAttribute("aria-label", `${side === "left" ? "Left" : "Right"} VHS library tower`);
+
+    const tapes = side === "left" ? VHS_TAPES : [];
+    const slots = Array.from({ length: 14 }, (_, index) => {
+      const tape = tapes[index];
+      if (!tape) {
+        const empty = document.createElement("span");
+        empty.className = "vhs-storage-bay is-empty";
+        empty.dataset.vhsBay = `${side}-${String(index + 1).padStart(2, "0")}`;
+        empty.setAttribute("aria-hidden", "true");
+        return empty;
+      }
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "vhs-storage-bay vhs-case-button";
+      button.dataset.vhsId = tape.id;
+      button.setAttribute("aria-label", `Load ${tape.title} — ${tape.subtitle} on the television`);
+      button.setAttribute("aria-pressed", "false");
+      button.title = `${tape.title} — ${tape.subtitle}`;
+      button.innerHTML = `<img src="${tape.caseArt}" alt="" aria-hidden="true">`;
+      button.addEventListener("click", () => loadVhs(tape));
+      return button;
+    });
+    tower.append(...slots);
+    return tower;
+  }
+
+  function bindVhsTvControls() {
+    const power = document.querySelector("#broadcast-tuner .console-power");
+    if (power && !power.dataset.vhsBound) {
+      power.dataset.vhsBound = "true";
+      power.addEventListener("click", () => {
+        if (activeVhs && power.classList.contains("is-on")) closeVhs();
+      });
+    }
+    document.querySelectorAll("#broadcast-tuner .console-channel-controls button").forEach(button => {
+      if (button.dataset.vhsBound) return;
+      button.dataset.vhsBound = "true";
+      button.addEventListener("click", () => {
+        if (activeVhs) closeVhs();
+      });
+    });
+  }
+
   function ensureEntertainmentCabinet() {
     const component = document.querySelector(".cassette-component");
     if (!component) return null;
@@ -590,17 +720,15 @@
 
     ["left", "right"].forEach(side => {
       let tower = component.querySelector(`.vhs-tower-${side}`);
-      if (tower) return;
-      tower = document.createElement("div");
-      tower.className = `vhs-tower vhs-tower-${side}`;
-      tower.setAttribute("aria-label", `${side === "left" ? "Left" : "Right"} video archive tower — future expansion`);
-      tower.innerHTML = Array.from({ length: 14 }, (_, index) =>
-        `<span class="vhs-storage-bay is-empty" data-vhs-bay="${String(index + 1).padStart(2, "0")}" aria-hidden="true"></span>`
-      ).join("");
+      if (tower?.dataset.libraryVersion === "3") return;
+      tower?.remove();
+      tower = buildVhsTower(side);
+      tower.dataset.libraryVersion = "3";
       component.appendChild(tower);
     });
 
     ensureTvVolumeControl();
+    bindVhsTvControls();
     return component;
   }
 
@@ -732,6 +860,7 @@
     ensureEntertainmentCabinet();
     syncReadoutFromDeck();
     routeVideoToTv();
+    routeVhsToTv();
 
     const active = meters.some((meter) => meter.querySelector("i.is-active"));
     const volume = Math.max(0, Math.min(1, Number(volumeInput?.value ?? 72) / 100));
@@ -773,8 +902,21 @@
       window.requestAnimationFrame(() => window.requestAnimationFrame(routeVideoToTv));
       window.setTimeout(routeVideoToTv, 120);
     });
-    window.addEventListener("resize", routeVideoToTv);
-    window.addEventListener("scroll", routeVideoToTv, { passive: true });
+    document.addEventListener("click", event => {
+      if (!activeVhs) return;
+      if (event.target.closest?.(".cassette-case, .cassette-transport")) closeVhs();
+    }, true);
+    window.addEventListener("keydown", event => {
+      if (event.key === "Escape" && activeVhs) closeVhs();
+    });
+    window.addEventListener("resize", () => {
+      routeVideoToTv();
+      routeVhsToTv();
+    });
+    window.addEventListener("scroll", () => {
+      routeVideoToTv();
+      routeVhsToTv();
+    }, { passive: true });
     window.addEventListener("message", (event) => {
       if (event.origin !== "https://zendigo-redline-82.zendigo-playz.chatgpt.site" || !event.data) return;
       if (event.data.type === "zendigo-cassette:state") {

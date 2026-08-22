@@ -18,7 +18,7 @@ main#top .site-header .main-nav{justify-self:center;gap:20px}
 .hero-media-stack{width:100%;max-width:none;min-width:0}
 
 .cassette-component.entertainment-cabinet{
-  --cabinet-side:76px;
+  --cabinet-side:150px;
   position:relative;
   isolation:isolate;
   display:grid;
@@ -85,10 +85,11 @@ main#top .site-header .main-nav{justify-self:center;gap:20px}
   top:17px;
   bottom:27px;
   width:var(--cabinet-side);
-  display:grid;
-  grid-template-rows:repeat(14,minmax(0,1fr));
-  gap:7px;
-  padding:11px 10px;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:6px;
+  padding:12px 8px;
   background:
     linear-gradient(90deg,#0009,#ffffff08 18%,transparent 50%,#000a),
     #0b0706;
@@ -99,23 +100,103 @@ main#top .site-header .main-nav{justify-self:center;gap:20px}
 .vhs-tower-right{right:10px}
 .vhs-storage-bay{
   position:relative;
-  min-height:0;
+  flex:0 0 26px;
+  min-height:26px;
+  min-width:0;
+  display:block;
+  width:100%;
+  padding:0;
   border:1px solid #34261e;
-  border-radius:1px 3px 3px 1px;
+  border-radius:3px;
   background:
     linear-gradient(106deg,#ffffff08,transparent 24% 76%,#000b),
     linear-gradient(#18100c,#070504 46%,#17100d 51%,#050303);
   box-shadow:inset 0 5px 8px #000d,0 3px #030202,0 5px 6px #0009;
 }
+.vhs-storage-bay.is-empty::before{
+  content:"";
+  position:absolute;
+  top:4px;
+  right:5px;
+  bottom:4px;
+  left:5px;
+  border:1px solid #211814;
+  background:linear-gradient(100deg,#140d0a,#070504 42%,#110b09);
+  box-shadow:inset 0 4px 9px #000e;
+}
 .vhs-storage-bay::after{
   content:"";
   position:absolute;
-  right:7px;
-  bottom:-5px;
-  left:7px;
-  height:4px;
+  right:4px;
+  bottom:-4px;
+  left:4px;
+  height:3px;
   background:linear-gradient(#795b43,#160f0b 52%,#040303);
   border-top:1px solid #9a7759;
+}
+.vhs-case-button{
+  cursor:pointer;
+  overflow:hidden;
+  appearance:none;
+  -webkit-appearance:none;
+  color:inherit;
+  background:
+    radial-gradient(ellipse at 50% 72%,#9d79531e,transparent 55%),
+    linear-gradient(106deg,#ffffff08,transparent 24% 76%,#000b),
+    linear-gradient(#18100c,#070504 46%,#17100d 51%,#050303);
+}
+.vhs-case-button img{
+  position:absolute;
+  z-index:1;
+  inset:1px;
+  width:calc(100% - 2px);
+  height:calc(100% - 2px);
+  object-fit:fill;
+  filter:drop-shadow(0 3px 2px #000e) saturate(.92) contrast(1.04);
+  transform:translateZ(0);
+  transform-origin:50% 50%;
+  transition:transform 150ms ease,filter 150ms ease;
+}
+.vhs-case-button:hover img,
+.vhs-case-button:focus-visible img{
+  filter:drop-shadow(0 4px 3px #000f) saturate(1.06) contrast(1.08);
+  transform:translateY(-1px) scale(1.015);
+}
+.vhs-case-button:focus-visible{outline:2px solid #f2eee8;outline-offset:2px}
+.vhs-case-button.is-playing{
+  border-color:#e41c2d;
+  box-shadow:inset 0 0 0 1px #ff5360,0 0 11px #e2182873,0 3px #030202,0 5px 6px #0009;
+}
+.vhs-case-button.is-playing::before{
+  content:"";
+  position:absolute;
+  z-index:2;
+  top:4px;
+  bottom:4px;
+  left:3px;
+  width:3px;
+  background:#ef2233;
+  box-shadow:0 0 7px #ff2438;
+}
+
+.vhs-player-stage{
+  position:fixed;
+  z-index:2147483000;
+  top:var(--vhs-top,0);
+  left:var(--vhs-left,0);
+  width:var(--vhs-width,0);
+  height:var(--vhs-height,0);
+  overflow:hidden;
+  background:#000;
+  border-radius:7% / 5%;
+  box-shadow:inset 0 0 24px #000,0 0 0 2px #101716;
+}
+.vhs-player-stage iframe{
+  display:block;
+  width:100%;
+  height:100%;
+  border:0;
+  background:#000;
 }
 
 /* A late-80s/early-90s 4:3 CRT built into the same warm component cabinet. */
@@ -392,7 +473,26 @@ main#top .site-header .main-nav{justify-self:center;gap:20px}
     grid-template-areas:"tuner" "deck" "tapes" "games" !important;
     padding:14px 13px 24px;
   }
-  .vhs-tower{display:none}
+  .vhs-tower-left{
+    position:relative;
+    top:auto;
+    right:auto;
+    bottom:auto;
+    left:auto;
+    grid-column:1/-1;
+    grid-row:5;
+    width:100%;
+    height:54px;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    gap:8px;
+    overflow-x:auto;
+    padding:10px;
+    scrollbar-color:#71553f #080504;
+  }
+  .vhs-tower-left .vhs-storage-bay{flex:0 0 160px;width:160px}
+  .vhs-tower-right{display:none}
   .cassette-component.entertainment-cabinet::after{right:13px;left:13px}
   .cassette-component.entertainment-cabinet>.cassette-case-stack{width:min(100%,360px);place-self:start center}
   .media-tuner-slot .console-hardware{grid-template-columns:minmax(0,1fr) 82px;padding:13px;gap:8px}
