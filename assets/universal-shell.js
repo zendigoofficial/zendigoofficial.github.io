@@ -7,6 +7,7 @@
     ["/records/", "Records"],
     ["/work/", "Work"],
     ["/tools/", "Tools"],
+    ["/cryptids/", "Cryptids"],
     ["/ai-lab/", "AI Labs"],
     ["/contact/", "Contact"]
   ];
@@ -16,7 +17,7 @@
     "Retro Gaming",
     "Live Broadcasts",
     "Game Development",
-    "Competitive Coverage",
+    "Cryptid Research",
     "AI Experiments"
   ];
 

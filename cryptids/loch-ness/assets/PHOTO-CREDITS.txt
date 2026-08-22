@@ -1,0 +1,56 @@
+LOCH NESS CASE 001 // ASSET RECORD
+Reviewed: 2026-08-22
+
+loch-ness-hero.webp
+  Source: Loch Ness, Scotland (9816048116).jpg
+  Creator: Gary Todd
+  Date: 2003-06-12
+  License: Creative Commons CC0 1.0
+  Original: https://commons.wikimedia.org/wiki/File:Loch_Ness,_Scotland_(9816048116).jpg
+  Changes: Cropped, resized, metadata stripped, converted to WebP.
+
+urquhart-castle.webp
+  Source: Urquhart Castle, on the shore of Loch Ness, Scotland (41389070730).jpg
+  Creator: Mustang Joe
+  License: Creative Commons CC0 1.0
+  Original: https://commons.wikimedia.org/wiki/File:Urquhart_Castle,_on_the_shore_of_Loch_Ness,_Scotland_(41389070730).jpg
+  Changes: Cropped, resized, metadata stripped, converted to WebP.
+
+fort-augustus-canal.webp
+  Source: Caledonian Canal, Fort Augustus to Loch Ness.jpg
+  Creator: Peter Glyn
+  Date: 2014-07-29
+  License: Creative Commons CC0 1.0
+  Original: https://commons.wikimedia.org/wiki/File:Caledonian_Canal,_Fort_Augustus_to_Loch_Ness.jpg
+  Changes: Cropped, resized, metadata stripped, converted to WebP.
+
+fort-augustus-map.webp
+  Source: Ordnance Survey One-inch Sheet 36 Fort Augustus, Published 1956.jpg
+  Creator: Ordnance Survey
+  Date: 1956
+  License: Public domain per source record
+  Original: https://commons.wikimedia.org/wiki/File:Ordnance_Survey_One-inch_Sheet_36_Fort_Augustus,_Published_1956.jpg
+  Changes: Resized, metadata stripped, converted to WebP.
+
+surgeons-photograph.webp
+  Source: Loch Ness Monster Surgeon's photograph.jpg
+  Creator credit on source: M. A. Wetherell
+  Publication: 1934-04-21
+  License: Public domain per source record
+  Original: https://commons.wikimedia.org/wiki/File:Loch_Ness_Monster_Surgeon%27s_photograph.jpg
+  Changes: Resized, metadata stripped, converted to WebP.
+
+urquhart-castle-painting.webp
+  Source: Castle Urquhart, Loch Ness
+  Artist: Hugh William Williams (1773-1829)
+  Collection: National Galleries of Scotland
+  License: Public domain
+  Original: https://commons.wikimedia.org/wiki/File:Hugh_William_Williams_(1773-1829)_-_Castle_Urquhart,_Loch_Ness_-_NG_371_-_National_Galleries_of_Scotland.jpg
+  Changes: Metadata stripped, converted to WebP.
+
+No generative imagery was used in these assets.
+
+loch-ness-case-001.webp
+  Source: Derived from loch-ness-hero.webp above.
+  License: Creative Commons CC0 1.0 source photograph.
+  Changes: 1200x630 crop with original Zendigo typography and graphic treatment.
