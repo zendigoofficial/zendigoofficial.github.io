@@ -1,0 +1,26 @@
+JIMOTHY CASE 002 — IMAGE CREDITS
+
+jimothy-hero.webp
+jimothy-usgs-illustration.webp
+  Creator: Sally House / U.S. Geological Survey
+  Date: July 23, 2026
+  Source: https://commons.wikimedia.org/wiki/File:JimothyRaccoon.jpg
+  Rights: Public domain in the United States (federal government work)
+  Note: jimothy-hero.webp is a presentation crop of the same illustration.
+
+raccoon-representative.webp
+  Creator: USFWS Mountain Prairie
+  Date: August 17, 2017
+  Source: https://commons.wikimedia.org/wiki/File:Raccoon_(1)_(48805099853).jpg
+  Rights: Public domain (U.S. Fish and Wildlife Service work)
+  Note: Representative common raccoon; not Jimothy.
+
+raccoon-tracks.webp
+  Creator: Julia Pinnix / U.S. Fish and Wildlife Service
+  Date: September 27, 2021
+  Source: https://www.fws.gov/media/raccoon-tracks-snow-leavenworth-national-fish-hatchery-julia-pinnixjpg
+  Rights: Public domain
+
+All source files are human-created, non-AI assets. Copyrighted social-media
+recordings, press photographs, game art, Mariners graphics and fan art are linked
+from the case file but are not republished here.

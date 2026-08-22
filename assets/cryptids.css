@@ -115,3 +115,55 @@ body .site-footer .footer-wordmark span{font-size:10px}body .site-footer>div a{f
 @media(max-width:650px){.archive-kicker{font-size:10px}.map-frame{min-height:500px;padding:12px}.map-canvas{width:100%;max-width:370px}.map-copy p{font-size:15px}.location-list button{min-height:68px}.source-list a{min-height:34px;display:flex;align-items:center}.footer-signal-strip>div{font-size:11px}}
 
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Jimothy case file + archive readability pass */
+.case-entry+.case-entry{margin-top:38px}
+.case-entry-media-jimothy img{object-position:center 62%;filter:saturate(.58) contrast(1.12) brightness(.82)}
+
+.jimothy-hero>img{object-position:center 58%;filter:saturate(.52) contrast(1.16) brightness(.5)}
+.jimothy-hero:before{background:linear-gradient(90deg,#030806f2 0 26%,#0308069e 51%,#030806c9 100%),linear-gradient(0deg,#030605e8 0 25%,transparent 66%)}
+.jimothy-hero .case-hero-copy{max-width:800px}
+.jimothy-hero h1{font-size:clamp(78px,10vw,146px)}
+.jimothy-hero h1 span{max-width:570px;margin-top:12px;color:var(--cryptid-green);font-size:.31em;line-height:.95;letter-spacing:.02em}
+
+.encounter-panel{display:grid;grid-template-columns:minmax(260px,.72fr) minmax(0,1.28fr);overflow:hidden;border:1px solid #315847;background:#0a100e}
+.encounter-readout{display:flex;flex-direction:column;justify-content:center;min-height:460px;border-right:1px solid #315847;padding:42px;background:radial-gradient(circle at 30% 34%,#8ce8c015,transparent 36%),repeating-linear-gradient(0deg,#ffffff04 0 1px,transparent 1px 4px),#07100d}
+.encounter-readout>span{color:var(--cryptid-green);text-transform:uppercase;font:700 11px/1.3 Consolas,monospace;letter-spacing:.15em}
+.encounter-readout>strong{display:flex;align-items:end;gap:12px;margin-top:22px;color:var(--cryptid-white);font:800 clamp(88px,10vw,132px)/.75 Consolas,monospace;letter-spacing:-.09em}
+.encounter-readout>strong small{padding-bottom:7px;color:var(--cryptid-red);font:700 19px/1 Consolas,monospace;letter-spacing:.04em}
+.encounter-readout>i{margin-top:17px;color:#9caaa3;font:700 12px/1.4 Consolas,monospace;letter-spacing:.12em}
+.footage-marks{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:37px}.footage-marks b{height:8px;border:1px solid #315847;background:#8ce8c01d}.footage-marks b:nth-child(-n+3){background:var(--cryptid-green)}
+.encounter-copy{align-self:center;padding:48px}
+.encounter-copy>span{color:var(--cryptid-red);text-transform:uppercase;font:700 11px/1.3 Consolas,monospace;letter-spacing:.14em}
+.encounter-copy h3{margin:14px 0 20px;text-transform:uppercase;font:900 clamp(38px,4.5vw,62px)/.87 "Arial Narrow",Arial,sans-serif;letter-spacing:-.04em}
+.encounter-copy p{max-width:720px;margin:0 0 17px;color:#c9cfcb;font-size:16px;line-height:1.72}
+.encounter-copy>small{display:block;margin-top:12px;color:#a8b1ac;font:400 12px/1.55 Consolas,monospace}
+.source-button{display:flex;align-items:center;justify-content:space-between;max-width:390px;margin-top:27px;border:1px solid var(--cryptid-green-dim);padding:14px 16px;color:var(--cryptid-green);text-decoration:none;text-transform:uppercase;font:700 11px/1.3 Consolas,monospace;letter-spacing:.11em}.source-button:hover,.source-button:focus-visible{color:#06110d;background:var(--cryptid-green)}
+
+.jimothy-science .science-readout strong{letter-spacing:-.03em}
+.standalone-note{margin:25px 0 0;border-left:3px solid var(--cryptid-red);background:#ffffff06;padding:17px 20px;color:#d3d6d0;font:700 14px/1.65 Consolas,monospace}
+.folklore-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #ffffff1a;border-left:1px solid #ffffff1a}.folklore-grid article{min-height:230px;border-right:1px solid #ffffff1a;border-bottom:1px solid #ffffff1a;padding:28px;background:linear-gradient(135deg,#141c19,#090d0c)}.folklore-grid b{color:var(--cryptid-red);font:700 12px/1 Consolas,monospace}.folklore-grid h3{margin:28px 0 12px;text-transform:uppercase;font:800 23px/1 "Arial Narrow",Arial,sans-serif;letter-spacing:.02em}.folklore-grid p{margin:0;color:#b7bfba;font-size:15px;line-height:1.6}
+.jimothy-species .evidence-photo img{filter:saturate(.55) contrast(1.1) brightness(.75)}
+.jimothy-conclusion .field-conclusion-image img{filter:grayscale(.75) sepia(.12) contrast(1.2) brightness(.58)}
+.verdict-line{margin-top:24px!important;border-left:3px solid var(--cryptid-green);padding-left:18px;color:var(--cryptid-green)!important;font:700 14px/1.65 Consolas,monospace!important}
+.wildlife-notice{display:grid;grid-template-columns:140px 1fr;gap:25px;margin-top:72px;border:1px solid #a9623c;border-left:5px solid #e0763c;padding:32px;background:repeating-linear-gradient(135deg,#e0763c08 0 8px,transparent 8px 16px),#120d0a}.wildlife-notice>span{color:#ef8650;text-transform:uppercase;font:700 11px/1.45 Consolas,monospace;letter-spacing:.12em}.wildlife-notice h2{margin:0;text-transform:uppercase;font:900 clamp(35px,4.5vw,58px)/.88 "Arial Narrow",Arial,sans-serif;letter-spacing:-.04em}.wildlife-notice p{max-width:820px;margin:15px 0 0;color:#ded6cf;font-size:16px;line-height:1.7}
+
+/* The earlier case file used several 7–10px labels. Keep the archival scale, but make the small type comfortably readable. */
+.case-breadcrumb{font-size:12px}
+.archive-status span,.section-heading span,.case-entry-copy>span,.archive-policy small{font-size:11px}
+.case-entry-code,.case-entry-action{font-size:12px}
+.case-entry-data dt{font-size:10px}.case-entry-data dd{font-size:13px}
+.archive-policy p{font-size:14px}
+.case-index>header{font-size:11px}.case-index dt{font-size:10px}.case-index dd{font-size:13px}
+.case-fact-strip span{font-size:10px}.case-fact-strip strong{font-size:16px}
+.case-section-heading>span{font-size:11px}.photo-caption{font-size:11px}
+.evidence-controls button,.evidence-result-count{font-size:11px}
+.evidence-index{font-size:12px}.evidence-name span,.evidence-status span{font-size:10px}.evidence-reading{font-size:14px}
+.evidence-feature-copy>span,.science-readout>span,.field-conclusion-copy>span{font-size:11px}.evidence-feature-copy li{font-size:13px}.science-readout small{font-size:11px}.science-result{font-size:13px}
+.explanation-row>span{font-size:12px}.explanation-row p{font-size:15px}
+.source-list>li>span{font-size:12px}.source-list strong{font-size:14px}.source-list small{font-size:13px}.source-list a{font-size:11px}
+.asset-credit-list summary{font-size:11px}.asset-credit-list p{font-size:13px}.case-revision{font-size:11px}
+body .site-footer .footer-wordmark span,body .site-footer>div a,body .site-footer>p{font-size:11px}
+
+@media(max-width:1050px){.encounter-panel{grid-template-columns:1fr}.encounter-readout{min-height:330px;border-right:0;border-bottom:1px solid #315847}.folklore-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.case-entry+.case-entry{margin-top:28px}.jimothy-hero h1{font-size:clamp(66px,22vw,102px)}.jimothy-hero h1 span{font-size:.34em}.encounter-readout{min-height:270px;padding:30px 22px}.encounter-copy{padding:30px 22px}.encounter-copy p{font-size:15px}.folklore-grid{grid-template-columns:1fr}.folklore-grid article{min-height:0}.wildlife-notice{grid-template-columns:1fr;gap:14px;margin-top:56px;padding:26px 21px}.wildlife-notice p{font-size:15px}.case-index dt{font-size:11px}.case-index dd{font-size:14px}.photo-caption{font-size:11px}.source-list a{font-size:12px}}
