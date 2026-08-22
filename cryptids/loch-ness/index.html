@@ -13,7 +13,7 @@
   <title>Case 001: The Loch Ness Monster // Zendigo</title>
   <link rel="icon" href="/favicon.svg">
   <link rel="preload" as="image" href="./assets/loch-ness-hero.webp">
-  <link rel="stylesheet" href="/assets/cryptids.css?v=cryptids-1">
+  <link rel="stylesheet" href="/assets/cryptids.css?v=cryptids-2">
   <link rel="stylesheet" href="/assets/site-header.css?v=universal-6">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Case 001: The Loch Ness Monster","description":"A sourced record of the reports, photographs, searches, science and reasonable explanations behind the Loch Ness Monster legend.","dateModified":"2026-08-22","author":{"@type":"Person","name":"Zendigo"},"publisher":{"@type":"Organization","name":"Zendigo"},"mainEntityOfPage":"https://zendigoofficial.github.io/cryptids/loch-ness/","image":"https://zendigoofficial.github.io/cryptids/loch-ness/assets/loch-ness-case-001.webp"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zendigoofficial.github.io/"},{"@type":"ListItem","position":2,"name":"Cryptids","item":"https://zendigoofficial.github.io/cryptids/"},{"@type":"ListItem","position":3,"name":"Loch Ness Monster","item":"https://zendigoofficial.github.io/cryptids/loch-ness/"}]}</script>
@@ -91,12 +91,13 @@
 
       <section class="case-section" aria-labelledby="evidence-heading">
         <header class="case-section-heading"><span>03 // Evidence</span><div><h2 id="evidence-heading">What holds up. What does not.</h2><p>Reports, photographs, instruments and scientific surveys are different forms of evidence. The archive keeps them that way.</p></div></header>
-        <div class="evidence-controls" data-evidence-controls aria-label="Filter evidence">
+        <div class="evidence-controls" data-evidence-controls role="group" aria-label="Filter evidence">
           <button type="button" data-filter="all" aria-pressed="true">All evidence</button>
           <button type="button" data-filter="visual" aria-pressed="false">Visual</button>
           <button type="button" data-filter="instrument" aria-pressed="false">Instrument</button>
           <button type="button" data-filter="science" aria-pressed="false">Scientific</button>
         </div>
+        <p class="evidence-result-count" data-evidence-result aria-live="polite">Showing all 5 evidence records</p>
         <div class="evidence-ledger">
           <article class="evidence-row" data-evidence-type="visual"><div class="evidence-index">01</div><div class="evidence-name"><span>Alleged photograph</span><strong>Surgeon's Photograph</strong></div><div class="evidence-status"><span class="is-discredited">Discredited</span></div><div class="evidence-reading">Historically important, but not evidence of an unknown animal. The image was staged with a small model.</div></article>
           <article class="evidence-row" data-evidence-type="visual"><div class="evidence-index">02</div><div class="evidence-name"><span>Alleged photograph</span><strong>Hugh Gray image</strong></div><div class="evidence-status"><span class="is-unresolved">Disputed</span></div><div class="evidence-reading">The subject has been interpreted in several ways. No identification has achieved general agreement.</div></article>
@@ -121,9 +122,31 @@
 
       <section class="case-section" aria-labelledby="map-heading">
         <header class="case-section-heading"><span>05 // Location</span><div><h2 id="map-heading">A long, dark search area.</h2><p>The geography is part of the case: a deep glacial trench, steep shores and peat-darkened water that can make distance and scale difficult to judge.</p></div></header>
-        <div class="map-panel">
-          <div class="map-frame"><img src="./assets/fort-augustus-map.webp" width="1600" height="1986" alt="1956 Ordnance Survey map showing Loch Ness and the surrounding Scottish Highlands" loading="lazy"></div>
-          <div class="map-copy"><span>Ordnance Survey · Sheet 36 · 1956</span><h3>Reference points.</h3><p>This is a historical survey map, used as geography rather than decoration. Reported locations should only be marked when the source gives enough information to do it honestly.</p><ol class="location-list"><li><b>01</b><span>Fort Augustus · Southern end and Caledonian Canal</span></li><li><b>02</b><span>Urquhart Bay · Castle, sonar work and frequent reports</span></li><li><b>03</b><span>Drumnadrochit · Centre of the modern 1933 story</span></li><li><b>04</b><span>Dores · Northern shoreline and modern observation point</span></li><li><b>05</b><span>River Ness · Location of the account attributed to 565</span></li></ol><p class="map-credit">Ordnance Survey One-inch Sheet 36, Fort Augustus, published 1956. Public-domain scan via <a href="#credit-map">Wikimedia Commons</a>.</p></div>
+        <div class="map-panel" data-location-map>
+          <div class="map-frame">
+            <div class="map-canvas">
+              <img src="./assets/loch-ness-locator.webp" width="862" height="1054" alt="Public-domain locator map of Loch Ness from Fort Augustus to Inverness" loading="lazy">
+              <button class="map-marker is-active" type="button" style="--x:36.3%;--y:74.9%" data-location="fort-augustus" aria-label="Show Fort Augustus" aria-pressed="true"><span>01</span></button>
+              <button class="map-marker" type="button" style="--x:48%;--y:52%" data-location="urquhart" aria-label="Show Urquhart Castle" aria-pressed="false"><span>02</span></button>
+              <button class="map-marker" type="button" style="--x:44.9%;--y:49.3%" data-location="drumnadrochit" aria-label="Show Drumnadrochit" aria-pressed="false"><span>03</span></button>
+              <button class="map-marker" type="button" style="--x:56.3%;--y:44.2%" data-location="dores" aria-label="Show Dores" aria-pressed="false"><span>04</span></button>
+              <button class="map-marker" type="button" style="--x:58.6%;--y:39.2%" data-location="river-ness" aria-label="Show the River Ness" aria-pressed="false"><span>05</span></button>
+            </div>
+          </div>
+          <div class="map-copy">
+            <span>Full-loch locator · Select a point</span>
+            <h3>Reference points.</h3>
+            <p>The markers connect the case record to identifiable places around the loch. Select a number on the map or in the index to inspect its location and relevance.</p>
+            <ol class="location-list">
+              <li><button class="is-active" type="button" data-location="fort-augustus" data-title="Fort Augustus" data-coords="57.1432° N · 4.6807° W" data-note="The southern end of Loch Ness, where the Caledonian Canal enters the loch." aria-pressed="true"><b>01</b><span><strong>Fort Augustus</strong><small>Southern end · Caledonian Canal</small></span></button></li>
+              <li><button type="button" data-location="urquhart" data-title="Urquhart Castle" data-coords="57.3246° N · 4.4414° W" data-note="A shoreline landmark associated with sonar work, tourism and many modern reports." aria-pressed="false"><b>02</b><span><strong>Urquhart Castle</strong><small>Northwestern shore · Urquhart Bay</small></span></button></li>
+              <li><button type="button" data-location="drumnadrochit" data-title="Drumnadrochit" data-coords="57.3373° N · 4.4800° W" data-note="The village tied to Aldie Mackay's 1933 report and the start of the modern story." aria-pressed="false"><b>03</b><span><strong>Drumnadrochit</strong><small>Centre of the modern 1933 case</small></span></button></li>
+              <li><button type="button" data-location="dores" data-title="Dores" data-coords="57.3826° N · 4.3339° W" data-note="A northern-shore observation point with a long view down the loch." aria-pressed="false"><b>04</b><span><strong>Dores</strong><small>Northern shore · Observation point</small></span></button></li>
+              <li><button type="button" data-location="river-ness" data-title="River Ness" data-coords="57.4254° N · 4.3132° W" data-note="The river corridor connected to the account attributed to the year 565." aria-pressed="false"><b>05</b><span><strong>River Ness</strong><small>Northern outflow · Early account</small></span></button></li>
+            </ol>
+            <div class="map-readout" aria-live="polite"><span>Selected point <b data-map-number>01</b></span><strong data-map-title>Fort Augustus</strong><small data-map-coords>57.1432° N · 4.6807° W</small><p data-map-note>The southern end of Loch Ness, where the Caledonian Canal enters the loch.</p></div>
+            <p class="map-credit">Public-domain Loch Ness locator map by P.K. Niyogi, modified for this interactive index. <a href="#credit-map">Image and coordinate notes</a>.</p>
+          </div>
         </div>
       </section>
 
@@ -150,12 +173,12 @@
         <div class="source-desk">
           <span class="archive-kicker">Research sources</span>
           <ol class="source-list">
-            <li id="source-columba"><span>01</span><div><strong>University of the Highlands and Islands · Columba, Nessie and the early account</strong><small>Context for Adomnán's Life of St Columba, written around 700.</small></div><a href="https://www.uhi.ac.uk/en/research-enterprise/cultural/institute-for-northern-studies/blogs--exhibitions/old-mimirs-well-articles/columba%2C-nessie%2C-and-the-deadly-loathsome-little-creatures/">Open source ↗</a></li>
-            <li id="source-mackay"><span>02</span><div><strong>The Loch Ness Experience · Aldie Mackay and the 1933 report</strong><small>History of the Old Drumnadrochit Hotel and the report that launched the modern legend.</small></div><a href="https://lochness.com/news/the-old-drumnadrochit-hotel-and-the-loch-ness-legacy/">Open source ↗</a></li>
-            <li id="source-surgeon"><span>03</span><div><strong>Smithsonian Magazine · The Surgeon's Photograph and the eDNA search</strong><small>Historical context for the 1934 image and its later exposure as a hoax. The image license is recorded separately below.</small></div><a href="https://www.smithsonianmag.com/smart-news/search-monster-dna-will-help-survey-life-loch-ness-180969151/">Open source ↗</a></li>
-            <li id="source-deepscan"><span>04</span><div><strong>Loch Ness Project · Operation Deepscan</strong><small>The project's archive record of the 1987 sonar curtain.</small></div><a href="https://www.lochnessproject.org/FIELDWORKGROUNDTRUTH/DEEPSCAN%20OP/DEEPSCAN%20OPERATION%20LOCH%20NESS.html">Open source ↗</a></li>
-            <li id="source-edna"><span>05</span><div><strong>University of Otago · First eDNA study of Loch Ness</strong><small>Official 2019 account of the sampling method and reported results.</small></div><a href="https://www.otago.ac.nz/news/newsroom/first-edna-study-of-loch-ness-points-to-something-fishy">Open source ↗</a></li>
-            <li id="source-register"><span>06</span><div><strong>Official Loch Ness Monster Sightings Register</strong><small>1,177 recorded reports and 17 separately recorded webcam images when reviewed on 22 August 2026.</small></div><a href="https://www.lochnesssightings.com/">Open source ↗</a></li>
+            <li id="source-columba"><span>01</span><div><strong>University of the Highlands and Islands · Columba, Nessie and the early account</strong><small>Context for Adomnán's Life of St Columba, written around 700.</small></div><a href="https://www.uhi.ac.uk/en/research-enterprise/cultural/institute-for-northern-studies/blogs--exhibitions/old-mimirs-well-articles/columba%2C-nessie%2C-and-the-deadly-loathsome-little-creatures/" aria-label="View the University of the Highlands and Islands source">View source ↗</a></li>
+            <li id="source-mackay"><span>02</span><div><strong>The Loch Ness Experience · Aldie Mackay and the 1933 report</strong><small>History of the Old Drumnadrochit Hotel and the report that launched the modern legend.</small></div><a href="https://lochness.com/news/the-old-drumnadrochit-hotel-and-the-loch-ness-legacy/" aria-label="View the Aldie Mackay source">View source ↗</a></li>
+            <li id="source-surgeon"><span>03</span><div><strong>Smithsonian Magazine · The Surgeon's Photograph and the eDNA search</strong><small>Historical context for the 1934 image and its later exposure as a hoax. The image license is recorded separately below.</small></div><a href="https://www.smithsonianmag.com/smart-news/search-monster-dna-will-help-survey-life-loch-ness-180969151/" aria-label="View the Smithsonian source">View source ↗</a></li>
+            <li id="source-deepscan"><span>04</span><div><strong>Loch Ness Project · Operation Deepscan</strong><small>The project's archive record of the 1987 sonar curtain.</small></div><a href="https://www.lochnessproject.org/FIELDWORKGROUNDTRUTH/DEEPSCAN%20OP/DEEPSCAN%20OPERATION%20LOCH%20NESS.html" aria-label="View the Operation Deepscan source">View source ↗</a></li>
+            <li id="source-edna"><span>05</span><div><strong>University of Otago · First eDNA study of Loch Ness</strong><small>Official 2019 account of the sampling method and reported results.</small></div><a href="https://www.otago.ac.nz/news/newsroom/first-edna-study-of-loch-ness-points-to-something-fishy" aria-label="View the University of Otago eDNA source">View source ↗</a></li>
+            <li id="source-register"><span>06</span><div><strong>Official Loch Ness Monster Sightings Register</strong><small>1,177 recorded reports and 17 separately recorded webcam images when reviewed on 22 August 2026.</small></div><a href="https://www.lochnesssightings.com/" aria-label="View the official sightings register">View source ↗</a></li>
           </ol>
         </div>
 
@@ -163,16 +186,16 @@
           <details id="credit-hero"><summary>Hero · Loch Ness</summary><p>Gary Todd, 12 June 2003. CC0. Cropped and resized for layout. <a href="https://commons.wikimedia.org/wiki/File:Loch_Ness,_Scotland_(9816048116).jpg">Original file</a>.</p></details>
           <details id="credit-castle"><summary>Urquhart Castle photograph</summary><p>Mustang Joe, via Flickr and Wikimedia Commons. CC0. Cropped and resized for layout. <a href="https://commons.wikimedia.org/wiki/File:Urquhart_Castle,_on_the_shore_of_Loch_Ness,_Scotland_(41389070730).jpg">Original file</a>.</p></details>
           <details id="credit-surgeon"><summary>Surgeon's Photograph</summary><p>Attributed on the source record to M. A. Wetherell, published 21 April 1934. Public domain. Resized for layout. <a href="https://commons.wikimedia.org/wiki/File:Loch_Ness_Monster_Surgeon%27s_photograph.jpg">Original file</a>.</p></details>
-          <details id="credit-map"><summary>Ordnance Survey map</summary><p>Ordnance Survey One-inch Sheet 36, Fort Augustus, published 1956. Public-domain scan. Resized for layout. <a href="https://commons.wikimedia.org/wiki/File:Ordnance_Survey_One-inch_Sheet_36_Fort_Augustus,_Published_1956.jpg">Original file</a>.</p></details>
+          <details id="credit-map"><summary>Loch Ness locator map</summary><p>P.K. Niyogi. Public domain. The map was converted to WebP and fitted with an original interactive marker layer. Coordinates are rounded locator points checked against Wikidata and Historic Environment Scotland records. <a href="https://commons.wikimedia.org/wiki/File:Loch_Ness_Map_(new).jpg">Original file</a>.</p></details>
           <details id="credit-canal"><summary>Fort Augustus photograph</summary><p>Peter Glyn, 29 July 2014. CC0. Cropped and resized for layout. <a href="https://commons.wikimedia.org/wiki/File:Caledonian_Canal,_Fort_Augustus_to_Loch_Ness.jpg">Original file</a>.</p></details>
         </div>
-        <p class="case-revision"><span>CASE REVISION // 22 AUG 2026</span><span><b>INITIAL FILE</b> · Sources and licenses checked before local build.</span></p>
+        <p class="case-revision"><span>CASE REVISION // 22 AUG 2026</span><span><b>REVISION 02</b> · Location index rebuilt, readability raised, sources and licenses rechecked.</span></p>
       </section>
     </article>
   </main>
 
   <div class="footer-signal-strip" aria-label="Zendigo focus areas"><div><span>Speedrunning</span><i>◆</i><span>Retro Gaming</span><i>◆</i><span>Live Broadcasts</span><i>◆</i><span>Game Development</span><i>◆</i><span>Cryptid Research</span><i>◆</i><span>AI Experiments</span></div></div>
   <footer class="site-footer"><a class="footer-wordmark" href="/"><strong>ZENDIGO</strong><span>Independent creator system</span></a><div><a href="/">Home</a><a href="/broadcast/">Broadcast</a><a href="/records/">Records</a><a href="/work/">Work</a><a href="/tools/">Tools</a><a href="/cryptids/">Cryptids</a><a href="/ai-lab/">AI Labs</a><a href="/contact/">Contact</a></div><p>© 2026 ZENDIGO</p></footer>
-  <script src="/assets/cryptids.js?v=cryptids-1" defer></script>
+  <script src="/assets/cryptids.js?v=cryptids-2" defer></script>
 </body>
 </html>

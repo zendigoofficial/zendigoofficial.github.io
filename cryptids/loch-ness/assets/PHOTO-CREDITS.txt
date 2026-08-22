@@ -32,6 +32,13 @@ fort-augustus-map.webp
   Original: https://commons.wikimedia.org/wiki/File:Ordnance_Survey_One-inch_Sheet_36_Fort_Augustus,_Published_1956.jpg
   Changes: Resized, metadata stripped, converted to WebP.
 
+loch-ness-locator.webp
+  Source: Loch Ness Map (new).jpg
+  Creator: P.K. Niyogi
+  License: Public domain per source record
+  Original: https://commons.wikimedia.org/wiki/File:Loch_Ness_Map_(new).jpg
+  Changes: Metadata stripped, converted to WebP, restyled in CSS and fitted with an original interactive marker layer.
+
 surgeons-photograph.webp
   Source: Loch Ness Monster Surgeon's photograph.jpg
   Creator credit on source: M. A. Wetherell
