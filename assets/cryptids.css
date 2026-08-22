@@ -19,6 +19,7 @@ html{scroll-behavior:smooth;background:var(--cryptid-black)}
 body{margin:0;color:var(--cryptid-white);background:radial-gradient(circle at 82% 16%,#15362924 0 13%,transparent 42%),linear-gradient(116deg,#060807 0 55%,#0d100d 100%);font-family:Arial,Helvetica,sans-serif}
 a{color:inherit}
 button{font:inherit}
+.skip-link{position:fixed;z-index:1000;top:10px;left:10px;transform:translateY(-160%);border:2px solid var(--cryptid-green);padding:12px 16px;background:#050706;color:var(--cryptid-white);text-decoration:none;font:700 13px/1.2 Consolas,monospace}.skip-link:focus{transform:translateY(0)}
 .cryptid-main{width:var(--cryptid-shell);margin:0 auto;padding:58px 0 96px}
 .case-breadcrumb{display:flex;align-items:center;gap:10px;margin:0 0 30px;padding:0;list-style:none;color:#89918d;text-transform:uppercase;font:700 9px/1.2 Consolas,monospace;letter-spacing:.15em}
 .case-breadcrumb li{display:flex;align-items:center;gap:10px}.case-breadcrumb li+li:before{content:"/";color:var(--cryptid-red)}
@@ -165,5 +166,13 @@ body .site-footer .footer-wordmark span{font-size:10px}body .site-footer>div a{f
 .asset-credit-list summary{font-size:11px}.asset-credit-list p{font-size:13px}.case-revision{font-size:11px}
 body .site-footer .footer-wordmark span,body .site-footer>div a,body .site-footer>p{font-size:11px}
 
+/* Final small-type standard: 11px minimum for labels, 12px for interactive and supporting text. */
+.archive-kicker,.archive-status span,.section-heading span,.case-entry-copy>span,.archive-policy small,.case-index>header,.case-section-heading>span,.evidence-controls button,.evidence-result-count,.evidence-feature-copy>span,.science-readout>span,.field-conclusion-copy>span,.asset-credit-list summary,.case-revision{font-size:12px}
+.case-entry-data dt,.case-index dt,.case-fact-strip span,.evidence-name span,.evidence-status span,.map-copy>span,.map-readout>span,.map-copy .map-credit{font-size:11px}
+.case-entry-code,.case-entry-action,.case-entry-data dd,.case-index dd,.photo-caption,.science-readout small,.source-list a,.location-list b,.location-list small,.map-readout>small{font-size:12px}
+.map-marker span{font-size:11px}
+.source-list small,.asset-credit-list p,.map-readout>p{font-size:14px}
+.case-section sup a,.wildlife-notice sup a{color:var(--cryptid-green);text-decoration:none}.case-section sup a:hover,.case-section sup a:focus-visible,.wildlife-notice sup a:hover,.wildlife-notice sup a:focus-visible{text-decoration:underline}
+
 @media(max-width:1050px){.encounter-panel{grid-template-columns:1fr}.encounter-readout{min-height:330px;border-right:0;border-bottom:1px solid #315847}.folklore-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:650px){.case-entry+.case-entry{margin-top:28px}.jimothy-hero h1{font-size:clamp(66px,22vw,102px)}.jimothy-hero h1 span{font-size:.34em}.encounter-readout{min-height:270px;padding:30px 22px}.encounter-copy{padding:30px 22px}.encounter-copy p{font-size:15px}.folklore-grid{grid-template-columns:1fr}.folklore-grid article{min-height:0}.wildlife-notice{grid-template-columns:1fr;gap:14px;margin-top:56px;padding:26px 21px}.wildlife-notice p{font-size:15px}.case-index dt{font-size:11px}.case-index dd{font-size:14px}.photo-caption{font-size:11px}.source-list a{font-size:12px}}
+@media(max-width:650px){.case-entry+.case-entry{margin-top:28px}.jimothy-hero h1{font-size:clamp(66px,22vw,102px)}.jimothy-hero h1 span{font-size:.34em}.encounter-readout{min-height:270px;padding:30px 22px}.encounter-copy{padding:30px 22px}.encounter-copy p{font-size:15px}.folklore-grid{grid-template-columns:1fr}.folklore-grid article{min-height:0}.wildlife-notice{grid-template-columns:1fr;gap:14px;margin-top:56px;padding:26px 21px}.wildlife-notice p{font-size:15px}.archive-kicker,.case-index dt,.photo-caption{font-size:12px}.case-index dd{font-size:14px}.source-list a{font-size:13px}}
