@@ -246,3 +246,25 @@ body .site-footer .footer-wordmark span,body .site-footer>div a,body .site-foote
 
 @media(max-width:1050px){.wendigo-theme-grid{grid-template-columns:repeat(2,1fr)}.wendigo-living-feature{grid-template-columns:1fr}.wendigo-map-figure{min-height:500px;border-top:1px solid #315847;border-left:0}}
 @media(max-width:650px){.wendigo-hero h1{font-size:clamp(56px,17vw,86px)}.wendigo-hero h1 span{font-size:.47em}.wendigo-theme-grid{grid-template-columns:1fr}.wendigo-map-figure{min-height:410px;padding:22px 18px 58px}.wendigo-language-grid .source-button{margin-top:24px}.wendigo-science .science-readout strong{font-size:clamp(34px,12vw,48px)}}
+
+/* Jackalope case file */
+.case-entry-media-jackalope img{object-position:center 43%;filter:saturate(.58) contrast(1.1) brightness(.7)}
+.jackalope-hero>img{object-position:center 48%;filter:saturate(.52) contrast(1.15) brightness(.42)}
+.jackalope-hero:before{background:linear-gradient(90deg,#020705f5 0 31%,#0207059d 57%,#020705d8 100%),linear-gradient(0deg,#020504ee 0 25%,transparent 68%)}
+.jackalope-hero .case-hero-copy{max-width:820px}
+.jackalope-hero h1{font-size:clamp(74px,9.3vw,134px)}
+.jackalope-hero h1 span{margin-top:8px;color:var(--cryptid-green);font-size:.72em;letter-spacing:-.045em}
+.jackalope-statue img{object-position:center 30%;filter:saturate(.55) contrast(1.12) brightness(.68)}
+.jackalope-history-grid .jackalope-small-plate{background:linear-gradient(145deg,#d8d0bb,#aaa28f)}
+.jackalope-history-grid .jackalope-small-plate img{object-fit:contain;padding:70px;image-rendering:auto;filter:grayscale(.15) sepia(.18) contrast(1.06)}
+.jackalope-history-grid article:first-child img{object-position:center 48%;filter:saturate(.65) contrast(1.06) brightness(.82)}
+.jackalope-anatomy-grid article:first-child img{object-position:center 47%;filter:saturate(.62) contrast(1.1) brightness(.72)}
+.jackalope-anatomy-grid article:nth-child(2) img{object-position:center 45%;filter:saturate(.54) contrast(1.15) brightness(.67)}
+.jackalope-science .science-readout strong{font-size:clamp(48px,7vw,88px);letter-spacing:-.055em}
+.jackalope-lore-grid{grid-template-columns:repeat(4,1fr)}
+.jackalope-bridge-feature .evidence-photo img{object-position:center 48%;filter:grayscale(.72) sepia(.12) contrast(1.12) brightness(.62)}
+.jackalope-conclusion .field-conclusion-image{background:#d2c8b2}
+.jackalope-conclusion .field-conclusion-image img{object-fit:contain;padding:34px;filter:saturate(.7) contrast(1.08) brightness(.72)}
+
+@media(max-width:1050px){.jackalope-lore-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.jackalope-hero h1{font-size:clamp(62px,19vw,96px)}.jackalope-hero h1 span{font-size:.7em}.jackalope-history-grid .jackalope-small-plate img{padding:48px}.jackalope-lore-grid{grid-template-columns:1fr}.jackalope-science .science-readout strong{font-size:clamp(42px,15vw,64px)}}
