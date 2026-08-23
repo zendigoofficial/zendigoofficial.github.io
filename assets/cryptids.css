@@ -218,3 +218,31 @@ body .site-footer .footer-wordmark span,body .site-footer>div a,body .site-foote
 
 @media(max-width:1050px){.report-comparison{grid-template-columns:1fr}.animal-comparison article{grid-template-columns:1fr}.animal-comparison figure{min-height:380px}.story-drift{grid-template-columns:repeat(2,1fr)}.story-drift article:nth-child(2):after{display:none}}
 @media(max-width:650px){.loveland-hero h1{font-size:clamp(62px,19vw,92px)}.loveland-hero h1 span{font-size:.58em}.report-comparison article{min-height:0;padding:28px 22px}.contradiction-table{margin-right:0}.contradiction-table>div{min-width:690px}.animal-comparison figure{min-height:300px}.animal-comparison article>div{padding:30px 22px}.animal-comparison p{font-size:15px}.story-drift{grid-template-columns:1fr}.story-drift article{min-height:0}.story-drift article:after,.story-drift article:nth-child(2):after{display:none}}
+
+/* Wendigo cultural case file */
+.case-entry-media-wendigo img{object-position:center 52%;filter:saturate(.48) contrast(1.14) brightness(.65)}
+.wendigo-hero>img{object-position:center 52%;filter:saturate(.46) contrast(1.16) brightness(.43)}
+.wendigo-hero:before{background:linear-gradient(90deg,#020705f5 0 31%,#020705aa 58%,#020705d5 100%),linear-gradient(0deg,#020504ec 0 25%,transparent 68%)}
+.wendigo-hero .case-hero-copy{max-width:860px}
+.wendigo-hero h1{font-size:clamp(70px,8.8vw,126px)}
+.wendigo-hero h1 span{max-width:760px;margin-top:10px;color:var(--cryptid-green);font-size:.48em;line-height:.92;letter-spacing:-.025em}
+.wendigo-village img{object-position:center 48%;filter:saturate(.54) contrast(1.11) brightness(.7)}
+
+.wendigo-language-grid article{display:flex;flex-direction:column}
+.wendigo-language-grid .source-button{margin-top:auto;padding-top:14px}
+.wendigo-theme-grid{grid-template-columns:repeat(4,1fr)}
+
+.wendigo-living-feature{grid-template-columns:minmax(0,1.2fr) minmax(330px,.8fr)}
+.wendigo-map-figure{position:relative;display:grid;place-items:center;min-height:500px;margin:0;overflow:hidden;border-left:1px solid #315847;padding:32px;background:radial-gradient(circle at 50% 45%,#efe8d2,#c9c1a8)}
+.wendigo-map-figure img{display:block;width:100%;height:100%;max-height:470px;object-fit:contain}
+.wendigo-map-figure .photo-caption{position:absolute;right:0;bottom:0;left:0;padding:14px 16px;background:#040605e8;color:#d9dcd7}
+
+.wendigo-sensitive-feature .evidence-photo img{object-position:center top;filter:grayscale(1) contrast(1.06) brightness(.72)}
+.wendigo-fiddler-panel .footage-marks b:nth-child(n){background:#8ce8c01d}
+.wendigo-fiddler-panel .footage-marks b:nth-child(-n+2){background:var(--cryptid-green)}
+.wendigo-science .science-readout strong{font-size:clamp(38px,5vw,64px);letter-spacing:-.045em}
+.wendigo-blackwood-feature .evidence-photo img{object-position:center 20%;filter:grayscale(1) contrast(1.08) brightness(.75)}
+.wendigo-conclusion .field-conclusion-image img{object-position:center 52%;filter:saturate(.45) contrast(1.16) brightness(.5)}
+
+@media(max-width:1050px){.wendigo-theme-grid{grid-template-columns:repeat(2,1fr)}.wendigo-living-feature{grid-template-columns:1fr}.wendigo-map-figure{min-height:500px;border-top:1px solid #315847;border-left:0}}
+@media(max-width:650px){.wendigo-hero h1{font-size:clamp(56px,17vw,86px)}.wendigo-hero h1 span{font-size:.47em}.wendigo-theme-grid{grid-template-columns:1fr}.wendigo-map-figure{min-height:410px;padding:22px 18px 58px}.wendigo-language-grid .source-button{margin-top:24px}.wendigo-science .science-readout strong{font-size:clamp(34px,12vw,48px)}}
