@@ -268,3 +268,29 @@ body .site-footer .footer-wordmark span,body .site-footer>div a,body .site-foote
 
 @media(max-width:1050px){.jackalope-lore-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){.jackalope-hero h1{font-size:clamp(62px,19vw,96px)}.jackalope-hero h1 span{font-size:.7em}.jackalope-history-grid .jackalope-small-plate img{padding:48px}.jackalope-lore-grid{grid-template-columns:1fr}.jackalope-science .science-readout strong{font-size:clamp(42px,15vw,64px)}}
+
+/* Mothman case file */
+.case-entry-media-mothman img{object-position:center 47%;filter:saturate(.5) contrast(1.15) brightness(.61)}
+.mothman-hero>img{object-position:center 48%;filter:saturate(.42) contrast(1.2) brightness(.38)}
+.mothman-hero:before{background:linear-gradient(90deg,#020705f6 0 31%,#020705a5 58%,#020705dc 100%),linear-gradient(0deg,#020504ef 0 26%,transparent 68%),radial-gradient(circle at 73% 35%,#ff303014,transparent 19%)}
+.mothman-hero .case-hero-copy{max-width:840px}
+.mothman-hero h1{font-size:clamp(74px,9.3vw,134px)}
+.mothman-hero h1 span{margin-top:8px;color:var(--cryptid-red);font-size:.72em;letter-spacing:-.045em}
+.mothman-river img{object-position:center 46%;filter:saturate(.48) contrast(1.14) brightness(.61)}
+.mothman-report-grid article:first-child{box-shadow:inset 0 3px 0 #e14843}.mothman-report-grid article:nth-child(2){box-shadow:inset 0 3px 0 var(--cryptid-green-dim)}
+.mothman-site-panel .science-readout strong{font-size:clamp(44px,6vw,78px);letter-spacing:-.055em}
+.mothman-bird-grid article:first-child img{object-position:center 46%;filter:saturate(.55) contrast(1.12) brightness(.67)}
+.mothman-bird-grid article:nth-child(2) img{object-position:center 50%;filter:saturate(.42) contrast(1.18) brightness(.59)}
+.mothman-bridge-feature{grid-template-columns:minmax(340px,.9fr) minmax(0,1.1fr)}
+.bridge-document-pair{display:grid;grid-template-columns:1fr 1fr;gap:2px;align-content:center;min-height:520px;border-right:1px solid #315847;padding:34px;background:radial-gradient(circle at 48% 44%,#ffffff0b,transparent 42%),repeating-linear-gradient(0deg,#ffffff04 0 1px,transparent 1px 4px),#070b0a}
+.bridge-document-pair figure{display:grid;align-content:center;min-height:280px;margin:0;border:1px solid #39433e;background:#dedbd0;padding:17px;box-shadow:0 16px 34px #0008}
+.bridge-document-pair figure:first-child{transform:rotate(-1.25deg)}.bridge-document-pair figure:nth-child(2){transform:rotate(1deg)}
+.bridge-document-pair img{display:block;width:100%;height:auto;image-rendering:auto;filter:grayscale(1) contrast(1.16)}
+.bridge-document-pair figcaption{margin-top:14px;color:#1b201d;text-transform:uppercase;font:700 11px/1.35 Consolas,monospace;letter-spacing:.09em}
+.bridge-separation{margin-top:25px!important;border-left:3px solid var(--cryptid-red);padding:13px 0 13px 17px;color:#f0d8d5!important;font:700 13px/1.55 Consolas,monospace!important}
+.mothman-drift article:nth-child(3){box-shadow:inset 0 3px 0 var(--cryptid-red)}
+.mothman-culture-feature .evidence-photo img{object-position:center 42%;filter:saturate(.48) contrast(1.13) brightness(.62)}
+.mothman-conclusion .field-conclusion-image img{object-position:center 46%;filter:saturate(.4) contrast(1.2) brightness(.43)}
+
+@media(max-width:1050px){.mothman-bridge-feature{grid-template-columns:1fr}.bridge-document-pair{min-height:440px;border-right:0;border-bottom:1px solid #315847}}
+@media(max-width:650px){.mothman-hero h1{font-size:clamp(62px,19vw,96px)}.mothman-hero h1 span{font-size:.7em}.bridge-document-pair{grid-template-columns:1fr;min-height:0;padding:26px 20px}.bridge-document-pair figure{min-height:0}.mothman-site-panel .science-readout strong{font-size:clamp(38px,13vw,58px)}}

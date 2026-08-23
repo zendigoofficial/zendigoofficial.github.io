@@ -1,0 +1,55 @@
+MOTHMAN CASE 006 — PHOTO CREDITS
+Research and asset review: 23 August 2026
+
+point-pleasant-hero.webp
+  Source: https://commons.wikimedia.org/wiki/File:Bartow_Jones_Bridge.jpg
+  Creator: Nyttend
+  Date: 22 October 2012
+  License: Public domain dedication
+  Changes: Cropped to 16:9, resized, converted to WebP; CSS applies tonal treatment.
+  Note: Shows the modern Bartow Jones Bridge over the Kanawha River, not the Silver Bridge.
+
+point-pleasant-confluence.webp
+  Source: https://commons.wikimedia.org/wiki/File:Kanawha_Ohio_confluence.jpg
+  Creator: Charles Johnson / U.S. Army Corps of Engineers
+  License: Public domain, U.S. federal government work
+  Changes: Resized, converted to WebP; CSS applies tonal treatment.
+
+mothman-statue.webp
+  Source: https://commons.wikimedia.org/wiki/File:Mothman_Statue.jpg
+  Creator: Csassen13
+  Date: 10 August 2020
+  License: CC0 1.0 Universal Public Domain Dedication
+  Changes: Resized and converted to WebP; CSS applies tonal treatment.
+  Note: Cultural artwork, not a witness reconstruction or creature evidence.
+
+sandhill-cranes.webp
+  Source: https://www.fws.gov/media/sandhill-cranes-seedskadee-refuge
+  Creator: Tom Koerner / U.S. Fish and Wildlife Service
+  License: Public domain
+  Changes: Cropped, resized and converted to WebP; CSS applies tonal treatment.
+
+barn-owl.webp
+  Source: https://www.fws.gov/media/barn-owl
+  Creator: Holly Keepers / U.S. Fish and Wildlife Service
+  Date: 4 June 2022
+  License: Public domain
+  Changes: Cropped, resized and converted to WebP; CSS applies tonal treatment.
+
+silver-bridge-1928.webp
+  Source: https://commons.wikimedia.org/wiki/File:Silver_Bridge,_1928.jpg
+  Creator: Federal Highway Administration / U.S. Department of Transportation
+  License: Public domain, U.S. federal government work
+  Changes: Converted to WebP; displayed at native aspect ratio.
+
+silver-bridge-collapse.webp
+  Source: https://commons.wikimedia.org/wiki/File:Silver_Bridge_collapsed,_Ohio_side.jpg
+  Creator: Federal Highway Administration / U.S. Department of Transportation
+  Date: December 1967
+  License: Public domain, U.S. federal government work
+  Changes: Converted to WebP; displayed at native aspect ratio.
+
+ASSET POLICY
+  No AI-generated creature imagery is used.
+  No alleged Mothman photograph is presented as evidence.
+  Historical bridge images are intentionally separated from the supernatural claim.
